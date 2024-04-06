@@ -1,0 +1,6 @@
+subscription GetUser($userid: String) {
+  sub_status_user(userid: $userid) {
+    userid
+    username
+  }
+}
