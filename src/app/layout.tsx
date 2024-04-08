@@ -3,6 +3,7 @@ import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import { ApolloWrapper } from "@/lib/ApolloWrapper";
 import { cn } from "@/lib/utils";
+import MainHeader from "@/components/layout/main-header";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -27,6 +28,7 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
+        <MainHeader />
         <ApolloWrapper>{children}</ApolloWrapper>
       </body>
     </html>
