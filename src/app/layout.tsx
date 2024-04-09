@@ -30,7 +30,7 @@ export default function RootLayout({
       >
         <MainHeader />
         <ApolloWrapper>
-          <div className="grid grid-cols-7 h-screen">
+          <div className="grid grid-cols-7 h-screen pt-[72px]">
             <div className="col-span-1"></div>
             <div className="col-span-5">{children}</div>
             <div className="col-span-1"></div>
