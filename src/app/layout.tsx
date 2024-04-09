@@ -29,7 +29,13 @@ export default function RootLayout({
         )}
       >
         <MainHeader />
-        <ApolloWrapper>{children}</ApolloWrapper>
+        <ApolloWrapper>
+          <div className="grid grid-cols-7 h-screen">
+            <div className="col-span-1"></div>
+            <div className="col-span-5">{children}</div>
+            <div className="col-span-1"></div>
+          </div>
+        </ApolloWrapper>
       </body>
     </html>
   );
