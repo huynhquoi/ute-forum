@@ -15,19 +15,56 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useEffect, useState } from "react";
+import { loginApi } from "@/api/auth";
+import useStorage from "@/hooks/useStorage";
+import { useRouter } from "next/navigation";
 
 const loginSchema = z.object({
   username: z.string().min(2).max(50),
   password: z.string().min(6),
 });
 
+type LoginType = {
+  username: string;
+  password: string;
+};
+
 const LoginPage = () => {
+  const router = useRouter();
+  const { setItem } = useStorage();
+  const [loading, setLoading] = useState(false);
+  const [loginInfo, setLoginInfo] = useState<LoginType>({
+    username: "",
+    password: "",
+  });
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
   });
 
+  useEffect(() => {
+    if (!loading) {
+      return;
+    }
+
+    const fetchData = async () => {
+      try {
+        const responseLogin = await loginApi(loginInfo);
+        setLoading(false);
+        setItem("userId", responseLogin.id);
+        router.push("/home");
+      } catch (error: any) {
+        setLoading(false);
+        console.log(error.response.data);
+      }
+    };
+
+    fetchData();
+  }, [loading, loginInfo, router, setItem]);
+
   const onSubmit = (values: z.infer<typeof loginSchema>) => {
-    console.log(values);
+    setLoginInfo(values);
+    setLoading(true);
   };
   return (
     <>
@@ -49,7 +86,9 @@ const LoginPage = () => {
                 name="username"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-bold">Tên đăng nhập <span className="text-red-600">*</span></FormLabel>
+                    <FormLabel className="font-bold">
+                      Tên đăng nhập <span className="text-red-600">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Input placeholder="example" {...field} />
                     </FormControl>
@@ -62,7 +101,9 @@ const LoginPage = () => {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-bold">Mật khẩu <span className="text-red-600">*</span></FormLabel>
+                    <FormLabel className="font-bold">
+                      Mật khẩu <span className="text-red-600">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Input placeholder="1234Aa@" type="password" {...field} />
                     </FormControl>
@@ -70,7 +111,9 @@ const LoginPage = () => {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full">Đăng nhập</Button>
+              <Button type="submit" className="w-full" disabled={loading}>
+                Đăng nhập
+              </Button>
             </form>
           </Form>
         </CardContent>

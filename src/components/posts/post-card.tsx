@@ -4,33 +4,36 @@ import { Separator } from "../ui/separator";
 import UserDisplay from "../users/user-display";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
+import Link from "next/link";
 
 const PostCard = () => {
   return (
     <>
       <Separator className="my-1" />
       <Card className="w-full shadow-none border-none hover:bg-gray-100 cursor-pointer">
-        <CardHeader className="py-1 px-2">
-          <UserDisplay />
-        </CardHeader>
-        <CardContent className="py-1 px-2">
-          <p className="text-xl font-bold">
-            Sử dụng thẻ sinh viên một cách đúng đắn, bạn đã thử?
-          </p>
-          <div className="flex items-center">
-            <Badge className="mr-2">Học tập</Badge>
-            <Badge>Sinh viên</Badge>
-          </div>
-          <div className="my-1 py-4 flex items-center justify-center bg-black bg-opacity-50 rounded-md">
-            <Image
-              src={"/loginpage.jpg"}
-              alt="Textpage"
-              width={600}
-              height={400}
-              className="rounded-md"
-            />
-          </div>
-        </CardContent>
+        <Link href={`/post/1`}>
+          <CardHeader className="py-1 px-2">
+            <UserDisplay />
+          </CardHeader>
+          <CardContent className="py-1 px-2">
+            <p className="text-xl font-bold">
+              Sử dụng thẻ sinh viên một cách đúng đắn, bạn đã thử?
+            </p>
+            <div className="flex items-center">
+              <Badge className="mr-2">Học tập</Badge>
+              <Badge>Sinh viên</Badge>
+            </div>
+            <div className="my-1 py-4 flex items-center justify-center bg-black bg-opacity-50 rounded-md">
+              <Image
+                src={"/loginpage.jpg"}
+                alt="Textpage"
+                width={600}
+                height={400}
+                className="rounded-md"
+              />
+            </div>
+          </CardContent>
+        </Link>
         <CardFooter className="py-1 px-2 flex items-center justify-between">
           <div className="">
             <Button

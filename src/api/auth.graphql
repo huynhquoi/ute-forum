@@ -1,0 +1,35 @@
+fragment user on User {
+  userid
+  username
+  fullname
+  email
+  address
+  phone
+  birthday
+  gender
+  image
+  createday
+  role {
+    roleid
+    rolename
+  }
+  reputation
+  status
+  isbanid {
+    nameban
+    description
+  }
+  mssv
+}
+
+query GetAccountByPk($userId: String!) {
+  find_account_by_id(userid: $userId) {
+    ...user
+  }
+}
+
+mutation UpdateUserInfo($user: UserRequest) {
+  account_update(user: $user) {
+    userid
+  }
+}
