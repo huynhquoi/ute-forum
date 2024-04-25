@@ -6,8 +6,8 @@ import { redirect } from "next/navigation";
 export default function Home() {
   const { getItem } = useStorage();
 
-  if (getItem("name").length === 0) {
-    redirect("/home");
+  if (getItem("userId", "session").length === 0) {
+    redirect("/login");
   }
   return <main>Home</main>;
 }

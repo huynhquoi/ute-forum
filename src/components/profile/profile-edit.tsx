@@ -2,6 +2,7 @@ import { Schema, z } from "zod";
 import { Button } from "../ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -9,10 +10,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User } from "@/generated/types";
+import { User, useUpdateUserInfoMutation } from "@/generated/types";
 import {
   Form,
   FormControl,
@@ -22,7 +23,9 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { useUserStorage } from "@/lib/store/userStorage";
+import { UserActions, UserState, useUserStorage } from "@/lib/store/userStorage";
+import useZustandHook from "@/hooks/useZustandHook";
+import DatePickerForm from "../shared/date-picker-form";
 
 const profileInfoSchema = z.object({
   fullname: z.string(),
@@ -45,8 +48,10 @@ type ProfileInfoType = {
 };
 
 const ProfileEdit = () => {
-  const userStorage = useUserStorage((state) => state.user);
+  const userStorage = useUserStorage(state => state.user)
   const [loading, setLoading] = useState(false);
+
+  const [updateAccount] = useUpdateUserInfoMutation()
 
   const [profileInfo, setProfileInfo] = useState<ProfileInfoType>({
     fullname: "",
@@ -66,16 +71,31 @@ const ProfileEdit = () => {
       username: (userStorage?.username as string) || "",
       address: (userStorage?.address as string) || "",
       phone: (userStorage?.phone as string) || "",
-      birthday: userStorage?.birthday || new Date(),
+      birthday: new Date(userStorage?.birthday) || new Date(),
       image: (userStorage?.image as string) || "",
     }),
   });
+
+  useEffect(() => {
+    if (!loading) {
+      return;
+    }
+
+    updateAccount({
+      variables: {
+        user: {
+          userid: userStorage?.userid,
+          ...profileInfo
+        }
+      }
+    })
+  }, [loading, updateAccount, profileInfo, userStorage?.userid])
 
   const onSubmit = (values: z.infer<typeof profileInfoSchema>) => {
     setProfileInfo(values);
     setLoading(true);
 
-    console.log(profileInfo);
+    console.log(values);
   };
   return (
     <>
@@ -138,8 +158,51 @@ const ProfileEdit = () => {
                   </FormItem>
                 )}
               />
+              <DatePickerForm form={form} name="birthday" classname="w-full pl-3 text-left font-normal" />
+              <FormField
+                control={form.control}
+                name="address"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-bold">Địa chỉ</FormLabel>
+                    <FormControl>
+                      <Input placeholder="example" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-bold">Số điện thoại</FormLabel>
+                    <FormControl>
+                      <Input placeholder="example" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* <FormField
+                control={form.control}
+                name="birthday"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-bold">Sinh nhật</FormLabel>
+                    <FormControl>
+                      <Input placeholder="example" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              /> */}
               <DialogFooter>
-                <Button type="submit">Lưu</Button>
+                <DialogClose asChild>
+                  <Button type="submit">Lưu</Button>
+                </DialogClose>
               </DialogFooter>
             </form>
           </Form>

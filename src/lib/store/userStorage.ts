@@ -7,7 +7,7 @@ export type UserState = {
 };
 
 export type UserActions = {
-  addUser: (user: User) => void;
+  addUser: (user?: User) => void;
   removeUser: () => void;
 };
 
@@ -15,9 +15,9 @@ export const useUserStorage = create<UserState & UserActions>()(
   persist(
     (set) => ({
       user: null,
-      addUser: (userInfo: User) => {
+      addUser: (userInfo?: User) => {
         set(() => ({
-          user: userInfo,
+          user: userInfo || null,
         }));
       },
       removeUser: () => {

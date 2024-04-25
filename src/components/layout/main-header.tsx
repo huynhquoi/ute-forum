@@ -32,15 +32,19 @@ const MainHeader = ({ inUser }: MainHeaderProps) => {
       userId: getItem("userId"),
     },
   });
-  addUser(data?.find_account_by_id as User);
+  useEffect(() => {
+    if (loading || !data?.find_account_by_id?.userid) {
+      return;
+    }
+    addUser(data?.find_account_by_id as User);
+  }, [loading, data?.find_account_by_id?.userid, addUser])
   return (
     <ApolloWrapper>
       <div className={inUser ? "mb-[56px]" : "mb-[72px]"}></div>
       <div className="fixed top-0 left-0 w-screen bg-white z-50">
         <div
-          className={`grid grid-cols-7 border-b-2 h-[56px] ${
-            inUser ? "" : "mb-4"
-          }`}
+          className={`grid grid-cols-7 border-b-2 h-[56px] ${inUser ? "" : "mb-4"
+            }`}
         >
           <div className="col-span-1"></div>
           <div className="col-span-5 flex items-center justify-between ">

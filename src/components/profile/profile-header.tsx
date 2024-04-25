@@ -10,7 +10,6 @@ type ProfileHeaderProps = {
 };
 
 const ProfileHeader = ({ user }: ProfileHeaderProps) => {
-
   return (
     <>
       <Card className="shadow-none border-x-none border-t-none rounded-none">
@@ -45,7 +44,7 @@ const ProfileHeader = ({ user }: ProfileHeaderProps) => {
                 </div>
                 <div className="flex items-start">
                   <Button>Đăng bài</Button>
-                  <ProfileEdit/>
+                  {user ? <ProfileEdit /> : <></>}
                 </div>
               </div>
               <div className="col-span-1"></div>
