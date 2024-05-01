@@ -2,5 +2,13 @@ subscription GetUser($userid: String) {
   sub_status_user(userid: $userid) {
     userid
     username
+    status
+  }
+}
+
+subscription GetNotice($userid: String) {
+  sub_all_notice_by_userid(userid: $userid) {
+    noiticeid
+    content
   }
 }

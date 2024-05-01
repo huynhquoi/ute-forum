@@ -5,27 +5,31 @@ import UserDisplay from "../users/user-display";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import Link from "next/link";
+import { Post, PostDto } from "@/generated/types";
 
-const PostCard = () => {
+type PostCardProps = {
+  post: PostDto
+}
+
+const PostCard = ({ post }: PostCardProps) => {
   return (
     <>
       <Separator className="my-1" />
       <Card className="w-full shadow-none border-none hover:bg-gray-100 cursor-pointer">
-        <Link href={`/post/1`}>
+        <Link href={`/post/${post.postid}`}>
           <CardHeader className="py-1 px-2">
-            <UserDisplay />
+            <UserDisplay user={post?.user_post} />
           </CardHeader>
           <CardContent className="py-1 px-2">
             <p className="text-xl font-bold">
-              Sử dụng thẻ sinh viên một cách đúng đắn, bạn đã thử?
+              {post.title}
             </p>
             <div className="flex items-center">
-              <Badge className="mr-2">Học tập</Badge>
-              <Badge>Sinh viên</Badge>
+              //topic
             </div>
             <div className="my-1 py-4 flex items-center justify-center bg-black bg-opacity-50 rounded-md">
               <Image
-                src={"/loginpage.jpg"}
+                src={post.image as string || "/loginpage.jpg"}
                 alt="Textpage"
                 width={600}
                 height={400}
@@ -46,7 +50,7 @@ const PostCard = () => {
                 width={24}
                 height={24}
               />
-              <p className="ml-2 text-sm">1000</p>
+              <p className="ml-2 text-sm">{post.totallike}</p>
             </Button>
             <Button
               variant={"secondary"}
@@ -58,7 +62,7 @@ const PostCard = () => {
                 width={24}
                 height={24}
               />
-              <p className="ml-2 text-sm">1000</p>
+              <p className="ml-2 text-sm">{post.totaldislike}</p>
             </Button>
             <Button
               variant={"secondary"}

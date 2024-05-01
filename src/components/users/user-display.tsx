@@ -22,7 +22,7 @@ const UserDisplay = ({
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
         <div className="ml-2">
-          <p className="font-bold">User Test</p>
+          <p className="font-bold">{user?.fullname}</p>
           <p className="text-sm">Description</p>
         </div>
       </div>

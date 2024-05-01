@@ -1,0 +1,13 @@
+fragment topic on Topic {
+  topicid
+  topicname
+  createday
+  ishide
+  isdelete
+}
+
+query GetTopic {
+  topic {
+    ...topic
+  }
+}
