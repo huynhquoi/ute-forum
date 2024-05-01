@@ -94,7 +94,7 @@ const MainHeader = ({ inUser }: MainHeaderProps) => {
               </NavigationMenuList>
             </NavigationMenu>
             <div className="m-0 p-0 flex items-center">
-              {inUser ? <></> : <Button className="mr-4">Đăng bài</Button>}
+              {inUser ? <></> : <Link href={"/create-post"}><Button className="mr-4">Đăng bài</Button></Link>}
               <Button className="mr-4">N</Button>
               <UserMenu />
             </div>

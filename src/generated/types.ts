@@ -652,6 +652,24 @@ export type Post = {
   user_post?: Maybe<User>;
 };
 
+export type PostDto = {
+  __typename?: 'PostDto';
+  content?: Maybe<Scalars['String']['output']>;
+  createday?: Maybe<Scalars['LocalDateTime']['output']>;
+  group_post?: Maybe<Group>;
+  image?: Maybe<Scalars['String']['output']>;
+  ishide?: Maybe<Scalars['Int']['output']>;
+  listtopic?: Maybe<Array<Maybe<Post_Topic>>>;
+  postid: Scalars['Int']['output'];
+  requiredreputation?: Maybe<Scalars['Int']['output']>;
+  title?: Maybe<Scalars['String']['output']>;
+  totaldislike?: Maybe<Scalars['Int']['output']>;
+  totallike?: Maybe<Scalars['Int']['output']>;
+  totalread?: Maybe<Scalars['Int']['output']>;
+  updateday?: Maybe<Scalars['LocalDateTime']['output']>;
+  user_post?: Maybe<User>;
+};
+
 export type PostRequest = {
   content?: InputMaybe<Scalars['String']['input']>;
   createday?: InputMaybe<Scalars['LocalDateTime']['input']>;
@@ -751,7 +769,7 @@ export type Query = {
   /**     Comment_Like */
   list_commentlike_by_commentid?: Maybe<Array<Maybe<Comment_Like>>>;
   /**     Post */
-  post?: Maybe<Array<Maybe<Post>>>;
+  post?: Maybe<Array<Maybe<PostDto>>>;
   statistic_post?: Maybe<Array<Maybe<Scalars['Int']['output']>>>;
   statistic_post_in_topic?: Maybe<Array<Maybe<Scalars['Int']['output']>>>;
   /**    Statistic */
@@ -837,6 +855,7 @@ export type QueryFind_Commentlike_ByuseridArgs = {
 
 export type QueryFind_Group_By_KeywordArgs = {
   keyword?: InputMaybe<Scalars['String']['input']>;
+  userid?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -854,6 +873,7 @@ export type QueryFind_Post_By_IdArgs = {
 
 export type QueryFind_Post_By_KeywordArgs = {
   keyword?: InputMaybe<Scalars['String']['input']>;
+  userid?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -940,6 +960,7 @@ export type QueryGet_Report_By_TypeArgs = {
 
 export type QueryGet_User_By_KeywordArgs = {
   keyword?: InputMaybe<Scalars['String']['input']>;
+  userid?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -1124,12 +1145,54 @@ export type UpdateUserInfoMutationVariables = Exact<{
 
 export type UpdateUserInfoMutation = { __typename?: 'Mutation', account_update?: { __typename?: 'User', userid: string } | null };
 
+export type PostFragment = { __typename?: 'Post', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, isdelete?: number | null, requiredreputation?: number | null, totalread?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null };
+
+export type PostDtoFragment = { __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null };
+
+export type GetPostQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  pacing?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetPostQuery = { __typename?: 'Query', post?: Array<{ __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null } | null> | null };
+
+export type GetPostByUserIdQueryVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetPostByUserIdQuery = { __typename?: 'Query', find_post_by_userid?: Array<{ __typename?: 'Post', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, isdelete?: number | null, requiredreputation?: number | null, totalread?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null } | null> | null };
+
+export type CreatePostMutationVariables = Exact<{
+  post?: InputMaybe<PostRequest>;
+  user?: InputMaybe<UserRequest>;
+  topic?: InputMaybe<Array<InputMaybe<TopicRequest>> | InputMaybe<TopicRequest>>;
+}>;
+
+
+export type CreatePostMutation = { __typename?: 'Mutation', create_post?: string | null };
+
 export type GetUserSubscriptionVariables = Exact<{
   userid?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type GetUserSubscription = { __typename?: 'Subscription', sub_status_user?: { __typename?: 'User', userid: string, username?: string | null } | null };
+export type GetUserSubscription = { __typename?: 'Subscription', sub_status_user?: { __typename?: 'User', userid: string, username?: string | null, status?: number | null } | null };
+
+export type GetNoticeSubscriptionVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetNoticeSubscription = { __typename?: 'Subscription', sub_all_notice_by_userid?: Array<{ __typename?: 'Notice', noiticeid: number, content?: string | null } | null> | null };
+
+export type TopicFragment = { __typename?: 'Topic', topicid: number, topicname?: string | null, createday?: any | null, ishide?: number | null, isdelete?: number | null };
+
+export type GetTopicQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetTopicQuery = { __typename?: 'Query', topic?: Array<{ __typename?: 'Topic', topicid: number, topicname?: string | null, createday?: any | null, ishide?: number | null, isdelete?: number | null } | null> | null };
 
 export const UserFragmentDoc = gql`
     fragment user on User {
@@ -1154,6 +1217,67 @@ export const UserFragmentDoc = gql`
     description
   }
   mssv
+}
+    `;
+export const PostFragmentDoc = gql`
+    fragment post on Post {
+  postid
+  user_post {
+    userid
+    fullname
+  }
+  content
+  title
+  createday
+  updateday
+  image
+  ishide
+  isdelete
+  requiredreputation
+  totalread
+  group_post {
+    groupid
+    groupname
+  }
+}
+    `;
+export const PostDtoFragmentDoc = gql`
+    fragment postDto on PostDto {
+  postid
+  user_post {
+    userid
+    fullname
+  }
+  content
+  title
+  createday
+  updateday
+  image
+  ishide
+  requiredreputation
+  totalread
+  group_post {
+    groupid
+    groupname
+  }
+  totallike
+  totaldislike
+  listtopic {
+    posttopicid
+    topic_posttopic {
+      topicid
+      topicname
+    }
+  }
+}
+    `;
+export const TopicFragmentDoc = gql`
+    fragment topic on Topic {
+  topicid
+  topicname
+  createday
+  ishide
+  isdelete
 }
     `;
 export const GetAccountByPkDocument = gql`
@@ -1229,11 +1353,126 @@ export function useUpdateUserInfoMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateUserInfoMutationHookResult = ReturnType<typeof useUpdateUserInfoMutation>;
 export type UpdateUserInfoMutationResult = Apollo.MutationResult<UpdateUserInfoMutation>;
 export type UpdateUserInfoMutationOptions = Apollo.BaseMutationOptions<UpdateUserInfoMutation, UpdateUserInfoMutationVariables>;
+export const GetPostDocument = gql`
+    query GetPost($limit: Int, $pacing: Int) {
+  post(limit: $limit, pacing: $pacing) {
+    ...postDto
+  }
+}
+    ${PostDtoFragmentDoc}`;
+
+/**
+ * __useGetPostQuery__
+ *
+ * To run a query within a React component, call `useGetPostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPostQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      pacing: // value for 'pacing'
+ *   },
+ * });
+ */
+export function useGetPostQuery(baseOptions?: Apollo.QueryHookOptions<GetPostQuery, GetPostQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPostQuery, GetPostQueryVariables>(GetPostDocument, options);
+      }
+export function useGetPostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPostQuery, GetPostQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPostQuery, GetPostQueryVariables>(GetPostDocument, options);
+        }
+export function useGetPostSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetPostQuery, GetPostQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetPostQuery, GetPostQueryVariables>(GetPostDocument, options);
+        }
+export type GetPostQueryHookResult = ReturnType<typeof useGetPostQuery>;
+export type GetPostLazyQueryHookResult = ReturnType<typeof useGetPostLazyQuery>;
+export type GetPostSuspenseQueryHookResult = ReturnType<typeof useGetPostSuspenseQuery>;
+export type GetPostQueryResult = Apollo.QueryResult<GetPostQuery, GetPostQueryVariables>;
+export const GetPostByUserIdDocument = gql`
+    query GetPostByUserId($userid: String) {
+  find_post_by_userid(userid: $userid) {
+    ...post
+  }
+}
+    ${PostFragmentDoc}`;
+
+/**
+ * __useGetPostByUserIdQuery__
+ *
+ * To run a query within a React component, call `useGetPostByUserIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPostByUserIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPostByUserIdQuery({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *   },
+ * });
+ */
+export function useGetPostByUserIdQuery(baseOptions?: Apollo.QueryHookOptions<GetPostByUserIdQuery, GetPostByUserIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPostByUserIdQuery, GetPostByUserIdQueryVariables>(GetPostByUserIdDocument, options);
+      }
+export function useGetPostByUserIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPostByUserIdQuery, GetPostByUserIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPostByUserIdQuery, GetPostByUserIdQueryVariables>(GetPostByUserIdDocument, options);
+        }
+export function useGetPostByUserIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetPostByUserIdQuery, GetPostByUserIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetPostByUserIdQuery, GetPostByUserIdQueryVariables>(GetPostByUserIdDocument, options);
+        }
+export type GetPostByUserIdQueryHookResult = ReturnType<typeof useGetPostByUserIdQuery>;
+export type GetPostByUserIdLazyQueryHookResult = ReturnType<typeof useGetPostByUserIdLazyQuery>;
+export type GetPostByUserIdSuspenseQueryHookResult = ReturnType<typeof useGetPostByUserIdSuspenseQuery>;
+export type GetPostByUserIdQueryResult = Apollo.QueryResult<GetPostByUserIdQuery, GetPostByUserIdQueryVariables>;
+export const CreatePostDocument = gql`
+    mutation CreatePost($post: PostRequest, $user: UserRequest, $topic: [TopicRequest]) {
+  create_post(post: $post, user: $user, topic: $topic)
+}
+    `;
+export type CreatePostMutationFn = Apollo.MutationFunction<CreatePostMutation, CreatePostMutationVariables>;
+
+/**
+ * __useCreatePostMutation__
+ *
+ * To run a mutation, you first call `useCreatePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPostMutation, { data, loading, error }] = useCreatePostMutation({
+ *   variables: {
+ *      post: // value for 'post'
+ *      user: // value for 'user'
+ *      topic: // value for 'topic'
+ *   },
+ * });
+ */
+export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<CreatePostMutation, CreatePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePostMutation, CreatePostMutationVariables>(CreatePostDocument, options);
+      }
+export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
+export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
+export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
 export const GetUserDocument = gql`
     subscription GetUser($userid: String) {
   sub_status_user(userid: $userid) {
     userid
     username
+    status
   }
 }
     `;
@@ -1260,3 +1499,73 @@ export function useGetUserSubscription(baseOptions?: Apollo.SubscriptionHookOpti
       }
 export type GetUserSubscriptionHookResult = ReturnType<typeof useGetUserSubscription>;
 export type GetUserSubscriptionResult = Apollo.SubscriptionResult<GetUserSubscription>;
+export const GetNoticeDocument = gql`
+    subscription GetNotice($userid: String) {
+  sub_all_notice_by_userid(userid: $userid) {
+    noiticeid
+    content
+  }
+}
+    `;
+
+/**
+ * __useGetNoticeSubscription__
+ *
+ * To run a query within a React component, call `useGetNoticeSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useGetNoticeSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetNoticeSubscription({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *   },
+ * });
+ */
+export function useGetNoticeSubscription(baseOptions?: Apollo.SubscriptionHookOptions<GetNoticeSubscription, GetNoticeSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<GetNoticeSubscription, GetNoticeSubscriptionVariables>(GetNoticeDocument, options);
+      }
+export type GetNoticeSubscriptionHookResult = ReturnType<typeof useGetNoticeSubscription>;
+export type GetNoticeSubscriptionResult = Apollo.SubscriptionResult<GetNoticeSubscription>;
+export const GetTopicDocument = gql`
+    query GetTopic {
+  topic {
+    ...topic
+  }
+}
+    ${TopicFragmentDoc}`;
+
+/**
+ * __useGetTopicQuery__
+ *
+ * To run a query within a React component, call `useGetTopicQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTopicQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTopicQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetTopicQuery(baseOptions?: Apollo.QueryHookOptions<GetTopicQuery, GetTopicQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetTopicQuery, GetTopicQueryVariables>(GetTopicDocument, options);
+      }
+export function useGetTopicLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTopicQuery, GetTopicQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetTopicQuery, GetTopicQueryVariables>(GetTopicDocument, options);
+        }
+export function useGetTopicSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetTopicQuery, GetTopicQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetTopicQuery, GetTopicQueryVariables>(GetTopicDocument, options);
+        }
+export type GetTopicQueryHookResult = ReturnType<typeof useGetTopicQuery>;
+export type GetTopicLazyQueryHookResult = ReturnType<typeof useGetTopicLazyQuery>;
+export type GetTopicSuspenseQueryHookResult = ReturnType<typeof useGetTopicSuspenseQuery>;
+export type GetTopicQueryResult = Apollo.QueryResult<GetTopicQuery, GetTopicQueryVariables>;

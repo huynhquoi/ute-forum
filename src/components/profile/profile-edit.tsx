@@ -26,6 +26,7 @@ import { Input } from "../ui/input";
 import { UserActions, UserState, useUserStorage } from "@/lib/store/userStorage";
 import useZustandHook from "@/hooks/useZustandHook";
 import DatePickerForm from "../shared/date-picker-form";
+import Editor from "../shared/editor";
 
 const profileInfoSchema = z.object({
   fullname: z.string(),

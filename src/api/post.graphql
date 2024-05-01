@@ -1,0 +1,69 @@
+fragment post on Post {
+  postid
+  user_post {
+    userid
+    fullname
+  }
+  content
+  title
+  createday
+  updateday
+  image
+  ishide
+  isdelete
+  requiredreputation
+  totalread
+  group_post {
+    groupid
+    groupname
+  }
+}
+
+fragment postDto on PostDto {
+  postid
+  user_post {
+    userid
+    fullname
+  }
+  content
+  title
+  createday
+  updateday
+  image
+  ishide
+  requiredreputation
+  totalread
+  group_post {
+    groupid
+    groupname
+  }
+  totallike
+  totaldislike
+  listtopic {
+    posttopicid
+    topic_posttopic {
+      topicid
+      topicname
+    }
+  }
+}
+
+query GetPost($limit: Int, $pacing: Int) {
+  post(limit: $limit, pacing: $pacing) {
+    ...postDto
+  }
+}
+
+query GetPostByUserId($userid: String) {
+  find_post_by_userid(userid: $userid) {
+    ...post
+  }
+}
+
+mutation CreatePost(
+  $post: PostRequest
+  $user: UserRequest
+  $topic: [TopicRequest]
+) {
+  create_post(post: $post, user: $user, topic: $topic)
+}
