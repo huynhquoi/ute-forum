@@ -25,7 +25,6 @@ const PostCard = ({ post }: PostCardProps) => {
               {post.title}
             </p>
             <div className="flex items-center">
-              //topic
             </div>
             <div className="my-1 py-4 flex items-center justify-center bg-black bg-opacity-50 rounded-md">
               <Image
@@ -34,6 +33,7 @@ const PostCard = ({ post }: PostCardProps) => {
                 width={600}
                 height={400}
                 className="rounded-md"
+                priority
               />
             </div>
           </CardContent>

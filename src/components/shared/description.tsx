@@ -7,9 +7,10 @@ type DescriptionProps = {
 const Description = ({ value }: DescriptionProps) => {
   return (
     <>
-      <div className="quill ql-snow ">
+      <div className="quill ql-snow">
         <div
           className="ql-editor"
+          style={{padding: 0,}}
           dangerouslySetInnerHTML={{ __html: value }}
         ></div>
       </div>

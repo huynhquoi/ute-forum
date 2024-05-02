@@ -60,6 +60,12 @@ query GetPostByUserId($userid: String) {
   }
 }
 
+query GetPostById($postid: Int) {
+  find_post_by_id(postid: $postid) {
+    ...post
+  }
+}
+
 mutation CreatePost(
   $post: PostRequest
   $user: UserRequest
