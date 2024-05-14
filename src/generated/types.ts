@@ -663,6 +663,7 @@ export type PostDto = {
   postid: Scalars['Int']['output'];
   requiredreputation?: Maybe<Scalars['Int']['output']>;
   title?: Maybe<Scalars['String']['output']>;
+  totalcomment?: Maybe<Scalars['Int']['output']>;
   totaldislike?: Maybe<Scalars['Int']['output']>;
   totallike?: Maybe<Scalars['Int']['output']>;
   totalread?: Maybe<Scalars['Int']['output']>;
@@ -733,13 +734,15 @@ export type Query = {
   /**    Group */
   find_group_by_keyword?: Maybe<Array<Maybe<Group>>>;
   find_notice_by_userid_type_subject?: Maybe<Notice>;
-  find_post_by_id?: Maybe<Post>;
-  find_post_by_keyword?: Maybe<Array<Maybe<Post>>>;
-  find_post_by_topicid?: Maybe<Array<Maybe<Post>>>;
-  find_post_by_userid?: Maybe<Array<Maybe<Post>>>;
-  find_post_in_group?: Maybe<Array<Maybe<Post>>>;
+  find_post_by_follow?: Maybe<Array<Maybe<PostDto>>>;
+  find_post_by_id?: Maybe<PostDto>;
+  find_post_by_keyword?: Maybe<Array<Maybe<PostDto>>>;
+  find_post_by_topicid?: Maybe<Array<Maybe<PostDto>>>;
+  find_post_by_userid?: Maybe<Array<Maybe<PostDto>>>;
+  find_post_in_group?: Maybe<Array<Maybe<PostDto>>>;
   find_postlike_by_postid_and_userid?: Maybe<Post_Like>;
   find_postlike_byuserid?: Maybe<Array<Maybe<Post_Like>>>;
+  find_topic_by_topicname?: Maybe<Array<Maybe<Topic>>>;
   /**    Follow */
   get_all_follower_by_user?: Maybe<Array<Maybe<User>>>;
   get_all_user_by_follower?: Maybe<Array<Maybe<User>>>;
@@ -866,6 +869,11 @@ export type QueryFind_Notice_By_Userid_Type_SubjectArgs = {
 };
 
 
+export type QueryFind_Post_By_FollowArgs = {
+  userid?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type QueryFind_Post_By_IdArgs = {
   postid?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -900,6 +908,11 @@ export type QueryFind_Postlike_By_Postid_And_UseridArgs = {
 
 export type QueryFind_Postlike_ByuseridArgs = {
   userid?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryFind_Topic_By_TopicnameArgs = {
+  topicname?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -1078,6 +1091,7 @@ export type TopicRequest = {
 export type User = {
   __typename?: 'User';
   address?: Maybe<Scalars['String']['output']>;
+  bio?: Maybe<Scalars['String']['output']>;
   birthday?: Maybe<Scalars['Date']['output']>;
   createday?: Maybe<Scalars['LocalDateTime']['output']>;
   email?: Maybe<Scalars['String']['output']>;
@@ -1096,6 +1110,7 @@ export type User = {
 
 export type UserRequest = {
   address?: InputMaybe<Scalars['String']['input']>;
+  bio?: InputMaybe<Scalars['String']['input']>;
   birthday?: InputMaybe<Scalars['Date']['input']>;
   createday?: InputMaybe<Scalars['LocalDateTime']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
@@ -1145,9 +1160,56 @@ export type UpdateUserInfoMutationVariables = Exact<{
 
 export type UpdateUserInfoMutation = { __typename?: 'Mutation', account_update?: { __typename?: 'User', userid: string } | null };
 
+export type CommentFragment = { __typename?: 'Comment', commentid: number, content?: string | null, createday?: any | null, updateday?: any | null, isdelete?: number | null, user_comment?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null };
+
+export type CmtFragment = { __typename?: 'Comment', commentid: number, content?: string | null, createday?: any | null, updateday?: any | null, isdelete?: number | null, comment_comment?: { __typename?: 'Comment', commentid: number, content?: string | null, createday?: any | null, updateday?: any | null, isdelete?: number | null, user_comment?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null, user_comment?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null };
+
+export type GetCommentByPostIdQueryVariables = Exact<{
+  postid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetCommentByPostIdQuery = { __typename?: 'Query', find_all_comment_by_postid?: Array<{ __typename?: 'Comment', commentid: number, content?: string | null, createday?: any | null, updateday?: any | null, isdelete?: number | null, comment_comment?: { __typename?: 'Comment', commentid: number, content?: string | null, createday?: any | null, updateday?: any | null, isdelete?: number | null, user_comment?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null, user_comment?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null> | null };
+
+export type CreateCommentMutationVariables = Exact<{
+  comment?: InputMaybe<CommentRequest>;
+  userid?: InputMaybe<Scalars['String']['input']>;
+  postid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type CreateCommentMutation = { __typename?: 'Mutation', create_comment?: string | null };
+
+export type CreateCommentChildMutationVariables = Exact<{
+  comment?: InputMaybe<CommentRequest>;
+  userid?: InputMaybe<Scalars['String']['input']>;
+  comment_parentid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type CreateCommentChildMutation = { __typename?: 'Mutation', create_comment_in_comment?: string | null };
+
+export type NoticeFragment = { __typename?: 'Notice', noiticeid: number, content?: string | null, createday?: any | null, isseen?: number | null, type?: number | null, subjectid?: number | null, user_notice?: { __typename?: 'User', userid: string, fullname?: string | null } | null };
+
+export type GetNotificationByUserIdSubscriptionVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetNotificationByUserIdSubscription = { __typename?: 'Subscription', sub_all_notice_by_userid?: Array<{ __typename?: 'Notice', noiticeid: number, content?: string | null, createday?: any | null, isseen?: number | null, type?: number | null, subjectid?: number | null, user_notice?: { __typename?: 'User', userid: string, fullname?: string | null } | null } | null> | null };
+
+export type IsSeenMutationVariables = Exact<{
+  noticeid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type IsSeenMutation = { __typename?: 'Mutation', update_isseen_true?: { __typename?: 'Notice', noiticeid: number, content?: string | null, createday?: any | null, isseen?: number | null, type?: number | null, subjectid?: number | null, user_notice?: { __typename?: 'User', userid: string, fullname?: string | null } | null } | null };
+
 export type PostFragment = { __typename?: 'Post', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, isdelete?: number | null, requiredreputation?: number | null, totalread?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null };
 
 export type PostDtoFragment = { __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null };
+
+export type Post_ReactedFragment = { __typename?: 'Post_Like', postlikeid: number, post_postlike?: { __typename?: 'Post', postid: number } | null, icon_postlike?: { __typename?: 'Icon', iconid: number } | null };
 
 export type GetPostQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -1162,14 +1224,28 @@ export type GetPostByUserIdQueryVariables = Exact<{
 }>;
 
 
-export type GetPostByUserIdQuery = { __typename?: 'Query', find_post_by_userid?: Array<{ __typename?: 'Post', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, isdelete?: number | null, requiredreputation?: number | null, totalread?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null } | null> | null };
+export type GetPostByUserIdQuery = { __typename?: 'Query', find_post_by_userid?: Array<{ __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null } | null> | null };
 
 export type GetPostByIdQueryVariables = Exact<{
   postid?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
-export type GetPostByIdQuery = { __typename?: 'Query', find_post_by_id?: { __typename?: 'Post', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, isdelete?: number | null, requiredreputation?: number | null, totalread?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null } | null };
+export type GetPostByIdQuery = { __typename?: 'Query', find_post_by_id?: { __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null } | null };
+
+export type GetPostByTopicIdQueryVariables = Exact<{
+  topicid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetPostByTopicIdQuery = { __typename?: 'Query', find_post_by_topicid?: Array<{ __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null } | null> | null };
+
+export type GetPostReactedByUserIdQueryVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetPostReactedByUserIdQuery = { __typename?: 'Query', find_postlike_byuserid?: Array<{ __typename?: 'Post_Like', postlikeid: number, post_postlike?: { __typename?: 'Post', postid: number } | null, icon_postlike?: { __typename?: 'Icon', iconid: number } | null } | null> | null };
 
 export type CreatePostMutationVariables = Exact<{
   post?: InputMaybe<PostRequest>;
@@ -1179,6 +1255,49 @@ export type CreatePostMutationVariables = Exact<{
 
 
 export type CreatePostMutation = { __typename?: 'Mutation', create_post?: string | null };
+
+export type DeletePostMutationVariables = Exact<{
+  postid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type DeletePostMutation = { __typename?: 'Mutation', delete_post_by_pk?: string | null };
+
+export type CreatePostReactionMutationVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+  postid?: InputMaybe<Scalars['Int']['input']>;
+  iconid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type CreatePostReactionMutation = { __typename?: 'Mutation', create_icon_for_postlike?: string | null };
+
+export type DeletePostReactionMutationVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+  postid?: InputMaybe<Scalars['Int']['input']>;
+  iconid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type DeletePostReactionMutation = { __typename?: 'Mutation', delete_icon_for_postlike?: string | null };
+
+export type CreateCommentReactionMutationVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+  commentid?: InputMaybe<Scalars['Int']['input']>;
+  iconid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type CreateCommentReactionMutation = { __typename?: 'Mutation', create_icon_for_commentlike?: string | null };
+
+export type DeleteCommentReactionMutationVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+  commentid?: InputMaybe<Scalars['Int']['input']>;
+  iconid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type DeleteCommentReactionMutation = { __typename?: 'Mutation', delete_icon_for_commentlike?: string | null };
 
 export type GetUserSubscriptionVariables = Exact<{
   userid?: InputMaybe<Scalars['String']['input']>;
@@ -1224,6 +1343,45 @@ export const UserFragmentDoc = gql`
     description
   }
   mssv
+}
+    `;
+export const CommentFragmentDoc = gql`
+    fragment comment on Comment {
+  commentid
+  user_comment {
+    userid
+    fullname
+    image
+  }
+  post_comment {
+    postid
+  }
+  content
+  createday
+  updateday
+  isdelete
+}
+    `;
+export const CmtFragmentDoc = gql`
+    fragment cmt on Comment {
+  ...comment
+  comment_comment {
+    ...comment
+  }
+}
+    ${CommentFragmentDoc}`;
+export const NoticeFragmentDoc = gql`
+    fragment notice on Notice {
+  noiticeid
+  user_notice {
+    userid
+    fullname
+  }
+  content
+  createday
+  isseen
+  type
+  subjectid
 }
     `;
 export const PostFragmentDoc = gql`
@@ -1275,6 +1433,17 @@ export const PostDtoFragmentDoc = gql`
       topicid
       topicname
     }
+  }
+}
+    `;
+export const Post_ReactedFragmentDoc = gql`
+    fragment post_reacted on Post_Like {
+  postlikeid
+  post_postlike {
+    postid
+  }
+  icon_postlike {
+    iconid
   }
 }
     `;
@@ -1360,6 +1529,179 @@ export function useUpdateUserInfoMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateUserInfoMutationHookResult = ReturnType<typeof useUpdateUserInfoMutation>;
 export type UpdateUserInfoMutationResult = Apollo.MutationResult<UpdateUserInfoMutation>;
 export type UpdateUserInfoMutationOptions = Apollo.BaseMutationOptions<UpdateUserInfoMutation, UpdateUserInfoMutationVariables>;
+export const GetCommentByPostIdDocument = gql`
+    query GetCommentByPostId($postid: Int) {
+  find_all_comment_by_postid(postid: $postid) {
+    ...cmt
+  }
+}
+    ${CmtFragmentDoc}`;
+
+/**
+ * __useGetCommentByPostIdQuery__
+ *
+ * To run a query within a React component, call `useGetCommentByPostIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCommentByPostIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCommentByPostIdQuery({
+ *   variables: {
+ *      postid: // value for 'postid'
+ *   },
+ * });
+ */
+export function useGetCommentByPostIdQuery(baseOptions?: Apollo.QueryHookOptions<GetCommentByPostIdQuery, GetCommentByPostIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCommentByPostIdQuery, GetCommentByPostIdQueryVariables>(GetCommentByPostIdDocument, options);
+      }
+export function useGetCommentByPostIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCommentByPostIdQuery, GetCommentByPostIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCommentByPostIdQuery, GetCommentByPostIdQueryVariables>(GetCommentByPostIdDocument, options);
+        }
+export function useGetCommentByPostIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetCommentByPostIdQuery, GetCommentByPostIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCommentByPostIdQuery, GetCommentByPostIdQueryVariables>(GetCommentByPostIdDocument, options);
+        }
+export type GetCommentByPostIdQueryHookResult = ReturnType<typeof useGetCommentByPostIdQuery>;
+export type GetCommentByPostIdLazyQueryHookResult = ReturnType<typeof useGetCommentByPostIdLazyQuery>;
+export type GetCommentByPostIdSuspenseQueryHookResult = ReturnType<typeof useGetCommentByPostIdSuspenseQuery>;
+export type GetCommentByPostIdQueryResult = Apollo.QueryResult<GetCommentByPostIdQuery, GetCommentByPostIdQueryVariables>;
+export const CreateCommentDocument = gql`
+    mutation CreateComment($comment: CommentRequest, $userid: String, $postid: Int) {
+  create_comment(comment: $comment, userid: $userid, postid: $postid)
+}
+    `;
+export type CreateCommentMutationFn = Apollo.MutationFunction<CreateCommentMutation, CreateCommentMutationVariables>;
+
+/**
+ * __useCreateCommentMutation__
+ *
+ * To run a mutation, you first call `useCreateCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCommentMutation, { data, loading, error }] = useCreateCommentMutation({
+ *   variables: {
+ *      comment: // value for 'comment'
+ *      userid: // value for 'userid'
+ *      postid: // value for 'postid'
+ *   },
+ * });
+ */
+export function useCreateCommentMutation(baseOptions?: Apollo.MutationHookOptions<CreateCommentMutation, CreateCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCommentMutation, CreateCommentMutationVariables>(CreateCommentDocument, options);
+      }
+export type CreateCommentMutationHookResult = ReturnType<typeof useCreateCommentMutation>;
+export type CreateCommentMutationResult = Apollo.MutationResult<CreateCommentMutation>;
+export type CreateCommentMutationOptions = Apollo.BaseMutationOptions<CreateCommentMutation, CreateCommentMutationVariables>;
+export const CreateCommentChildDocument = gql`
+    mutation CreateCommentChild($comment: CommentRequest, $userid: String, $comment_parentid: Int) {
+  create_comment_in_comment(
+    comment: $comment
+    userid: $userid
+    comment_parentid: $comment_parentid
+  )
+}
+    `;
+export type CreateCommentChildMutationFn = Apollo.MutationFunction<CreateCommentChildMutation, CreateCommentChildMutationVariables>;
+
+/**
+ * __useCreateCommentChildMutation__
+ *
+ * To run a mutation, you first call `useCreateCommentChildMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCommentChildMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCommentChildMutation, { data, loading, error }] = useCreateCommentChildMutation({
+ *   variables: {
+ *      comment: // value for 'comment'
+ *      userid: // value for 'userid'
+ *      comment_parentid: // value for 'comment_parentid'
+ *   },
+ * });
+ */
+export function useCreateCommentChildMutation(baseOptions?: Apollo.MutationHookOptions<CreateCommentChildMutation, CreateCommentChildMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCommentChildMutation, CreateCommentChildMutationVariables>(CreateCommentChildDocument, options);
+      }
+export type CreateCommentChildMutationHookResult = ReturnType<typeof useCreateCommentChildMutation>;
+export type CreateCommentChildMutationResult = Apollo.MutationResult<CreateCommentChildMutation>;
+export type CreateCommentChildMutationOptions = Apollo.BaseMutationOptions<CreateCommentChildMutation, CreateCommentChildMutationVariables>;
+export const GetNotificationByUserIdDocument = gql`
+    subscription GetNotificationByUserId($userid: String) {
+  sub_all_notice_by_userid(userid: $userid) {
+    ...notice
+  }
+}
+    ${NoticeFragmentDoc}`;
+
+/**
+ * __useGetNotificationByUserIdSubscription__
+ *
+ * To run a query within a React component, call `useGetNotificationByUserIdSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useGetNotificationByUserIdSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetNotificationByUserIdSubscription({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *   },
+ * });
+ */
+export function useGetNotificationByUserIdSubscription(baseOptions?: Apollo.SubscriptionHookOptions<GetNotificationByUserIdSubscription, GetNotificationByUserIdSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<GetNotificationByUserIdSubscription, GetNotificationByUserIdSubscriptionVariables>(GetNotificationByUserIdDocument, options);
+      }
+export type GetNotificationByUserIdSubscriptionHookResult = ReturnType<typeof useGetNotificationByUserIdSubscription>;
+export type GetNotificationByUserIdSubscriptionResult = Apollo.SubscriptionResult<GetNotificationByUserIdSubscription>;
+export const IsSeenDocument = gql`
+    mutation IsSeen($noticeid: Int) {
+  update_isseen_true(noticeid: $noticeid) {
+    ...notice
+  }
+}
+    ${NoticeFragmentDoc}`;
+export type IsSeenMutationFn = Apollo.MutationFunction<IsSeenMutation, IsSeenMutationVariables>;
+
+/**
+ * __useIsSeenMutation__
+ *
+ * To run a mutation, you first call `useIsSeenMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useIsSeenMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [isSeenMutation, { data, loading, error }] = useIsSeenMutation({
+ *   variables: {
+ *      noticeid: // value for 'noticeid'
+ *   },
+ * });
+ */
+export function useIsSeenMutation(baseOptions?: Apollo.MutationHookOptions<IsSeenMutation, IsSeenMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<IsSeenMutation, IsSeenMutationVariables>(IsSeenDocument, options);
+      }
+export type IsSeenMutationHookResult = ReturnType<typeof useIsSeenMutation>;
+export type IsSeenMutationResult = Apollo.MutationResult<IsSeenMutation>;
+export type IsSeenMutationOptions = Apollo.BaseMutationOptions<IsSeenMutation, IsSeenMutationVariables>;
 export const GetPostDocument = gql`
     query GetPost($limit: Int, $pacing: Int) {
   post(limit: $limit, pacing: $pacing) {
@@ -1404,10 +1746,10 @@ export type GetPostQueryResult = Apollo.QueryResult<GetPostQuery, GetPostQueryVa
 export const GetPostByUserIdDocument = gql`
     query GetPostByUserId($userid: String) {
   find_post_by_userid(userid: $userid) {
-    ...post
+    ...postDto
   }
 }
-    ${PostFragmentDoc}`;
+    ${PostDtoFragmentDoc}`;
 
 /**
  * __useGetPostByUserIdQuery__
@@ -1444,10 +1786,10 @@ export type GetPostByUserIdQueryResult = Apollo.QueryResult<GetPostByUserIdQuery
 export const GetPostByIdDocument = gql`
     query GetPostById($postid: Int) {
   find_post_by_id(postid: $postid) {
-    ...post
+    ...postDto
   }
 }
-    ${PostFragmentDoc}`;
+    ${PostDtoFragmentDoc}`;
 
 /**
  * __useGetPostByIdQuery__
@@ -1481,6 +1823,86 @@ export type GetPostByIdQueryHookResult = ReturnType<typeof useGetPostByIdQuery>;
 export type GetPostByIdLazyQueryHookResult = ReturnType<typeof useGetPostByIdLazyQuery>;
 export type GetPostByIdSuspenseQueryHookResult = ReturnType<typeof useGetPostByIdSuspenseQuery>;
 export type GetPostByIdQueryResult = Apollo.QueryResult<GetPostByIdQuery, GetPostByIdQueryVariables>;
+export const GetPostByTopicIdDocument = gql`
+    query GetPostByTopicId($topicid: Int) {
+  find_post_by_topicid(topicid: $topicid) {
+    ...postDto
+  }
+}
+    ${PostDtoFragmentDoc}`;
+
+/**
+ * __useGetPostByTopicIdQuery__
+ *
+ * To run a query within a React component, call `useGetPostByTopicIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPostByTopicIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPostByTopicIdQuery({
+ *   variables: {
+ *      topicid: // value for 'topicid'
+ *   },
+ * });
+ */
+export function useGetPostByTopicIdQuery(baseOptions?: Apollo.QueryHookOptions<GetPostByTopicIdQuery, GetPostByTopicIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPostByTopicIdQuery, GetPostByTopicIdQueryVariables>(GetPostByTopicIdDocument, options);
+      }
+export function useGetPostByTopicIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPostByTopicIdQuery, GetPostByTopicIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPostByTopicIdQuery, GetPostByTopicIdQueryVariables>(GetPostByTopicIdDocument, options);
+        }
+export function useGetPostByTopicIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetPostByTopicIdQuery, GetPostByTopicIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetPostByTopicIdQuery, GetPostByTopicIdQueryVariables>(GetPostByTopicIdDocument, options);
+        }
+export type GetPostByTopicIdQueryHookResult = ReturnType<typeof useGetPostByTopicIdQuery>;
+export type GetPostByTopicIdLazyQueryHookResult = ReturnType<typeof useGetPostByTopicIdLazyQuery>;
+export type GetPostByTopicIdSuspenseQueryHookResult = ReturnType<typeof useGetPostByTopicIdSuspenseQuery>;
+export type GetPostByTopicIdQueryResult = Apollo.QueryResult<GetPostByTopicIdQuery, GetPostByTopicIdQueryVariables>;
+export const GetPostReactedByUserIdDocument = gql`
+    query GetPostReactedByUserId($userid: String) {
+  find_postlike_byuserid(userid: $userid) {
+    ...post_reacted
+  }
+}
+    ${Post_ReactedFragmentDoc}`;
+
+/**
+ * __useGetPostReactedByUserIdQuery__
+ *
+ * To run a query within a React component, call `useGetPostReactedByUserIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPostReactedByUserIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPostReactedByUserIdQuery({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *   },
+ * });
+ */
+export function useGetPostReactedByUserIdQuery(baseOptions?: Apollo.QueryHookOptions<GetPostReactedByUserIdQuery, GetPostReactedByUserIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPostReactedByUserIdQuery, GetPostReactedByUserIdQueryVariables>(GetPostReactedByUserIdDocument, options);
+      }
+export function useGetPostReactedByUserIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPostReactedByUserIdQuery, GetPostReactedByUserIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPostReactedByUserIdQuery, GetPostReactedByUserIdQueryVariables>(GetPostReactedByUserIdDocument, options);
+        }
+export function useGetPostReactedByUserIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetPostReactedByUserIdQuery, GetPostReactedByUserIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetPostReactedByUserIdQuery, GetPostReactedByUserIdQueryVariables>(GetPostReactedByUserIdDocument, options);
+        }
+export type GetPostReactedByUserIdQueryHookResult = ReturnType<typeof useGetPostReactedByUserIdQuery>;
+export type GetPostReactedByUserIdLazyQueryHookResult = ReturnType<typeof useGetPostReactedByUserIdLazyQuery>;
+export type GetPostReactedByUserIdSuspenseQueryHookResult = ReturnType<typeof useGetPostReactedByUserIdSuspenseQuery>;
+export type GetPostReactedByUserIdQueryResult = Apollo.QueryResult<GetPostReactedByUserIdQuery, GetPostReactedByUserIdQueryVariables>;
 export const CreatePostDocument = gql`
     mutation CreatePost($post: PostRequest, $user: UserRequest, $topic: [TopicRequest]) {
   create_post(post: $post, user: $user, topic: $topic)
@@ -1514,6 +1936,177 @@ export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
+export const DeletePostDocument = gql`
+    mutation DeletePost($postid: Int) {
+  delete_post_by_pk(postid: $postid)
+}
+    `;
+export type DeletePostMutationFn = Apollo.MutationFunction<DeletePostMutation, DeletePostMutationVariables>;
+
+/**
+ * __useDeletePostMutation__
+ *
+ * To run a mutation, you first call `useDeletePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePostMutation, { data, loading, error }] = useDeletePostMutation({
+ *   variables: {
+ *      postid: // value for 'postid'
+ *   },
+ * });
+ */
+export function useDeletePostMutation(baseOptions?: Apollo.MutationHookOptions<DeletePostMutation, DeletePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePostMutation, DeletePostMutationVariables>(DeletePostDocument, options);
+      }
+export type DeletePostMutationHookResult = ReturnType<typeof useDeletePostMutation>;
+export type DeletePostMutationResult = Apollo.MutationResult<DeletePostMutation>;
+export type DeletePostMutationOptions = Apollo.BaseMutationOptions<DeletePostMutation, DeletePostMutationVariables>;
+export const CreatePostReactionDocument = gql`
+    mutation CreatePostReaction($userid: String, $postid: Int, $iconid: Int) {
+  create_icon_for_postlike(userid: $userid, postid: $postid, iconid: $iconid)
+}
+    `;
+export type CreatePostReactionMutationFn = Apollo.MutationFunction<CreatePostReactionMutation, CreatePostReactionMutationVariables>;
+
+/**
+ * __useCreatePostReactionMutation__
+ *
+ * To run a mutation, you first call `useCreatePostReactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePostReactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPostReactionMutation, { data, loading, error }] = useCreatePostReactionMutation({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *      postid: // value for 'postid'
+ *      iconid: // value for 'iconid'
+ *   },
+ * });
+ */
+export function useCreatePostReactionMutation(baseOptions?: Apollo.MutationHookOptions<CreatePostReactionMutation, CreatePostReactionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePostReactionMutation, CreatePostReactionMutationVariables>(CreatePostReactionDocument, options);
+      }
+export type CreatePostReactionMutationHookResult = ReturnType<typeof useCreatePostReactionMutation>;
+export type CreatePostReactionMutationResult = Apollo.MutationResult<CreatePostReactionMutation>;
+export type CreatePostReactionMutationOptions = Apollo.BaseMutationOptions<CreatePostReactionMutation, CreatePostReactionMutationVariables>;
+export const DeletePostReactionDocument = gql`
+    mutation DeletePostReaction($userid: String, $postid: Int, $iconid: Int) {
+  delete_icon_for_postlike(userid: $userid, postid: $postid, iconid: $iconid)
+}
+    `;
+export type DeletePostReactionMutationFn = Apollo.MutationFunction<DeletePostReactionMutation, DeletePostReactionMutationVariables>;
+
+/**
+ * __useDeletePostReactionMutation__
+ *
+ * To run a mutation, you first call `useDeletePostReactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePostReactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePostReactionMutation, { data, loading, error }] = useDeletePostReactionMutation({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *      postid: // value for 'postid'
+ *      iconid: // value for 'iconid'
+ *   },
+ * });
+ */
+export function useDeletePostReactionMutation(baseOptions?: Apollo.MutationHookOptions<DeletePostReactionMutation, DeletePostReactionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePostReactionMutation, DeletePostReactionMutationVariables>(DeletePostReactionDocument, options);
+      }
+export type DeletePostReactionMutationHookResult = ReturnType<typeof useDeletePostReactionMutation>;
+export type DeletePostReactionMutationResult = Apollo.MutationResult<DeletePostReactionMutation>;
+export type DeletePostReactionMutationOptions = Apollo.BaseMutationOptions<DeletePostReactionMutation, DeletePostReactionMutationVariables>;
+export const CreateCommentReactionDocument = gql`
+    mutation CreateCommentReaction($userid: String, $commentid: Int, $iconid: Int) {
+  create_icon_for_commentlike(
+    userid: $userid
+    commentid: $commentid
+    iconid: $iconid
+  )
+}
+    `;
+export type CreateCommentReactionMutationFn = Apollo.MutationFunction<CreateCommentReactionMutation, CreateCommentReactionMutationVariables>;
+
+/**
+ * __useCreateCommentReactionMutation__
+ *
+ * To run a mutation, you first call `useCreateCommentReactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCommentReactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCommentReactionMutation, { data, loading, error }] = useCreateCommentReactionMutation({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *      commentid: // value for 'commentid'
+ *      iconid: // value for 'iconid'
+ *   },
+ * });
+ */
+export function useCreateCommentReactionMutation(baseOptions?: Apollo.MutationHookOptions<CreateCommentReactionMutation, CreateCommentReactionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCommentReactionMutation, CreateCommentReactionMutationVariables>(CreateCommentReactionDocument, options);
+      }
+export type CreateCommentReactionMutationHookResult = ReturnType<typeof useCreateCommentReactionMutation>;
+export type CreateCommentReactionMutationResult = Apollo.MutationResult<CreateCommentReactionMutation>;
+export type CreateCommentReactionMutationOptions = Apollo.BaseMutationOptions<CreateCommentReactionMutation, CreateCommentReactionMutationVariables>;
+export const DeleteCommentReactionDocument = gql`
+    mutation DeleteCommentReaction($userid: String, $commentid: Int, $iconid: Int) {
+  delete_icon_for_commentlike(
+    userid: $userid
+    commentid: $commentid
+    iconid: $iconid
+  )
+}
+    `;
+export type DeleteCommentReactionMutationFn = Apollo.MutationFunction<DeleteCommentReactionMutation, DeleteCommentReactionMutationVariables>;
+
+/**
+ * __useDeleteCommentReactionMutation__
+ *
+ * To run a mutation, you first call `useDeleteCommentReactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCommentReactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCommentReactionMutation, { data, loading, error }] = useDeleteCommentReactionMutation({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *      commentid: // value for 'commentid'
+ *      iconid: // value for 'iconid'
+ *   },
+ * });
+ */
+export function useDeleteCommentReactionMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCommentReactionMutation, DeleteCommentReactionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCommentReactionMutation, DeleteCommentReactionMutationVariables>(DeleteCommentReactionDocument, options);
+      }
+export type DeleteCommentReactionMutationHookResult = ReturnType<typeof useDeleteCommentReactionMutation>;
+export type DeleteCommentReactionMutationResult = Apollo.MutationResult<DeleteCommentReactionMutation>;
+export type DeleteCommentReactionMutationOptions = Apollo.BaseMutationOptions<DeleteCommentReactionMutation, DeleteCommentReactionMutationVariables>;
 export const GetUserDocument = gql`
     subscription GetUser($userid: String) {
   sub_status_user(userid: $userid) {

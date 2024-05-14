@@ -48,6 +48,16 @@ fragment postDto on PostDto {
   }
 }
 
+fragment post_reacted on Post_Like {
+  postlikeid
+  post_postlike {
+    postid
+  }
+  icon_postlike {
+    iconid
+  }
+}
+
 query GetPost($limit: Int, $pacing: Int) {
   post(limit: $limit, pacing: $pacing) {
     ...postDto
@@ -56,13 +66,25 @@ query GetPost($limit: Int, $pacing: Int) {
 
 query GetPostByUserId($userid: String) {
   find_post_by_userid(userid: $userid) {
-    ...post
+    ...postDto
   }
 }
 
 query GetPostById($postid: Int) {
   find_post_by_id(postid: $postid) {
-    ...post
+    ...postDto
+  }
+}
+
+query GetPostByTopicId($topicid: Int) {
+  find_post_by_topicid(topicid: $topicid) {
+    ...postDto
+  }
+}
+
+query GetPostReactedByUserId($userid: String) {
+  find_postlike_byuserid(userid: $userid) {
+    ...post_reacted
   }
 }
 
@@ -72,4 +94,8 @@ mutation CreatePost(
   $topic: [TopicRequest]
 ) {
   create_post(post: $post, user: $user, topic: $topic)
+}
+
+mutation DeletePost($postid: Int) {
+  delete_post_by_pk(postid: $postid)
 }

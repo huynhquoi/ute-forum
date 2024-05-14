@@ -4,8 +4,13 @@ import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { Label } from "../ui/label";
+import { User } from "@/generated/types";
 
-const PostAuth = () => {
+type PostAuthProps = {
+  user: User
+}
+
+const PostAuth = ({ user }: PostAuthProps) => {
   return (
     <>
       <Card className="ml-4 shadow-none rounded-md">
@@ -17,7 +22,7 @@ const PostAuth = () => {
           </div>
           <div className="w-full h-8 relative">
             <p className="absolute top-0 left-[calc(10%+56px)] text-lg font-bold">
-              Huynh Van Quoi
+              {user?.fullname}
             </p>
           </div>
         </CardHeader>
@@ -45,7 +50,7 @@ const PostAuth = () => {
       <Card className="ml-4 mt-2 shadow-none rounded-md">
         <CardHeader>
           <div className="text-lg">
-            Bài viết khác từ <span className="font-bold">Huynh Van Quoi</span>
+            Bài viết khác từ <span className="font-bold">{user?.fullname}</span>
           </div>
         </CardHeader>
         <CardContent className="p-0">

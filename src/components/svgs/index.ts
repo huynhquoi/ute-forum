@@ -1,0 +1,15 @@
+export { default as ArrowUpCircle } from "./ArrowUpCircle.svg";
+export { default as ArrowDownCircle } from "./ArrowDownCircle.svg";
+export { default as Bookmark } from "./Bookmark.svg";
+export { default as BookmarkFill } from "./BookmarkFill.svg";
+export { default as Close } from "./Close.svg";
+export { default as Trash } from "./Trash.svg";
+export { default as CommentIcon } from "./CommentIcon.svg";
+export { default as Bell } from "./Bell.svg";
+export { default as Learn } from "./Learn.svg";
+export { default as Plus } from "./Plus.svg";
+export { default as Dot } from "./Dot.svg";
+export { default as ThreeDots } from "./ThreeDots.svg";
+export { default as Edit } from "./Edit.svg";
+export { default as Picture } from "./Picture.svg";
+export { default as Send } from "./Send.svg";

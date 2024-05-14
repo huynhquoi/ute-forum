@@ -1,0 +1,40 @@
+fragment comment on Comment {
+  commentid
+  user_comment {
+    userid
+    fullname
+    image
+  }
+  post_comment {
+    postid
+  }
+  content
+  createday
+  updateday
+  isdelete
+}
+
+fragment cmt on Comment {
+  ...comment
+  comment_comment {
+    ...comment
+  }
+}
+
+query GetCommentByPostId($postid: Int) {
+  find_all_comment_by_postid(postid: $postid) {
+    ...cmt
+  }
+}
+
+mutation CreateComment(
+  $comment: CommentRequest
+  $userid: String
+  $postid: Int
+) {
+  create_comment(comment: $comment, userid: $userid, postid: $postid)
+}
+
+mutation CreateCommentChild($comment: CommentRequest, $userid:String, $comment_parentid:Int) {
+  create_comment_in_comment(comment: $comment, userid:$userid, comment_parentid:$comment_parentid)
+}

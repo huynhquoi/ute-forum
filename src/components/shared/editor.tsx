@@ -6,7 +6,11 @@ import "react-quill/dist/quill.snow.css";
 import "./style.scss";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
-const Editor = ({ ...props }: ReactQuillProps) => {
+type EditorProps = {
+  comment?: boolean
+}
+
+const Editor = ({ comment, ...props }: ReactQuillProps & EditorProps) => {
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, 4, false] }],
@@ -22,6 +26,21 @@ const Editor = ({ ...props }: ReactQuillProps) => {
       ["clean"],
     ],
   };
+
+  const modulesComment = {
+    toolbar: [
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [
+        { list: "ordered" },
+        { list: "bullet" },
+        { indent: "-1" },
+        { indent: "+1" },
+      ],
+      ["code-block"],
+      ["link", "image", "video"],
+      ["clean"],
+    ],
+  }
 
   const formats = [
     "header",
@@ -45,7 +64,7 @@ const Editor = ({ ...props }: ReactQuillProps) => {
         className="x_editor"
         style={{ borderRadius: "15px" }}
         theme="snow"
-        modules={modules}
+        modules={comment ? modulesComment : modules}
         formats={formats}
         {...props}
       />

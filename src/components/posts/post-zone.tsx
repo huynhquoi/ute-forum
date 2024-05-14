@@ -1,8 +1,10 @@
-import { Post, PostDto, useGetPostQuery } from "@/generated/types";
+import { Post, PostDto, useGetPostQuery, useGetPostReactedByUserIdQuery } from "@/generated/types";
 import { ScrollArea } from "../ui/scroll-area";
 import PostCard from "./post-card";
+import { useUserStorage } from "@/lib/store/userStorage";
 
 const PostZone = () => {
+  const userStorage = useUserStorage((state) => state.user)
   const { data, loading, fetchMore } = useGetPostQuery({
     variables: {
       limit: 20,
@@ -12,8 +14,10 @@ const PostZone = () => {
   return (
     <>
       <ScrollArea className="w-full h-[calc(100vh-116px)]">
-        {data?.post?.map(post => (
-          <PostCard key={post?.postid} post={post as PostDto} />
+        {loading ? <>Loading...</> :data?.post?.map(post => (
+          <PostCard
+            key={post?.postid}
+            post={post as PostDto} />
         ))}
       </ScrollArea>
     </>

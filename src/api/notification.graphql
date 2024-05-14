@@ -1,0 +1,24 @@
+fragment notice on Notice {
+  noiticeid
+  user_notice {
+    userid
+    fullname
+  }
+  content
+  createday
+  isseen
+  type
+  subjectid
+}
+
+subscription GetNotificationByUserId($userid: String) {
+  sub_all_notice_by_userid(userid: $userid) {
+    ...notice
+  }
+}
+
+mutation IsSeen($noticeid: Int) {
+  update_isseen_true(noticeid: $noticeid) {
+    ...notice
+  }
+}

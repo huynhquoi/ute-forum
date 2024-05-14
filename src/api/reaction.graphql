@@ -1,0 +1,15 @@
+mutation CreatePostReaction($userid: String, $postid: Int, $iconid: Int) {
+  create_icon_for_postlike(userid: $userid, postid: $postid, iconid: $iconid)
+}
+
+mutation DeletePostReaction($userid: String, $postid: Int, $iconid: Int) {
+  delete_icon_for_postlike(userid: $userid, postid: $postid, iconid: $iconid)
+}
+
+mutation CreateCommentReaction($userid: String,$commentid: Int, $iconid: Int) {
+    create_icon_for_commentlike(userid: $userid,commentid: $commentid, iconid: $iconid)
+}
+
+mutation DeleteCommentReaction($userid: String,$commentid: Int, $iconid: Int) {
+     delete_icon_for_commentlike(userid: $userid,commentid: $commentid, iconid: $iconid)
+}
