@@ -11,6 +11,8 @@ import PostAuth from "@/components/posts/post-auth";
 import { useState } from "react";
 import { User, useGetPostByIdQuery } from "@/generated/types";
 import Description from "@/components/shared/description";
+import CommentArea from "@/components/comment/comment-area";
+import ImageCover from "@/components/shared/image-cover";
 
 const PostDetail = () => {
   const param = useParams();
@@ -60,16 +62,8 @@ const PostDetail = () => {
         <div className="grid grid-cols-3 w-[calc(100%-80px)]">
           <div className="col-span-2">
             <ScrollArea className="w-full h-[calc(100vh-72px)]">
-              <Image
-                src={data?.find_post_by_id?.image as string || "/loginpage.jpg"}
-                alt="Textpage"
-                className="rounded-t-md"
-                width={0}
-                height={0}
-                sizes="100vw"
-                style={{ width: "100% !important", height: "auto" }}
-              />
-              <Card className="rounded-none shadow-none">
+              <ImageCover image={data?.find_post_by_id?.image as string} />
+              <Card className="rounded-md shadow-none">
                 <CardHeader>
                   <UserDisplay user={data?.find_post_by_id?.user_post as User} />
                 </CardHeader>
@@ -89,10 +83,11 @@ const PostDetail = () => {
               <p className="my-4 text-xl font-bold">
                 Bình luận <span className="text-lg text-gray-400">126</span>
               </p>
+              <CommentArea postId={data?.find_post_by_id?.postid as number} />
             </ScrollArea>
           </div>
           <div className="col-span-1">
-            <PostAuth />
+            <PostAuth user={data?.find_post_by_id?.user_post as User} />
           </div>
         </div>
       </div>

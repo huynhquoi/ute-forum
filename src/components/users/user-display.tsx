@@ -23,7 +23,7 @@ const UserDisplay = ({
         </Avatar>
         <div className="ml-2">
           <p className="font-bold">{user?.fullname}</p>
-          <p className="text-sm">Description</p>
+          <p className="text-sm">{descripttion}</p>
         </div>
       </div>
     </>
