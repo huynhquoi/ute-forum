@@ -4,13 +4,18 @@ import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { Label } from "../ui/label";
-import { User } from "@/generated/types";
+import { User, useGetPostByUserIdQuery } from "@/generated/types";
 
 type PostAuthProps = {
   user: User
 }
 
 const PostAuth = ({ user }: PostAuthProps) => {
+  const { data, loading } = useGetPostByUserIdQuery({
+    variables: {
+      userid: user?.userid
+    }
+  })
   return (
     <>
       <Card className="ml-4 shadow-none rounded-md">
@@ -54,33 +59,22 @@ const PostAuth = ({ user }: PostAuthProps) => {
           </div>
         </CardHeader>
         <CardContent className="p-0">
-          <Link href={"#"} className="flex flex-col px-6 py-4 border-y">
-            <Label className="text-base font-bold">
-              Những điều sinh viên cần lưu ý khi mới vào trường
-            </Label>
-            <div className="mt-1">
-              <Badge className="mr-1">Sinh viên</Badge>
-              <Badge>hcmute</Badge>
-            </div>
-          </Link>
-          <Link href={"#"} className="flex flex-col px-6 py-4 border-t">
-            <Label className="text-base font-bold">
-              Những điều sinh viên cần lưu ý khi mới vào trường
-            </Label>
-            <div className="mt-1">
-              <Badge className="mr-1">Sinh viên</Badge>
-              <Badge>hcmute</Badge>
-            </div>
-          </Link>
-          <Link href={"#"} className="flex flex-col px-6 py-4 border-y">
-            <Label className="text-base font-bold">
-              Những điều sinh viên cần lưu ý khi mới vào trường
-            </Label>
-            <div className="mt-1">
-              <Badge className="mr-1">Sinh viên</Badge>
-              <Badge>hcmute</Badge>
-            </div>
-          </Link>
+          {data?.find_post_by_userid?.map((item, index) => {
+            if (index < 3) {
+              return (
+                <Link href={`/post/${item?.postid}`} key={index} className="flex flex-col px-6 py-4 border-y">
+                  <Label className="text-base font-bold">
+                    {item?.title}
+                  </Label>
+                  <div className="mt-1">
+                    {item?.listtopic?.map((topic) => (
+                      <Badge key={topic?.topic_posttopic?.topicid}>{topic?.topic_posttopic?.topicname}</Badge>
+                    ))}
+                  </div>
+                </Link>
+              )
+            }
+          })}
         </CardContent>
       </Card>
     </>

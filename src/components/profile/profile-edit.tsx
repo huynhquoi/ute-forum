@@ -110,7 +110,7 @@ const ProfileEdit = () => {
           <DialogHeader>
             <DialogTitle>Chỉnh sửa trang cá nhân</DialogTitle>
             <DialogDescription>
-              Thay đổi thông tin tại đây. Nhấn "Lưu" để lưu thay đổi.
+              Thay đổi thông tin tại đây. Nhấn <span className="font-bold">Lưu</span> để lưu thay đổi.
             </DialogDescription>
           </DialogHeader>
 
