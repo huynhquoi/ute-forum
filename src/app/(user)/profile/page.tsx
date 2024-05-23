@@ -17,7 +17,7 @@ const ProfilePage = () => {
   })
   return (
     <>
-      <ProfileHeader user={userStorage as User} />
+      {userStorage ? <ProfileHeader user={userStorage as User} /> : <></>}
       <div className="grid grid-cols-7 h-[calc(100vh-72px)]">
         <div className="col-span-1"></div>
         <div className="col-span-2">
