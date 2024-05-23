@@ -12,23 +12,21 @@ import { useState } from "react";
 import Notification from "../shared/notification";
 import ImageCover from "../shared/image-cover";
 import PostMenu from "./post-menu";
+import { useUserStorage } from "@/lib/store/userStorage";
+import { format } from "date-fns";
+import PostBookmark from "./post-bookmark";
 
 type PostCardProps = {
   post: PostDto
+  firstChild?: boolean
 }
 
-const PostCard = ({ post }: PostCardProps) => {
+const PostCard = ({ post, firstChild }: PostCardProps) => {
   const [iseDeleted, setIsDeleted] = useState(false)
-
-  const [showBookmark, setShowBookmark] = useState(true);
-
-  const handleClick = () => {
-    setShowBookmark(false);
-  };
-
+  const userStorage = useUserStorage(state => state.user)
   return (
     <>
-      <Separator className="my-1" />
+      {!firstChild ? <Separator className="my-1" /> : <></>}
       {iseDeleted ?
         <Card className="text-base">
           <CardHeader className="text-xl font-bold py-3">
@@ -40,8 +38,8 @@ const PostCard = ({ post }: PostCardProps) => {
         </Card>
         : <Card className="w-full shadow-none border-none hover:bg-gray-100 cursor-pointer">
           <CardHeader className="py-1 px-2 flex flex-row justify-between items-start">
-            <UserDisplay user={post?.user_post} />
-            <PostMenu post={post} onDeleted={() => setIsDeleted(true)} />
+            <UserDisplay user={post?.user_post} descripttion={format(post?.createday, "dd/MM/yyyy")} />
+            {userStorage?.userid === post?.user_post?.userid ? <PostMenu post={post} onDeleted={() => setIsDeleted(true)} /> : <></>}
           </CardHeader>
           <Link href={`/post/${post.postid}`}>
             <CardContent className="py-1 px-2">
@@ -55,27 +53,8 @@ const PostCard = ({ post }: PostCardProps) => {
             </CardContent>
           </Link>
           <CardFooter className="py-1 px-2 flex items-center justify-between">
-            <PostAction post={post} />
-            <Button
-              variant={"secondary"}
-              className="rounded-full shadow-none bg-gray-200 hover:bg-gray-200 ml-2"
-              onClick={handleClick}
-              style={{ position: "relative", padding: "8px 16px" }}
-            >
-              <div className="w-6 h-6"></div>
-              <Bookmark
-                className="text-2xl"
-                style={{ position: "absolute", zIndex: showBookmark ? 1 : -1 }}
-              />
-              <BookmarkFill
-                className="text-2xl text-purple-500"
-                style={{
-                  position: "absolute",
-                  opacity: showBookmark ? 0 : 1,
-                  transition: "opacity 0.5s ease-in-out",
-                }}
-              />
-            </Button>
+            <PostAction post={post} useBg={true} showCommnent={true} />
+            <PostBookmark />
           </CardFooter>
         </Card>}
     </>

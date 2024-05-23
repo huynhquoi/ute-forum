@@ -5,6 +5,8 @@ import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { Label } from "../ui/label";
 import { User, useGetPostByUserIdQuery } from "@/generated/types";
+import { format } from "date-fns";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "../ui/hover-card";
 
 type PostAuthProps = {
   user: User
@@ -36,18 +38,17 @@ const PostAuth = ({ user }: PostAuthProps) => {
             Theo dõi
           </Button>
           <div className="mt-4">
-            Ful-stack Dev, blogger, giáo viên. Theo dõi tôi để biết thêm nhiều
-            điều hấp dẫn
+            {user?.bio}
           </div>
           <div className="mt-2">
             <Label className="font-bold text-gray-700 text-base">Địa chỉ</Label>
-            <p>Hồ Chí Minh, Việt Nam</p>
+            <p>{user?.address}</p>
           </div>
           <div className="mt-2">
             <Label className="font-bold text-gray-700 text-base">
               Ngày tham gia
             </Label>
-            <p>20/12/2023</p>
+            <p>{format(user?.createday || new Date(), "dd/MM/yyyy")}</p>
           </div>
         </CardContent>
       </Card>
@@ -62,14 +63,34 @@ const PostAuth = ({ user }: PostAuthProps) => {
           {data?.find_post_by_userid?.map((item, index) => {
             if (index < 3) {
               return (
-                <Link href={`/post/${item?.postid}`} key={index} className="flex flex-col px-6 py-4 border-y">
-                  <Label className="text-base font-bold">
+                <Link href={`/post/${item?.postid}`} key={index} className="flex flex-col px-6 py-4 border-y hover:cursor-pointer">
+                  <Label className="text-base font-bold hover:cursor-pointer">
                     {item?.title}
                   </Label>
                   <div className="mt-1">
-                    {item?.listtopic?.map((topic) => (
-                      <Badge key={topic?.topic_posttopic?.topicid}>{topic?.topic_posttopic?.topicname}</Badge>
-                    ))}
+                    {item?.listtopic?.map((topic, index) => {
+                      if (index < 2) {
+                        return (
+                          <Badge className="mr-2" key={topic?.topic_posttopic?.topicid}>{topic?.topic_posttopic?.topicname}</Badge>
+                        )
+                      }
+                    })}
+                    {item?.listtopic?.length as number > 2
+                      ? <HoverCard>
+                        <HoverCardTrigger asChild>
+                          <Button className="w-4 h-[23px] shadow-none rounded-md border-black" variant={"ghost"}><Badge>+</Badge></Button>
+                        </HoverCardTrigger>
+                        <HoverCardContent className="w-64 flex flex-col items-start space-y-2">
+                          {item?.listtopic?.map((topic, index) => {
+                            if (index >= 2) {
+                              return (
+                                <Badge className="mr-2" key={topic?.topic_posttopic?.topicid}>{topic?.topic_posttopic?.topicname}</Badge>
+                              )
+                            }
+                          })}
+                        </HoverCardContent>
+                      </HoverCard>
+                      : <></>}
                   </div>
                 </Link>
               )

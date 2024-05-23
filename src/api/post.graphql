@@ -24,6 +24,9 @@ fragment postDto on PostDto {
   user_post {
     userid
     fullname
+    createday
+    bio
+    address
   }
   content
   title
@@ -39,6 +42,7 @@ fragment postDto on PostDto {
   }
   totallike
   totaldislike
+  totalcomment
   listtopic {
     posttopicid
     topic_posttopic {
@@ -55,6 +59,16 @@ fragment post_reacted on Post_Like {
   }
   icon_postlike {
     iconid
+  }
+}
+
+fragment bookmark on Bookmark {
+  bookmarkid
+  post_bookmark {
+    ...post
+  }
+  user_bookmark {
+    userid
   }
 }
 
@@ -86,6 +100,26 @@ query GetPostReactedByUserId($userid: String) {
   find_postlike_byuserid(userid: $userid) {
     ...post_reacted
   }
+}
+
+query GetPostByFollowing($userid: String) {
+  find_post_by_follow(userid: $userid) {
+    ...postDto
+  }
+}
+
+mutation CreateReadPost($postid: Int, $userid: String) {
+  update_totalread_post(postid: $postid, userid: $userid)
+}
+
+mutation CreateBookmark($userid: String, $postid: Int) {
+  create_bookmark(userid: $userid, postid: $postid) {
+    bookmarkid
+  }
+}
+
+mutation DeleteBookmark($userid: String, $postid: Int) {
+  delete_bookmark(userid: $userid, postid: $postid)
 }
 
 mutation CreatePost(

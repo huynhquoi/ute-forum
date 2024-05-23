@@ -32,9 +32,13 @@ mutation CreateComment(
   $userid: String
   $postid: Int
 ) {
-  create_comment(comment: $comment, userid: $userid, postid: $postid)
+  create_comment(comment: $comment, userid: $userid, postid: $postid) {
+    ...cmt
+  }
 }
 
 mutation CreateCommentChild($comment: CommentRequest, $userid:String, $comment_parentid:Int) {
-  create_comment_in_comment(comment: $comment, userid:$userid, comment_parentid:$comment_parentid)
+  create_comment_in_comment(comment: $comment, userid:$userid, comment_parentid:$comment_parentid) {
+    ...cmt
+  }
 }

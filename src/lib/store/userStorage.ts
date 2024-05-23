@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import { Post, Post_Like, User } from "@/generated/types";
 import { persist } from "zustand/middleware";
+import { Post, Post_Like, User } from "@/generated/types";
 
 export type UserState = {
   user: User | null;

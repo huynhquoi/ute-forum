@@ -4,6 +4,10 @@ import { Card, CardContent } from "../ui/card"
 import { Button } from "../ui/button"
 import { useState } from "react"
 import CommentForm from "./comment-form"
+import { format } from "date-fns"
+import { Reply } from "../svgs"
+import { useUserStorage } from "@/lib/store/userStorage"
+import Link from "next/link"
 
 type CommentItemsProps = {
   comment: Comment
@@ -15,9 +19,21 @@ const CommentItems = ({ comment, onReload, onComment }: CommentItemsProps) => {
   const [reply, setReply] = useState(false)
   return <>
     <div className="w-full">
-      <UserDisplay user={comment?.user_comment as User} />
+      <UserDisplay user={comment?.user_comment as User} descripttion={format(comment?.createday || new Date(), "dd/MM/yyyy HH:mm")} />
       <Card className="ml-12 shadow-none rounded-md bg-gray-100">
         <CardContent className="px-4 py-3">
+          {!!comment?.comment_comment?.commentid ? <div className="text-sm flex items-center">
+            <span className="font-bold text-gray-500 mr-1"><span>Đã trả lời</span>
+            </span>
+            {comment?.user_comment?.userid === comment?.comment_comment?.user_comment?.userid
+              ? "chính mình"
+              : <div className="flex items-center">
+                <Reply className="text-base" />
+                <Link href={`/profile/${comment?.comment_comment?.user_comment?.userid}`} className="font-bold">
+                  {comment?.comment_comment?.user_comment?.fullname}
+                </Link>
+              </div>}
+          </div> : <></>}
           {comment?.content}
         </CardContent>
       </Card>
@@ -31,18 +47,7 @@ const CommentItems = ({ comment, onReload, onComment }: CommentItemsProps) => {
         {reply
           ? <CommentForm
             postId={comment?.post_comment?.postid as number}
-            commentId={comment?.commentid as number}
-            onReload={() => {
-              if (typeof onReload !== "undefined") {
-                onReload()
-              }
-              setReply(false)
-            }}
-            onComment={() => {
-              if (typeof onComment !== "undefined") {
-                onComment()
-              }
-            }} />
+            commentId={comment?.commentid as number} />
           : <></>}
       </div>
     </div>

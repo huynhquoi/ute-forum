@@ -14,10 +14,11 @@ const PostZone = () => {
   return (
     <>
       <ScrollArea className="w-full h-[calc(100vh-116px)]">
-        {loading ? <>Loading...</> :data?.post?.map(post => (
+        {loading ? <>Loading...</> :data?.post?.map((post, index) => (
           <PostCard
             key={post?.postid}
-            post={post as PostDto} />
+            post={post as PostDto}
+            firstChild={index === 0} />
         ))}
       </ScrollArea>
     </>

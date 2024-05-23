@@ -4,12 +4,14 @@ import { Avatar, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import ProfileEdit from "./profile-edit";
 import { useState } from "react";
+import { useUserStorage } from "@/lib/store/userStorage";
 
 type ProfileHeaderProps = {
-  user: User;
+  user?: User;
 };
 
 const ProfileHeader = ({ user }: ProfileHeaderProps) => {
+  const userStorage = useUserStorage((state) => state.user)
   return (
     <>
       <Card className="shadow-none border-x-none border-t-none rounded-none">
@@ -36,16 +38,16 @@ const ProfileHeader = ({ user }: ProfileHeaderProps) => {
               <div className="col-span-1"></div>
               <div className="col-span-5 relative h-24 flex justify-end">
                 <div className="absolute top-0 left-[106px]">
-                  <p className="text-2xl font-bold">Huynh Van Quoi</p>
+                  <p className="text-2xl font-bold">{user?.fullname}</p>
                   <p className="text-base">
                     <span className="font-bold text-gray-500">Reputation:</span>{" "}
-                    0
+                    {user?.reputation}
                   </p>
                 </div>
-                <div className="flex items-start">
+                {user?.userid === userStorage?.userid ? <div className="flex items-start">
                   <Button>Đăng bài</Button>
-                  {user ? <ProfileEdit /> : <></>}
-                </div>
+                  <ProfileEdit />
+                </div> : <></>}
               </div>
               <div className="col-span-1"></div>
             </div>

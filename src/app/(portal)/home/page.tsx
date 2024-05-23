@@ -1,5 +1,6 @@
 "use client";
 
+import PostFollowZone from "@/components/posts/post-follow-zone";
 import PostZone from "@/components/posts/post-zone";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -16,7 +17,9 @@ const HomePage = () => {
             <TabsContent value="post">
               <PostZone />
             </TabsContent>
-            <TabsContent value="follow">Change your password here.</TabsContent>
+            <TabsContent value="follow">
+              <PostFollowZone />
+            </TabsContent>
           </Tabs>
         </div>
         <div className="col-span-2"></div>
