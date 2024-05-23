@@ -36,6 +36,7 @@ const profileInfoSchema = z.object({
   phone: z.string(),
   birthday: z.date(),
   image: z.string(),
+  bio: z.string(),
 });
 
 type ProfileInfoType = {
@@ -46,6 +47,7 @@ type ProfileInfoType = {
   phone: string;
   birthday: Date;
   image: string;
+  bio: string;
 };
 
 const ProfileEdit = () => {
@@ -62,6 +64,7 @@ const ProfileEdit = () => {
     phone: "",
     birthday: new Date(),
     image: "",
+    bio: "",
   });
 
   const form = useForm<z.infer<typeof profileInfoSchema>>({
@@ -74,6 +77,7 @@ const ProfileEdit = () => {
       phone: (userStorage?.phone as string) || "",
       birthday: new Date(userStorage?.birthday) || new Date(),
       image: (userStorage?.image as string) || "",
+      bio: (userStorage?.bio as string) || "",
     }),
   });
 
@@ -187,19 +191,19 @@ const ProfileEdit = () => {
                 )}
               />
 
-              {/* <FormField
+              <FormField
                 control={form.control}
-                name="birthday"
+                name="bio"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-bold">Sinh nhật</FormLabel>
+                    <FormLabel className="font-bold">Mô tả bản thân</FormLabel>
                     <FormControl>
-                      <Input placeholder="example" {...field} />
+                      <Input placeholder="Mô tả" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
-              /> */}
+              />
               <DialogFooter>
                 <DialogClose asChild>
                   <Button type="submit">Lưu</Button>

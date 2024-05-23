@@ -8,55 +8,66 @@ import UserDisplay from "@/components/users/user-display";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import PostAuth from "@/components/posts/post-auth";
-import { useState } from "react";
-import { User, useGetPostByIdQuery } from "@/generated/types";
+import { useEffect, useState } from "react";
+import { PostDto, User, useCreateReadPostMutation, useGetPostByIdQuery } from "@/generated/types";
 import Description from "@/components/shared/description";
 import CommentArea from "@/components/comment/comment-area";
 import ImageCover from "@/components/shared/image-cover";
+import { useCommentStorage } from "@/lib/store/commentStorage";
+import { ArrowDownCircle, ArrowUpCircle, Eye } from "@/components/svgs";
+import { useUserStorage } from "@/lib/store/userStorage";
+import PostAction from "@/components/posts/post-action";
+import { format } from "date-fns";
 
 const PostDetail = () => {
   const param = useParams();
-  const { data, loading, fetchMore } = useGetPostByIdQuery({
+  const [read, setRead] = useState(false)
+  const user = useUserStorage((state) => state.user)
+
+  const [createRead] = useCreateReadPostMutation()
+
+  const { data, loading, fetchMore, refetch } = useGetPostByIdQuery({
     variables: {
       postid: parseInt(param?.postId as string)
     }
   })
+
+  useEffect(() => {
+    if (!read) {
+      return
+    }
+
+    createRead({
+      variables: {
+        postid: parseInt(param?.postId as string),
+        userid: user?.userid,
+      }
+    }).then(() => refetch())
+  }, [createRead, param?.postId, read, refetch, user?.userid])
+
+  setTimeout(() => {
+    if (read) {
+      return
+    }
+    setRead(true)
+  }, 10000)
+
+  const comment = useCommentStorage((state) => state.comments)
   return (
     <>
       <div className="w-full flex justify-between min-h-[calc(100vh-72px)]">
         <div className="w-16">
-          <div className="flex flex-col items-center h-60 justify-between mt-16">
-            <Button
-              variant={"ghost"}
-              className="rounded-full shadow-none flex flex-col items-center h-12"
-            >
-              <Image
-                src={"/arrow-up-circle.png"}
-                alt="like"
-                width={24}
-                height={24}
-              />
-              <p className="text-sm">1000</p>
-            </Button>
-            <Button
-              variant={"ghost"}
-              className="rounded-full shadow-none flex flex-col items-center h-12"
-            >
-              <Image
-                src={"/arrow-down-circle.png"}
-                alt="like"
-                width={24}
-                height={24}
-              />
-              <p className="text-sm">1000</p>
-            </Button>
-            <Button
-              variant={"ghost"}
-              className="rounded-full shadow-none flex flex-col items-center h-12"
-            >
-              <Image src={"/bookmark.svg"} alt="like" width={24} height={24} />
-              <p className="text-sm">126</p>
-            </Button>
+          <div className="flex flex-col items-center space-y-4 mt-16">
+            {loading ? <></> : <>
+              <PostAction post={data?.find_post_by_id as PostDto} isVertical={true} />
+              <Button
+                variant={"secondary"}
+                className={`rounded-full shadow-none bg-white hover:bg-gray-200`}
+              >
+                <Eye className="text-2xl" />
+                <p className="ml-2 text-sm text-black">{data?.find_post_by_id?.totalread}</p>
+              </Button>
+            </>}
           </div>
         </div>
         <div className="grid grid-cols-3 w-[calc(100%-80px)]">
@@ -65,15 +76,26 @@ const PostDetail = () => {
               <ImageCover image={data?.find_post_by_id?.image as string} />
               <Card className="rounded-md shadow-none">
                 <CardHeader>
-                  <UserDisplay user={data?.find_post_by_id?.user_post as User} />
+                  {data?.find_post_by_id?.postid
+                    ? <UserDisplay
+                      user={data?.find_post_by_id?.user_post as User}
+                      descripttion={
+                        format(data?.find_post_by_id?.createday || new Date(),
+                          "dd/MM/yyyy")} />
+                    : <></>}
                 </CardHeader>
                 <CardContent>
                   <p className="text-3xl font-bold mb-2">
                     {data?.find_post_by_id?.title}
                   </p>
                   <div className="flex items-center mb-2">
-                    <Badge className="mr-2">Học tập</Badge>
-                    <Badge>Sinh viên</Badge>
+                    {data?.find_post_by_id?.listtopic?.map((topic, index) => {
+                      if (index < 2) {
+                        return (
+                          <Badge className="mr-2" key={topic?.topic_posttopic?.topicid}>{topic?.topic_posttopic?.topicname}</Badge>
+                        )
+                      }
+                    })}
                   </div>
                   <Description value={data?.find_post_by_id?.content as string}>
                     {/* {data?.find_post_by_id?.content} */}
@@ -81,7 +103,7 @@ const PostDetail = () => {
                 </CardContent>
               </Card>
               <p className="my-4 text-xl font-bold">
-                Bình luận <span className="text-lg text-gray-400">126</span>
+                Bình luận <span className="text-lg text-gray-400">{comment.length}</span>
               </p>
               <CommentArea postId={data?.find_post_by_id?.postid as number} />
             </ScrollArea>

@@ -10,14 +10,17 @@ import { ArrowDownCircle, ArrowUpCircle, CommentIcon } from "../svgs";
 type PostActionProps = {
   post: PostDto
   reacted?: number
+  isVertical?: boolean
+  useBg?: boolean
+  showCommnent?: boolean
 }
 
-const PostAction = ({ post }: PostActionProps) => {
+const PostAction = ({ post, isVertical, useBg, showCommnent }: PostActionProps) => {
   const [click, setClick] = useState(false)
   const [reacted, setReacted] = useState(0)
   const [loading, setLoading] = useState(false);
-  const [like, setLike] = useState(post.totallike)
-  const [dislike, setDislike] = useState(post.totaldislike)
+  const [like, setLike] = useState(post?.totallike)
+  const [dislike, setDislike] = useState(post?.totaldislike)
   const userStorage = useUserStorage((state) => state.user)
   const postReacted = useUserStorage((state) => state.postReacted)
   const [CreateReaction, { loading: loadCreate }] = useCreatePostReactionMutation()
@@ -108,32 +111,34 @@ const PostAction = ({ post }: PostActionProps) => {
       }
     }
   }
-  return <div className="">
+  return <div className={isVertical ? "flex flex-col items-center space-y-4" : "space-x-4"}>
     <Button
       variant={reacted === 1 ? "destructive" : "secondary"}
-      className="rounded-full shadow-none bg-gray-200 hover:bg-gray-200"
+      className={`rounded-full shadow-none ${useBg ? "bg-gray-200" : "bg-white"} hover:bg-gray-200`}
       disabled={loading}
       onClick={() => onReacted(1)}
     >
       <ArrowUpCircle className={`text-2xl ${reacted === 1 ? "text-green-500" : "text-black"}`} />
-      <p className="ml-2 text-sm">{like}</p>
+      <p className="ml-2 text-sm text-black">{like}</p>
     </Button>
     <Button
       // variant={reacted === 1 ? "destructive" : "secondary"}
-      className="rounded-full shadow-none bg-gray-200 hover:bg-gray-200 ml-2"
+      className={`rounded-full shadow-none ${useBg ? "bg-gray-200" : "bg-white"} hover:bg-gray-200`}
       disabled={loading}
       onClick={() => onReacted(2)}
     >
       <ArrowDownCircle className={`text-2xl ${reacted === 2 ? "text-red-500" : "text-black"}`} />
-      <p className="ml-2 text-sm">{dislike}</p>
+      <p className="ml-2 text-sm text-black">{dislike}</p>
     </Button>
-    <Button
-      variant={"secondary"}
-      className="rounded-full shadow-none bg-gray-200 hover:bg-gray-200 ml-2"
-    >
-      <CommentIcon className="text-2xl" />
-      <p className="ml-2 text-sm">0</p>
-    </Button>
+    {showCommnent ? <>
+      <Button
+        variant={"secondary"}
+        className={`rounded-full shadow-none ${useBg ? "bg-gray-200" : "bg-white"} hover:bg-gray-200`}
+      >
+        <CommentIcon className="text-2xl" />
+        <p className="ml-2 text-sm text-black">{post?.totalcomment}</p>
+      </Button>
+    </> : <></>}
   </div>
 }
 

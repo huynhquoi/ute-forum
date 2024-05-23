@@ -20,6 +20,9 @@ fragment user on User {
     description
   }
   mssv
+  bio
+  color
+  totalfollowing
 }
 
 query GetAccountByPk($userId: String!) {
@@ -32,4 +35,12 @@ mutation UpdateUserInfo($user: UserRequest) {
   account_update(user: $user) {
     userid
   }
+}
+
+mutation CreateFollow($userid: String, $followerid: String) {
+  create_follow(userid: $userid, followerid: $followerid)
+}
+
+mutation DeleteFollow($userid: String, $followerid: String) {
+  delete_follow(userid: $userid, followerid: $followerid)
 }

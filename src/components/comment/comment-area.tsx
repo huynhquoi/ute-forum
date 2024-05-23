@@ -1,19 +1,11 @@
 "use client"
 
-import { Comment, useCreateCommentMutation, useGetCommentByPostIdQuery } from "@/generated/types"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { Form, FormControl, FormField, FormItem, FormMessage } from "../ui/form"
-import Editor from "../shared/editor"
-import { Button } from "../ui/button"
-import { Input } from "../ui/input"
-import { Picture, Send } from "../svgs"
-import { useEffect, useState } from "react"
-import { useUserStorage } from "@/lib/store/userStorage"
-import { Card, CardContent } from "../ui/card"
-import CommentItems from "./comment-item"
-import CommentForm from "./comment-form"
+import { Comment, useGetCommentByPostIdQuery } from "@/generated/types";
+import { useEffect, useState } from "react";
+import { Card, CardContent } from "../ui/card";
+import CommentItems from "./comment-item";
+import CommentForm from "./comment-form";
+import { useCommentStorage } from "@/lib/store/commentStorage";
 
 type CommentAreaProps = {
   postId: number,
@@ -24,40 +16,40 @@ interface CommentNode extends Comment {
 }
 
 const CommentArea = ({ postId }: CommentAreaProps) => {
+  const [sorted, setSorted] = useState<CommentNode[]>([]);
+  const comments = useCommentStorage((state) => state.comments)
+  const { addPostComment, removePostComment } = useCommentStorage()
+  const [onAdd, setOnAdd] = useState(true);
+  const [total, setTotal] = useState(0)
 
-  const [sorted, setSorted] = useState<Comment[]>()
-  const { data, loading, fetchMore } = useGetCommentByPostIdQuery({
+  const { data, loading, error } = useGetCommentByPostIdQuery({
     variables: {
       postid: postId
     }
   })
 
-  //
-  const [load, setLoad] = useState(false)
-  const [total, setTotal] = useState(0)
+  useEffect(() => {
+    if (!onAdd || loading) {
+      return;
+    }
+
+    if (data?.find_all_comment_by_postid) {
+      addPostComment(data?.find_all_comment_by_postid as Comment[] || []);
+      setOnAdd(false);
+    }
+  }, [loading, data, addPostComment, onAdd]);
 
   useEffect(() => {
-    if (load) {
-      return
-    }
+    if (comments.length === total) return;
+    const sortedC = sortComment(comments);
+    setSorted(sortedC);
+    setTotal(comments.length)
+  }, [comments, total]);
 
-    if (total === data?.find_all_comment_by_postid?.length) {
-      return
-    }
-
-    if (data?.find_all_comment_by_postid?.length) {
-      const sortedC = sortComment(data?.find_all_comment_by_postid as Comment[]);
-      setSorted(sortedC);
-      setLoad(true)
-      setTotal(sortedC.length)
-    }
-
-  }, [data?.find_all_comment_by_postid, load, total]);
-
-  const sortComment = (comments: Comment[]) => {
+  const sortComment = (comments: Comment[]): CommentNode[] => {
     const commentMap = new Map<number, CommentNode>();
-    comments?.forEach(comment => {
-      commentMap.set(comment.commentid, { ...comment, children: [] });
+    comments.forEach(comment => {
+      commentMap.set(comment?.commentid, { ...comment, children: [] });
     });
 
     let rootComments: CommentNode[] = [];
@@ -72,64 +64,39 @@ const CommentArea = ({ postId }: CommentAreaProps) => {
       }
     });
 
-    function traverse(comment: CommentNode, sortedList: Comment[]): void {
-      sortedList.push(comment);
-      comment.children.forEach(child => traverse(child, sortedList));
-    }
-
-    let sortedComments: Comment[] = [];
-    rootComments.forEach(comment => traverse(comment, sortedComments));
-
-    return sortedComments;
-  }
-  //
+    return rootComments;
+  };
 
   const renderComment = (comments: CommentNode[]) => {
-    return comments.map(comment => (
-      <div className="mb-4" key={comment?.commentid}>
+    return comments.map((comment, index) => (
+      <div className="mb-4" key={index}>
         <CommentItems
           comment={comment as Comment}
-          onReload={() => {
-            fetchMore({
-              variables: {
-                postid: postId
-              }
-            })
-          }}
-          onComment={() => {
-            setLoad(false)
-          }} />
-        {comment.children.length > 0 && (
-          <div>{renderComment(comment.children)}</div>
-        )}
+        />
+        <div className={`p-0 m-0 ${!!comment?.comment_comment?.commentid ? "" : "ml-12"}`}>
+          {comment.children.length > 0 && (
+            <div>{renderComment(comment.children)}</div>
+          )}
+        </div>
       </div>
     ));
-  }
-  return <>
-    <CommentForm
-      postId={postId}
-      onReload={() => {
-        fetchMore({
-          variables: {
-            postid: postId
-          }
-        })
-      }}
-      onComment={() => {
-        setLoad(false)
-      }} />
-    <Card className="my-8 rounded-none border-none shadow-none">
-      <CardContent className="p-0">
-        {sorted?.length
-          ? renderComment(sorted as CommentNode[]) : <>
-            <p>Chưa có bình luận nào </p>
-          </>}
-      </CardContent>
-    </Card>
+  };
 
-  </>
+  return (
+    <>
+      <CommentForm
+        postId={postId}
+      />
+      <Card className="my-8 rounded-none border-none shadow-none">
+        <CardContent className="p-0">
+          {sorted.length
+            ? renderComment(sorted) : (
+              <p>Chưa có bình luận nào</p>
+            )}
+        </CardContent>
+      </Card>
+    </>
+  );
+};
 
-
-}
-
-export default CommentArea
+export default CommentArea;

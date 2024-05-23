@@ -6,13 +6,12 @@ import { Input } from "../ui/input"
 import { z } from "zod"
 import { useEffect, useState } from "react"
 import { useUserStorage } from "@/lib/store/userStorage"
-import { useCreateCommentChildMutation, useCreateCommentMutation } from "@/generated/types"
+import { Comment, useCreateCommentChildMutation, useCreateCommentMutation } from "@/generated/types"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useCommentStorage } from "@/lib/store/commentStorage"
 
 type CommentFormProps = {
   postId: number,
-  onReload?: () => void,
-  onComment?: () => void,
   commentId?: number,
 }
 
@@ -20,13 +19,16 @@ const commentSchema = z.object({
   content: z.string()
 })
 
-const CommentForm = ({ postId, onReload, commentId, onComment }: CommentFormProps) => {
+const CommentForm = ({ postId, commentId }: CommentFormProps) => {
 
   const [submit, setSubmit] = useState(false)
+  const [onAdd, setOnAdd] = useState(true)
   const userStorage = useUserStorage((state) => state.user)
   const [content, setContent] = useState<string>("")
-  const [CreateComment] = useCreateCommentMutation()
-  const [CreateCommentChild] = useCreateCommentChildMutation()
+  const [CreateComment, { data, loading, error }] = useCreateCommentMutation()
+  const [CreateCommentChild, { data: child }] = useCreateCommentChildMutation()
+
+  const { addComment } = useCommentStorage()
 
   const form = useForm<z.infer<typeof commentSchema>>({
     resolver: zodResolver(commentSchema),
@@ -34,6 +36,25 @@ const CommentForm = ({ postId, onReload, commentId, onComment }: CommentFormProp
       content: ""
     }
   })
+
+  useEffect(() => {
+    if (!onAdd) {
+      return
+    }
+
+    if (data?.create_comment?.commentid) {
+      console.log(data?.create_comment)
+      addComment(data.create_comment as Comment)
+      setOnAdd(false)
+    }
+
+    if (child?.create_comment_in_comment?.commentid) {
+      console.log(child?.create_comment_in_comment)
+      addComment(child.create_comment_in_comment as Comment)
+      setOnAdd(false)
+    }
+
+  }, [addComment, child?.create_comment_in_comment, data?.create_comment, onAdd])
 
 
   useEffect(() => {
@@ -45,52 +66,49 @@ const CommentForm = ({ postId, onReload, commentId, onComment }: CommentFormProp
       return
     }
 
-    if (commentId) {
-      CreateCommentChild({
-        variables: {
-          comment: {
-            content: content
-          },
-          userid: userStorage?.userid as string,
-          comment_parentid: commentId
+    const submitComment = async () => {
+      try {
+        if (commentId) {
+          await CreateCommentChild({
+            variables: {
+              comment: {
+                content: content
+              },
+              userid: userStorage?.userid as string,
+              comment_parentid: commentId
+            }
+          });
+        } else {
+          await CreateComment({
+            variables: {
+              comment: {
+                content: content
+              },
+              postid: postId,
+              userid: userStorage?.userid as string
+            }
+          });
         }
-      }).then(() => {
-        if (typeof onReload !== "undefined") {
-          onReload()
-        }
-        setSubmit(false)
-        form.resetField("content")
-      })
-    } else {
-      CreateComment(({
-        variables: {
-          comment: {
-            content: content
-          },
-          postid: postId,
-          userid: userStorage?.userid as string
-        }
-      })).then(() => {
-        if (typeof onReload !== "undefined") {
-          onReload()
-        }
-        setSubmit(false)
-        form.resetField("content")
-      })
-    }
-  }, [CreateComment, CreateCommentChild, commentId, content, form, onReload, postId, submit, userStorage?.userid])
+
+        setSubmit(false);
+        form.reset();
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    submitComment();
+    setSubmit(false);
+  }, [CreateComment, CreateCommentChild, addComment, commentId, content, form, postId, submit, userStorage?.userid])
 
   const onSubmit = (value: z.infer<typeof commentSchema>) => {
     setContent(value.content)
     setSubmit(true)
-    if (typeof onComment !== "undefined") {
-      onComment()
-    }
   }
 
   return <>
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-start justify-between">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-start justify-between w-full mb-2">
         <div className="flex items-start justify-start w-[95%]">
           <Button variant={"ghost"} className="p-0 m-0">
             <Picture className="text-3xl mr-4" />

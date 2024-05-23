@@ -49,7 +49,7 @@ const UserMenu = () => {
           <DropdownMenuGroup>
             <DropdownMenuItem
               onSelect={() => {
-                router.push("profile");
+                router.push("/profile");
               }}
             >
               {/* <User className="mr-2 h-4 w-4" /> */}
