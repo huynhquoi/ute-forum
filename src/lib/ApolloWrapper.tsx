@@ -1,12 +1,18 @@
 "use client";
 
-// import { ApolloLink, HttpLink } from "@apollo/client";
+// import { ApolloLink, concat, split } from '@apollo/client';
+// import { getMainDefinition } from '@apollo/client/utilities';
+// import { WebSocketLink } from '@apollo/client/link/ws';
+// import { HttpLink } from '@apollo/client';
 // import {
 //   ApolloNextAppProvider,
 //   NextSSRInMemoryCache,
 //   NextSSRApolloClient,
 //   SSRMultipartLink,
-// } from "@apollo/experimental-nextjs-app-support/ssr";
+// } from '@apollo/experimental-nextjs-app-support/ssr';
+
+// import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
+// import { createClient } from 'graphql-ws';
 
 // function makeClient() {
 //   const httpLink = new HttpLink({
@@ -14,17 +20,30 @@
 //     fetchOptions: { cache: "no-store" },
 //   });
 
+//   const wsLink = new GraphQLWsLink(createClient({
+//     url: 'ws://kltn2024.onrender.com/graphql',
+//   }));
+
+//   const link = split(
+//     // split based on operation type
+//     ({ query }) => {
+//       const definition = getMainDefinition(query);
+//       return (
+//         definition.kind === 'OperationDefinition' &&
+//         definition.operation === 'subscription'
+//       );
+//     },
+//     wsLink,
+//     httpLink,
+//   );
+
 //   return new NextSSRApolloClient({
 //     cache: new NextSSRInMemoryCache(),
 //     link:
 //       typeof window === "undefined"
-//         ? ApolloLink.from([
-//             new SSRMultipartLink({
-//               stripDefer: true,
-//             }),
-//             httpLink,
-//           ])
-//         : httpLink,
+//         // ? concat(new SSRMultipartLink({ stripDefer: true }), link)
+//         ? ApolloLink.from([new SSRMultipartLink({ stripDefer: true, }), link])
+//         : link,
 //   });
 // }
 
@@ -36,9 +55,10 @@
 //   );
 // }
 
+"use client";
+
 import { ApolloLink, concat, split } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
-import { WebSocketLink } from '@apollo/client/link/ws';
 import { HttpLink } from '@apollo/client';
 import {
   ApolloNextAppProvider,
@@ -49,6 +69,12 @@ import {
 
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
+import { setContext } from '@apollo/client/link/context';
+
+function getToken() {
+  // Implement your logic to get the token, e.g., from cookies or local storage
+  return typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
+}
 
 function makeClient() {
   const httpLink = new HttpLink({
@@ -56,15 +82,26 @@ function makeClient() {
     fetchOptions: { cache: "no-store" },
   });
 
-  // const wsLink = new WebSocketLink({
-  //   uri: `ws://kltn2024.onrender.com/graphql`,
-  //   options: {
-  //     reconnect: true,
-  //   },
-  // });
+  const authLink = setContext((_, { headers }) => {
+    const token = getToken();
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `Bearer ${token}` : "",
+      }
+    };
+  });
 
   const wsLink = new GraphQLWsLink(createClient({
     url: 'ws://kltn2024.onrender.com/graphql',
+    connectionParams: () => {
+      const token = getToken();
+      return {
+        headers: {
+          authorization: token ? `Bearer ${token}` : "",
+        },
+      };
+    },
   }));
 
   const link = split(
@@ -77,15 +114,14 @@ function makeClient() {
       );
     },
     wsLink,
-    httpLink,
+    authLink.concat(httpLink), // Use authLink to include token in httpLink
   );
 
   return new NextSSRApolloClient({
     cache: new NextSSRInMemoryCache(),
     link:
       typeof window === "undefined"
-        // ? concat(new SSRMultipartLink({ stripDefer: true }), link)
-        ? ApolloLink.from([new SSRMultipartLink({ stripDefer: true, }), link])
+        ? ApolloLink.from([new SSRMultipartLink({ stripDefer: true }), link])
         : link,
   });
 }

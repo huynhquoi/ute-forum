@@ -1,6 +1,7 @@
 "use client";
 
 import PostFollowZone from "@/components/posts/post-follow-zone";
+import PostOutstanding from "@/components/posts/post-outstanding";
 import PostZone from "@/components/posts/post-zone";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -22,7 +23,9 @@ const HomePage = () => {
             </TabsContent>
           </Tabs>
         </div>
-        <div className="col-span-2"></div>
+        <div className="col-span-2 pl-4">
+          <PostOutstanding />
+        </div>
       </div>
     </>
   );

@@ -21,3 +21,4 @@ export { default as Route } from "./Route.svg";
 export { default as Connect } from "./Connect.svg";
 export { default as Reply } from "./Reply.svg";
 export { default as Eye } from "./Eye.svg";
+export { default as Increase } from "./Increase.svg";
