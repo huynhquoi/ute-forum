@@ -108,6 +108,26 @@ query GetPostByFollowing($userid: String) {
   }
 }
 
+query GetPostBookmarkByUserId($userid: String) {
+  find_all_bookmark_by_userid(userid: $userid) {
+    bookmarkid
+    post_bookmark {
+      ...post
+    }
+    user_bookmark {
+      userid
+      fullname
+    }
+    createday
+  }
+}
+
+query GetPostbyGroupId($groupid: Int) {
+  find_post_in_group(groupid: $groupid) {
+    ...postDto
+  }
+}
+
 mutation CreateReadPost($postid: Int, $userid: String) {
   update_totalread_post(postid: $postid, userid: $userid)
 }
@@ -130,6 +150,19 @@ mutation CreatePost(
   create_post(post: $post, user: $user, topic: $topic)
 }
 
+mutation CreatePostInGroup(
+  $post: PostRequest
+  $user: UserRequest
+  $topic: [TopicRequest]
+  $groupid:Int
+) {
+  create_post_in_group(post: $post, user: $user, topic: $topic,groupid:$groupid)
+}
+
 mutation DeletePost($postid: Int) {
   delete_post_by_pk(postid: $postid)
+}
+
+mutation HidePost($postid: Int) {
+  hide_post(postid: $postid)
 }

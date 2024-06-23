@@ -1,62 +1,5 @@
 "use client";
 
-// import { ApolloLink, concat, split } from '@apollo/client';
-// import { getMainDefinition } from '@apollo/client/utilities';
-// import { WebSocketLink } from '@apollo/client/link/ws';
-// import { HttpLink } from '@apollo/client';
-// import {
-//   ApolloNextAppProvider,
-//   NextSSRInMemoryCache,
-//   NextSSRApolloClient,
-//   SSRMultipartLink,
-// } from '@apollo/experimental-nextjs-app-support/ssr';
-
-// import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
-// import { createClient } from 'graphql-ws';
-
-// function makeClient() {
-//   const httpLink = new HttpLink({
-//     uri: "https://kltn2024.onrender.com/graphql",
-//     fetchOptions: { cache: "no-store" },
-//   });
-
-//   const wsLink = new GraphQLWsLink(createClient({
-//     url: 'ws://kltn2024.onrender.com/graphql',
-//   }));
-
-//   const link = split(
-//     // split based on operation type
-//     ({ query }) => {
-//       const definition = getMainDefinition(query);
-//       return (
-//         definition.kind === 'OperationDefinition' &&
-//         definition.operation === 'subscription'
-//       );
-//     },
-//     wsLink,
-//     httpLink,
-//   );
-
-//   return new NextSSRApolloClient({
-//     cache: new NextSSRInMemoryCache(),
-//     link:
-//       typeof window === "undefined"
-//         // ? concat(new SSRMultipartLink({ stripDefer: true }), link)
-//         ? ApolloLink.from([new SSRMultipartLink({ stripDefer: true, }), link])
-//         : link,
-//   });
-// }
-
-// export function ApolloWrapper({ children }: React.PropsWithChildren) {
-//   return (
-//     <ApolloNextAppProvider makeClient={makeClient}>
-//       {children}
-//     </ApolloNextAppProvider>
-//   );
-// }
-
-"use client";
-
 import { ApolloLink, concat, split } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { HttpLink } from '@apollo/client';
@@ -78,7 +21,8 @@ function getToken() {
 
 function makeClient() {
   const httpLink = new HttpLink({
-    uri: "https://kltn2024.onrender.com/graphql",
+    // uri: "https://kltn2024.onrender.com/graphql",
+    uri: "https://forumnew.onrender.com/graphql",
     fetchOptions: { cache: "no-store" },
   });
 
@@ -93,7 +37,8 @@ function makeClient() {
   });
 
   const wsLink = new GraphQLWsLink(createClient({
-    url: 'ws://kltn2024.onrender.com/graphql',
+    // url: 'ws://kltn2024.onrender.com/graphql',
+    url: 'ws://forumnew.onrender.com/graphql',
     connectionParams: () => {
       const token = getToken();
       return {

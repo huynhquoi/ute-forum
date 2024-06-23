@@ -1,6 +1,6 @@
 export { default as ArrowUpCircle } from "./ArrowUpCircle.svg";
 export { default as ArrowDownCircle } from "./ArrowDownCircle.svg";
-export { default as Bookmark } from "./Bookmark.svg";
+export { default as BookmarkIcon } from "./Bookmark.svg";
 export { default as BookmarkFill } from "./BookmarkFill.svg";
 export { default as Close } from "./Close.svg";
 export { default as Trash } from "./Trash.svg";
@@ -22,3 +22,7 @@ export { default as Connect } from "./Connect.svg";
 export { default as Reply } from "./Reply.svg";
 export { default as Eye } from "./Eye.svg";
 export { default as Increase } from "./Increase.svg";
+export { default as Loading } from "./Loading.svg";
+export { default as Open } from "./Open.svg";
+export { default as GroupIcon } from "./Group.svg";
+export { default as Logout } from "./Logout.svg";

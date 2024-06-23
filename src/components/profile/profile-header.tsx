@@ -5,6 +5,8 @@ import { Button } from "../ui/button";
 import ProfileEdit from "./profile-edit";
 import { useState } from "react";
 import { useUserStorage } from "@/lib/store/userStorage";
+import Link from "next/link";
+import ForumForm from "../forum/forum-form";
 
 type ProfileHeaderProps = {
   user?: User;
@@ -14,7 +16,7 @@ const ProfileHeader = ({ user }: ProfileHeaderProps) => {
   const userStorage = useUserStorage((state) => state.user)
   return (
     <>
-      <Card className="shadow-none border-x-none border-t-none rounded-none">
+      <Card className="shadow-none border-x-none border-t-none rounded-none fixed top-[56px] w-full z-50">
         <CardHeader className="flex flex-col p-0">
           <div className=" bg-blue-400 w-full h-20">
             <div className="grid grid-cols-7 h-20">
@@ -44,8 +46,9 @@ const ProfileHeader = ({ user }: ProfileHeaderProps) => {
                     {user?.reputation}
                   </p>
                 </div>
-                {user?.userid === userStorage?.userid ? <div className="flex items-start">
-                  <Button>Đăng bài</Button>
+                {user?.userid === userStorage?.userid ? <div className="flex items-start space-x-2">
+                  <ForumForm />
+                  <Link href={"/create-post"}><Button>Đăng bài</Button></Link>
                   <ProfileEdit />
                 </div> : <></>}
               </div>
@@ -54,6 +57,7 @@ const ProfileHeader = ({ user }: ProfileHeaderProps) => {
           </div>
         </CardHeader>
       </Card>
+      <div className="mb-60"></div>
     </>
   );
 };

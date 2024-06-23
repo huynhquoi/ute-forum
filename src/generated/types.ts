@@ -83,6 +83,19 @@ export type ContentGroupMessage_Icon = {
   user_iconcontentgroupmessage?: Maybe<User>;
 };
 
+export type ContentMessageDto = {
+  __typename?: 'ContentMessageDTO';
+  content?: Maybe<Scalars['String']['output']>;
+  contentid?: Maybe<Scalars['Int']['output']>;
+  createday?: Maybe<Scalars['LocalDateTime']['output']>;
+  image?: Maybe<Scalars['String']['output']>;
+  messageid?: Maybe<Scalars['Int']['output']>;
+  parentid?: Maybe<Scalars['Int']['output']>;
+  totalicon?: Maybe<Array<Maybe<TotalIcon>>>;
+  updateday?: Maybe<Scalars['LocalDateTime']['output']>;
+  userid?: Maybe<Scalars['String']['output']>;
+};
+
 export type Content_GroupMessage = {
   __typename?: 'Content_GroupMessage';
   content?: Maybe<Scalars['String']['output']>;
@@ -201,7 +214,6 @@ export type Mutation = {
   account_update?: Maybe<User>;
   add_icon_to_content_message?: Maybe<Scalars['String']['output']>;
   ban_user?: Maybe<User>;
-  /**     DetailMessage */
   block_message?: Maybe<Scalars['String']['output']>;
   createIcon?: Maybe<Icon>;
   /**     Bookmark */
@@ -225,7 +237,7 @@ export type Mutation = {
   /**     PostLike */
   create_icon_for_postlike?: Maybe<Scalars['String']['output']>;
   /**     Message */
-  create_message?: Maybe<Scalars['String']['output']>;
+  create_message?: Maybe<Message>;
   /**     Notice */
   create_notice?: Maybe<Notice>;
   create_post?: Maybe<Scalars['String']['output']>;
@@ -268,6 +280,9 @@ export type Mutation = {
   update_group_message?: Maybe<Scalars['String']['output']>;
   update_isseen_false?: Maybe<Notice>;
   update_isseen_true?: Maybe<Notice>;
+  /**     DetailMessage */
+  update_lastseen?: Maybe<Scalars['String']['output']>;
+  update_lastseen_group?: Maybe<Scalars['String']['output']>;
   update_level_detailgroup_message?: Maybe<Scalars['String']['output']>;
   /**     Post */
   update_post_by_pk?: Maybe<Scalars['String']['output']>;
@@ -329,6 +344,7 @@ export type MutationCreate_Comment_In_CommentArgs = {
 export type MutationCreate_Content_GroupmessageArgs = {
   content?: InputMaybe<Scalars['String']['input']>;
   groupmessageId?: InputMaybe<Scalars['Int']['input']>;
+  image?: InputMaybe<Scalars['String']['input']>;
   messageresponseid?: InputMaybe<Scalars['Int']['input']>;
   userId?: InputMaybe<Scalars['String']['input']>;
 };
@@ -342,6 +358,7 @@ export type MutationCreate_Content_Groupmessage_IconArgs = {
 
 export type MutationCreate_Content_MessageArgs = {
   content?: InputMaybe<Scalars['String']['input']>;
+  image?: InputMaybe<Scalars['String']['input']>;
   messageid?: InputMaybe<Scalars['Int']['input']>;
   messageresponseid?: InputMaybe<Scalars['Int']['input']>;
   userid?: InputMaybe<Scalars['String']['input']>;
@@ -592,6 +609,16 @@ export type MutationUpdate_Isseen_FalseArgs = {
 
 export type MutationUpdate_Isseen_TrueArgs = {
   noticeid?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type MutationUpdate_LastseenArgs = {
+  messageid?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type MutationUpdate_Lastseen_GroupArgs = {
+  groupmessageid?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -1052,8 +1079,8 @@ export type Role = {
 export type Subscription = {
   __typename?: 'Subscription';
   sub_all_notice_by_userid?: Maybe<Array<Maybe<Notice>>>;
-  sub_content_message_by_messageid?: Maybe<Array<Maybe<Content_Message>>>;
-  sub_contentgroup_message_by_userid?: Maybe<Array<Maybe<Content_GroupMessage>>>;
+  sub_content_message_by_messageid?: Maybe<Array<Maybe<ContentMessageDto>>>;
+  sub_contentgroup_message_by_userid?: Maybe<Array<Maybe<ContentMessageDto>>>;
   sub_detail_message_by_userid?: Maybe<Array<Maybe<DetailMessage>>>;
   sub_group_message_by_userid?: Maybe<Array<Maybe<Group_Message>>>;
   sub_status_user?: Maybe<User>;
@@ -1067,11 +1094,23 @@ export type SubscriptionSub_All_Notice_By_UseridArgs = {
 
 export type SubscriptionSub_Content_Message_By_MessageidArgs = {
   messageid?: InputMaybe<Scalars['Int']['input']>;
+  userid?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 export type SubscriptionSub_Contentgroup_Message_By_UseridArgs = {
   groupmessageId?: InputMaybe<Scalars['Int']['input']>;
+  userid?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type SubscriptionSub_Detail_Message_By_UseridArgs = {
+  userid?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type SubscriptionSub_Group_Message_By_UseridArgs = {
+  userid?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -1097,6 +1136,12 @@ export type TopicRequest = {
   topicid?: InputMaybe<Scalars['Int']['input']>;
   topicname?: InputMaybe<Scalars['String']['input']>;
   user_topicid?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type TotalIcon = {
+  __typename?: 'TotalIcon';
+  iconid?: Maybe<Scalars['Int']['output']>;
+  total?: Maybe<Scalars['Int']['output']>;
 };
 
 export type User = {
@@ -1220,6 +1265,59 @@ export type CreateCommentChildMutationVariables = Exact<{
 
 export type CreateCommentChildMutation = { __typename?: 'Mutation', create_comment_in_comment?: { __typename?: 'Comment', commentid: number, content?: string | null, createday?: any | null, updateday?: any | null, isdelete?: number | null, comment_comment?: { __typename?: 'Comment', commentid: number, content?: string | null, createday?: any | null, updateday?: any | null, isdelete?: number | null, user_comment?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null, user_comment?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null };
 
+export type GroupFragment = { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, user_group?: { __typename?: 'User', userid: string, fullname?: string | null } | null };
+
+export type GetGroupByKeywordQueryVariables = Exact<{
+  keyword?: InputMaybe<Scalars['String']['input']>;
+  userid?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetGroupByKeywordQuery = { __typename?: 'Query', find_group_by_keyword?: Array<{ __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, user_group?: { __typename?: 'User', userid: string, fullname?: string | null } | null } | null> | null };
+
+export type GetGroupByAdminQueryVariables = Exact<{
+  admin?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetGroupByAdminQuery = { __typename?: 'Query', get_group_by_admin?: Array<{ __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, user_group?: { __typename?: 'User', userid: string, fullname?: string | null } | null } | null> | null };
+
+export type GetGroupByUserIdQueryVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetGroupByUserIdQuery = { __typename?: 'Query', get_group_by_userid?: Array<{ __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, user_group?: { __typename?: 'User', userid: string, fullname?: string | null } | null } | null> | null };
+
+export type GetGroupByGroupIdQueryVariables = Exact<{
+  groupid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetGroupByGroupIdQuery = { __typename?: 'Query', get_group_by_groupid?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, user_group?: { __typename?: 'User', userid: string, fullname?: string | null } | null } | null };
+
+export type CreateGroupMutationVariables = Exact<{
+  group?: InputMaybe<GroupRequest>;
+  admin?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type CreateGroupMutation = { __typename?: 'Mutation', create_group?: string | null };
+
+export type UpdateGroupMutationVariables = Exact<{
+  group?: InputMaybe<GroupRequest>;
+}>;
+
+
+export type UpdateGroupMutation = { __typename?: 'Mutation', update_group?: string | null };
+
+export type DeleteGroupMutationVariables = Exact<{
+  groupid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type DeleteGroupMutation = { __typename?: 'Mutation', delete_group?: string | null };
+
 export type NoticeFragment = { __typename?: 'Notice', noiticeid: number, content?: string | null, createday?: any | null, isseen?: number | null, type?: number | null, subjectid?: number | null, user_notice?: { __typename?: 'User', userid: string, fullname?: string | null } | null };
 
 export type GetNotificationByUserIdSubscriptionVariables = Exact<{
@@ -1287,6 +1385,20 @@ export type GetPostByFollowingQueryVariables = Exact<{
 
 export type GetPostByFollowingQuery = { __typename?: 'Query', find_post_by_follow?: Array<{ __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, totalcomment?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, createday?: any | null, bio?: string | null, address?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null } | null> | null };
 
+export type GetPostBookmarkByUserIdQueryVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetPostBookmarkByUserIdQuery = { __typename?: 'Query', find_all_bookmark_by_userid?: Array<{ __typename?: 'Bookmark', bookmarkid: number, createday?: any | null, post_bookmark?: { __typename?: 'Post', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, isdelete?: number | null, requiredreputation?: number | null, totalread?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null } | null, user_bookmark?: { __typename?: 'User', userid: string, fullname?: string | null } | null } | null> | null };
+
+export type GetPostbyGroupIdQueryVariables = Exact<{
+  groupid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetPostbyGroupIdQuery = { __typename?: 'Query', find_post_in_group?: Array<{ __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, totalcomment?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, createday?: any | null, bio?: string | null, address?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null } | null> | null };
+
 export type CreateReadPostMutationVariables = Exact<{
   postid?: InputMaybe<Scalars['Int']['input']>;
   userid?: InputMaybe<Scalars['String']['input']>;
@@ -1320,12 +1432,29 @@ export type CreatePostMutationVariables = Exact<{
 
 export type CreatePostMutation = { __typename?: 'Mutation', create_post?: string | null };
 
+export type CreatePostInGroupMutationVariables = Exact<{
+  post?: InputMaybe<PostRequest>;
+  user?: InputMaybe<UserRequest>;
+  topic?: InputMaybe<Array<InputMaybe<TopicRequest>> | InputMaybe<TopicRequest>>;
+  groupid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type CreatePostInGroupMutation = { __typename?: 'Mutation', create_post_in_group?: string | null };
+
 export type DeletePostMutationVariables = Exact<{
   postid?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
 export type DeletePostMutation = { __typename?: 'Mutation', delete_post_by_pk?: string | null };
+
+export type HidePostMutationVariables = Exact<{
+  postid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type HidePostMutation = { __typename?: 'Mutation', hide_post?: string | null };
 
 export type CreatePostReactionMutationVariables = Exact<{
   userid?: InputMaybe<Scalars['String']['input']>;
@@ -1437,6 +1566,20 @@ export const CmtFragmentDoc = gql`
   }
 }
     ${CommentFragmentDoc}`;
+export const GroupFragmentDoc = gql`
+    fragment group on Group {
+  groupid
+  groupname
+  image
+  createday
+  user_group {
+    userid
+    fullname
+  }
+  reputaion
+  description
+}
+    `;
 export const NoticeFragmentDoc = gql`
     fragment notice on Notice {
   noiticeid
@@ -1789,6 +1932,261 @@ export function useCreateCommentChildMutation(baseOptions?: Apollo.MutationHookO
 export type CreateCommentChildMutationHookResult = ReturnType<typeof useCreateCommentChildMutation>;
 export type CreateCommentChildMutationResult = Apollo.MutationResult<CreateCommentChildMutation>;
 export type CreateCommentChildMutationOptions = Apollo.BaseMutationOptions<CreateCommentChildMutation, CreateCommentChildMutationVariables>;
+export const GetGroupByKeywordDocument = gql`
+    query GetGroupByKeyword($keyword: String, $userid: String) {
+  find_group_by_keyword(keyword: $keyword, userid: $userid) {
+    ...group
+  }
+}
+    ${GroupFragmentDoc}`;
+
+/**
+ * __useGetGroupByKeywordQuery__
+ *
+ * To run a query within a React component, call `useGetGroupByKeywordQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGroupByKeywordQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGroupByKeywordQuery({
+ *   variables: {
+ *      keyword: // value for 'keyword'
+ *      userid: // value for 'userid'
+ *   },
+ * });
+ */
+export function useGetGroupByKeywordQuery(baseOptions?: Apollo.QueryHookOptions<GetGroupByKeywordQuery, GetGroupByKeywordQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetGroupByKeywordQuery, GetGroupByKeywordQueryVariables>(GetGroupByKeywordDocument, options);
+      }
+export function useGetGroupByKeywordLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGroupByKeywordQuery, GetGroupByKeywordQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetGroupByKeywordQuery, GetGroupByKeywordQueryVariables>(GetGroupByKeywordDocument, options);
+        }
+export function useGetGroupByKeywordSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetGroupByKeywordQuery, GetGroupByKeywordQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetGroupByKeywordQuery, GetGroupByKeywordQueryVariables>(GetGroupByKeywordDocument, options);
+        }
+export type GetGroupByKeywordQueryHookResult = ReturnType<typeof useGetGroupByKeywordQuery>;
+export type GetGroupByKeywordLazyQueryHookResult = ReturnType<typeof useGetGroupByKeywordLazyQuery>;
+export type GetGroupByKeywordSuspenseQueryHookResult = ReturnType<typeof useGetGroupByKeywordSuspenseQuery>;
+export type GetGroupByKeywordQueryResult = Apollo.QueryResult<GetGroupByKeywordQuery, GetGroupByKeywordQueryVariables>;
+export const GetGroupByAdminDocument = gql`
+    query GetGroupByAdmin($admin: String) {
+  get_group_by_admin(admin: $admin) {
+    ...group
+  }
+}
+    ${GroupFragmentDoc}`;
+
+/**
+ * __useGetGroupByAdminQuery__
+ *
+ * To run a query within a React component, call `useGetGroupByAdminQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGroupByAdminQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGroupByAdminQuery({
+ *   variables: {
+ *      admin: // value for 'admin'
+ *   },
+ * });
+ */
+export function useGetGroupByAdminQuery(baseOptions?: Apollo.QueryHookOptions<GetGroupByAdminQuery, GetGroupByAdminQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetGroupByAdminQuery, GetGroupByAdminQueryVariables>(GetGroupByAdminDocument, options);
+      }
+export function useGetGroupByAdminLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGroupByAdminQuery, GetGroupByAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetGroupByAdminQuery, GetGroupByAdminQueryVariables>(GetGroupByAdminDocument, options);
+        }
+export function useGetGroupByAdminSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetGroupByAdminQuery, GetGroupByAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetGroupByAdminQuery, GetGroupByAdminQueryVariables>(GetGroupByAdminDocument, options);
+        }
+export type GetGroupByAdminQueryHookResult = ReturnType<typeof useGetGroupByAdminQuery>;
+export type GetGroupByAdminLazyQueryHookResult = ReturnType<typeof useGetGroupByAdminLazyQuery>;
+export type GetGroupByAdminSuspenseQueryHookResult = ReturnType<typeof useGetGroupByAdminSuspenseQuery>;
+export type GetGroupByAdminQueryResult = Apollo.QueryResult<GetGroupByAdminQuery, GetGroupByAdminQueryVariables>;
+export const GetGroupByUserIdDocument = gql`
+    query GetGroupByUserId($userid: String) {
+  get_group_by_userid(userid: $userid) {
+    ...group
+  }
+}
+    ${GroupFragmentDoc}`;
+
+/**
+ * __useGetGroupByUserIdQuery__
+ *
+ * To run a query within a React component, call `useGetGroupByUserIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGroupByUserIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGroupByUserIdQuery({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *   },
+ * });
+ */
+export function useGetGroupByUserIdQuery(baseOptions?: Apollo.QueryHookOptions<GetGroupByUserIdQuery, GetGroupByUserIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetGroupByUserIdQuery, GetGroupByUserIdQueryVariables>(GetGroupByUserIdDocument, options);
+      }
+export function useGetGroupByUserIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGroupByUserIdQuery, GetGroupByUserIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetGroupByUserIdQuery, GetGroupByUserIdQueryVariables>(GetGroupByUserIdDocument, options);
+        }
+export function useGetGroupByUserIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetGroupByUserIdQuery, GetGroupByUserIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetGroupByUserIdQuery, GetGroupByUserIdQueryVariables>(GetGroupByUserIdDocument, options);
+        }
+export type GetGroupByUserIdQueryHookResult = ReturnType<typeof useGetGroupByUserIdQuery>;
+export type GetGroupByUserIdLazyQueryHookResult = ReturnType<typeof useGetGroupByUserIdLazyQuery>;
+export type GetGroupByUserIdSuspenseQueryHookResult = ReturnType<typeof useGetGroupByUserIdSuspenseQuery>;
+export type GetGroupByUserIdQueryResult = Apollo.QueryResult<GetGroupByUserIdQuery, GetGroupByUserIdQueryVariables>;
+export const GetGroupByGroupIdDocument = gql`
+    query GetGroupByGroupId($groupid: Int) {
+  get_group_by_groupid(groupid: $groupid) {
+    ...group
+  }
+}
+    ${GroupFragmentDoc}`;
+
+/**
+ * __useGetGroupByGroupIdQuery__
+ *
+ * To run a query within a React component, call `useGetGroupByGroupIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGroupByGroupIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGroupByGroupIdQuery({
+ *   variables: {
+ *      groupid: // value for 'groupid'
+ *   },
+ * });
+ */
+export function useGetGroupByGroupIdQuery(baseOptions?: Apollo.QueryHookOptions<GetGroupByGroupIdQuery, GetGroupByGroupIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetGroupByGroupIdQuery, GetGroupByGroupIdQueryVariables>(GetGroupByGroupIdDocument, options);
+      }
+export function useGetGroupByGroupIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGroupByGroupIdQuery, GetGroupByGroupIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetGroupByGroupIdQuery, GetGroupByGroupIdQueryVariables>(GetGroupByGroupIdDocument, options);
+        }
+export function useGetGroupByGroupIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetGroupByGroupIdQuery, GetGroupByGroupIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetGroupByGroupIdQuery, GetGroupByGroupIdQueryVariables>(GetGroupByGroupIdDocument, options);
+        }
+export type GetGroupByGroupIdQueryHookResult = ReturnType<typeof useGetGroupByGroupIdQuery>;
+export type GetGroupByGroupIdLazyQueryHookResult = ReturnType<typeof useGetGroupByGroupIdLazyQuery>;
+export type GetGroupByGroupIdSuspenseQueryHookResult = ReturnType<typeof useGetGroupByGroupIdSuspenseQuery>;
+export type GetGroupByGroupIdQueryResult = Apollo.QueryResult<GetGroupByGroupIdQuery, GetGroupByGroupIdQueryVariables>;
+export const CreateGroupDocument = gql`
+    mutation CreateGroup($group: GroupRequest, $admin: String) {
+  create_group(group: $group, admin: $admin)
+}
+    `;
+export type CreateGroupMutationFn = Apollo.MutationFunction<CreateGroupMutation, CreateGroupMutationVariables>;
+
+/**
+ * __useCreateGroupMutation__
+ *
+ * To run a mutation, you first call `useCreateGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createGroupMutation, { data, loading, error }] = useCreateGroupMutation({
+ *   variables: {
+ *      group: // value for 'group'
+ *      admin: // value for 'admin'
+ *   },
+ * });
+ */
+export function useCreateGroupMutation(baseOptions?: Apollo.MutationHookOptions<CreateGroupMutation, CreateGroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateGroupMutation, CreateGroupMutationVariables>(CreateGroupDocument, options);
+      }
+export type CreateGroupMutationHookResult = ReturnType<typeof useCreateGroupMutation>;
+export type CreateGroupMutationResult = Apollo.MutationResult<CreateGroupMutation>;
+export type CreateGroupMutationOptions = Apollo.BaseMutationOptions<CreateGroupMutation, CreateGroupMutationVariables>;
+export const UpdateGroupDocument = gql`
+    mutation UpdateGroup($group: GroupRequest) {
+  update_group(group: $group)
+}
+    `;
+export type UpdateGroupMutationFn = Apollo.MutationFunction<UpdateGroupMutation, UpdateGroupMutationVariables>;
+
+/**
+ * __useUpdateGroupMutation__
+ *
+ * To run a mutation, you first call `useUpdateGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateGroupMutation, { data, loading, error }] = useUpdateGroupMutation({
+ *   variables: {
+ *      group: // value for 'group'
+ *   },
+ * });
+ */
+export function useUpdateGroupMutation(baseOptions?: Apollo.MutationHookOptions<UpdateGroupMutation, UpdateGroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateGroupMutation, UpdateGroupMutationVariables>(UpdateGroupDocument, options);
+      }
+export type UpdateGroupMutationHookResult = ReturnType<typeof useUpdateGroupMutation>;
+export type UpdateGroupMutationResult = Apollo.MutationResult<UpdateGroupMutation>;
+export type UpdateGroupMutationOptions = Apollo.BaseMutationOptions<UpdateGroupMutation, UpdateGroupMutationVariables>;
+export const DeleteGroupDocument = gql`
+    mutation DeleteGroup($groupid: Int) {
+  delete_group(groupid: $groupid)
+}
+    `;
+export type DeleteGroupMutationFn = Apollo.MutationFunction<DeleteGroupMutation, DeleteGroupMutationVariables>;
+
+/**
+ * __useDeleteGroupMutation__
+ *
+ * To run a mutation, you first call `useDeleteGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteGroupMutation, { data, loading, error }] = useDeleteGroupMutation({
+ *   variables: {
+ *      groupid: // value for 'groupid'
+ *   },
+ * });
+ */
+export function useDeleteGroupMutation(baseOptions?: Apollo.MutationHookOptions<DeleteGroupMutation, DeleteGroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteGroupMutation, DeleteGroupMutationVariables>(DeleteGroupDocument, options);
+      }
+export type DeleteGroupMutationHookResult = ReturnType<typeof useDeleteGroupMutation>;
+export type DeleteGroupMutationResult = Apollo.MutationResult<DeleteGroupMutation>;
+export type DeleteGroupMutationOptions = Apollo.BaseMutationOptions<DeleteGroupMutation, DeleteGroupMutationVariables>;
 export const GetNotificationByUserIdDocument = gql`
     subscription GetNotificationByUserId($userid: String) {
   sub_all_notice_by_userid(userid: $userid) {
@@ -2093,6 +2491,94 @@ export type GetPostByFollowingQueryHookResult = ReturnType<typeof useGetPostByFo
 export type GetPostByFollowingLazyQueryHookResult = ReturnType<typeof useGetPostByFollowingLazyQuery>;
 export type GetPostByFollowingSuspenseQueryHookResult = ReturnType<typeof useGetPostByFollowingSuspenseQuery>;
 export type GetPostByFollowingQueryResult = Apollo.QueryResult<GetPostByFollowingQuery, GetPostByFollowingQueryVariables>;
+export const GetPostBookmarkByUserIdDocument = gql`
+    query GetPostBookmarkByUserId($userid: String) {
+  find_all_bookmark_by_userid(userid: $userid) {
+    bookmarkid
+    post_bookmark {
+      ...post
+    }
+    user_bookmark {
+      userid
+      fullname
+    }
+    createday
+  }
+}
+    ${PostFragmentDoc}`;
+
+/**
+ * __useGetPostBookmarkByUserIdQuery__
+ *
+ * To run a query within a React component, call `useGetPostBookmarkByUserIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPostBookmarkByUserIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPostBookmarkByUserIdQuery({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *   },
+ * });
+ */
+export function useGetPostBookmarkByUserIdQuery(baseOptions?: Apollo.QueryHookOptions<GetPostBookmarkByUserIdQuery, GetPostBookmarkByUserIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPostBookmarkByUserIdQuery, GetPostBookmarkByUserIdQueryVariables>(GetPostBookmarkByUserIdDocument, options);
+      }
+export function useGetPostBookmarkByUserIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPostBookmarkByUserIdQuery, GetPostBookmarkByUserIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPostBookmarkByUserIdQuery, GetPostBookmarkByUserIdQueryVariables>(GetPostBookmarkByUserIdDocument, options);
+        }
+export function useGetPostBookmarkByUserIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetPostBookmarkByUserIdQuery, GetPostBookmarkByUserIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetPostBookmarkByUserIdQuery, GetPostBookmarkByUserIdQueryVariables>(GetPostBookmarkByUserIdDocument, options);
+        }
+export type GetPostBookmarkByUserIdQueryHookResult = ReturnType<typeof useGetPostBookmarkByUserIdQuery>;
+export type GetPostBookmarkByUserIdLazyQueryHookResult = ReturnType<typeof useGetPostBookmarkByUserIdLazyQuery>;
+export type GetPostBookmarkByUserIdSuspenseQueryHookResult = ReturnType<typeof useGetPostBookmarkByUserIdSuspenseQuery>;
+export type GetPostBookmarkByUserIdQueryResult = Apollo.QueryResult<GetPostBookmarkByUserIdQuery, GetPostBookmarkByUserIdQueryVariables>;
+export const GetPostbyGroupIdDocument = gql`
+    query GetPostbyGroupId($groupid: Int) {
+  find_post_in_group(groupid: $groupid) {
+    ...postDto
+  }
+}
+    ${PostDtoFragmentDoc}`;
+
+/**
+ * __useGetPostbyGroupIdQuery__
+ *
+ * To run a query within a React component, call `useGetPostbyGroupIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPostbyGroupIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPostbyGroupIdQuery({
+ *   variables: {
+ *      groupid: // value for 'groupid'
+ *   },
+ * });
+ */
+export function useGetPostbyGroupIdQuery(baseOptions?: Apollo.QueryHookOptions<GetPostbyGroupIdQuery, GetPostbyGroupIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPostbyGroupIdQuery, GetPostbyGroupIdQueryVariables>(GetPostbyGroupIdDocument, options);
+      }
+export function useGetPostbyGroupIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPostbyGroupIdQuery, GetPostbyGroupIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPostbyGroupIdQuery, GetPostbyGroupIdQueryVariables>(GetPostbyGroupIdDocument, options);
+        }
+export function useGetPostbyGroupIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetPostbyGroupIdQuery, GetPostbyGroupIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetPostbyGroupIdQuery, GetPostbyGroupIdQueryVariables>(GetPostbyGroupIdDocument, options);
+        }
+export type GetPostbyGroupIdQueryHookResult = ReturnType<typeof useGetPostbyGroupIdQuery>;
+export type GetPostbyGroupIdLazyQueryHookResult = ReturnType<typeof useGetPostbyGroupIdLazyQuery>;
+export type GetPostbyGroupIdSuspenseQueryHookResult = ReturnType<typeof useGetPostbyGroupIdSuspenseQuery>;
+export type GetPostbyGroupIdQueryResult = Apollo.QueryResult<GetPostbyGroupIdQuery, GetPostbyGroupIdQueryVariables>;
 export const CreateReadPostDocument = gql`
     mutation CreateReadPost($postid: Int, $userid: String) {
   update_totalread_post(postid: $postid, userid: $userid)
@@ -2224,6 +2710,40 @@ export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
+export const CreatePostInGroupDocument = gql`
+    mutation CreatePostInGroup($post: PostRequest, $user: UserRequest, $topic: [TopicRequest], $groupid: Int) {
+  create_post_in_group(post: $post, user: $user, topic: $topic, groupid: $groupid)
+}
+    `;
+export type CreatePostInGroupMutationFn = Apollo.MutationFunction<CreatePostInGroupMutation, CreatePostInGroupMutationVariables>;
+
+/**
+ * __useCreatePostInGroupMutation__
+ *
+ * To run a mutation, you first call `useCreatePostInGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePostInGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPostInGroupMutation, { data, loading, error }] = useCreatePostInGroupMutation({
+ *   variables: {
+ *      post: // value for 'post'
+ *      user: // value for 'user'
+ *      topic: // value for 'topic'
+ *      groupid: // value for 'groupid'
+ *   },
+ * });
+ */
+export function useCreatePostInGroupMutation(baseOptions?: Apollo.MutationHookOptions<CreatePostInGroupMutation, CreatePostInGroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePostInGroupMutation, CreatePostInGroupMutationVariables>(CreatePostInGroupDocument, options);
+      }
+export type CreatePostInGroupMutationHookResult = ReturnType<typeof useCreatePostInGroupMutation>;
+export type CreatePostInGroupMutationResult = Apollo.MutationResult<CreatePostInGroupMutation>;
+export type CreatePostInGroupMutationOptions = Apollo.BaseMutationOptions<CreatePostInGroupMutation, CreatePostInGroupMutationVariables>;
 export const DeletePostDocument = gql`
     mutation DeletePost($postid: Int) {
   delete_post_by_pk(postid: $postid)
@@ -2255,6 +2775,37 @@ export function useDeletePostMutation(baseOptions?: Apollo.MutationHookOptions<D
 export type DeletePostMutationHookResult = ReturnType<typeof useDeletePostMutation>;
 export type DeletePostMutationResult = Apollo.MutationResult<DeletePostMutation>;
 export type DeletePostMutationOptions = Apollo.BaseMutationOptions<DeletePostMutation, DeletePostMutationVariables>;
+export const HidePostDocument = gql`
+    mutation HidePost($postid: Int) {
+  hide_post(postid: $postid)
+}
+    `;
+export type HidePostMutationFn = Apollo.MutationFunction<HidePostMutation, HidePostMutationVariables>;
+
+/**
+ * __useHidePostMutation__
+ *
+ * To run a mutation, you first call `useHidePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useHidePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [hidePostMutation, { data, loading, error }] = useHidePostMutation({
+ *   variables: {
+ *      postid: // value for 'postid'
+ *   },
+ * });
+ */
+export function useHidePostMutation(baseOptions?: Apollo.MutationHookOptions<HidePostMutation, HidePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<HidePostMutation, HidePostMutationVariables>(HidePostDocument, options);
+      }
+export type HidePostMutationHookResult = ReturnType<typeof useHidePostMutation>;
+export type HidePostMutationResult = Apollo.MutationResult<HidePostMutation>;
+export type HidePostMutationOptions = Apollo.BaseMutationOptions<HidePostMutation, HidePostMutationVariables>;
 export const CreatePostReactionDocument = gql`
     mutation CreatePostReaction($userid: String, $postid: Int, $iconid: Int) {
   create_icon_for_postlike(userid: $userid, postid: $postid, iconid: $iconid)

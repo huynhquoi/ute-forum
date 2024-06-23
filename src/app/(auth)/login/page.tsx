@@ -19,6 +19,7 @@ import { useEffect, useState } from "react";
 import { loginApi } from "@/api/auth";
 import useStorage from "@/hooks/useStorage";
 import { useRouter } from "next/navigation";
+import { Loading } from "@/components/svgs";
 
 const loginSchema = z.object({
   username: z.string().min(2).max(50),
@@ -55,7 +56,7 @@ const LoginPage = () => {
         router.push("/home");
       } catch (error: any) {
         setLoading(false);
-        console.log(error.response.data);
+        console.log(error.response?.data);
       }
     };
 
@@ -112,6 +113,7 @@ const LoginPage = () => {
                 )}
               />
               <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? <Loading className="mr-2 h-4 w-4 animate-spin" />: <></>}
                 Đăng nhập
               </Button>
             </form>

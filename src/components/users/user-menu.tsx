@@ -55,7 +55,11 @@ const UserMenu = () => {
               {/* <User className="mr-2 h-4 w-4" /> */}
               <span>Trang cá nhân</span>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => {
+                router.push("/profile/menu/saved");
+              }}
+            >
               {/* <CreditCard className="mr-2 h-4 w-4" /> */}
               <span>Đã lưu</span>
             </DropdownMenuItem>
@@ -66,11 +70,19 @@ const UserMenu = () => {
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
                 <DropdownMenuSubContent>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      router.push("/profile/menu/following");
+                    }}
+                  >
                     {/* <Mail className="mr-2 h-4 w-4" /> */}
                     <span>Đang theo dõi</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      router.push("/profile/menu/follower");
+                    }}
+                  >
                     {/* <MessageSquare className="mr-2 h-4 w-4" /> */}
                     <span>Được theo dõi</span>
                   </DropdownMenuItem>
@@ -96,11 +108,19 @@ const UserMenu = () => {
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
                 <DropdownMenuSubContent>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      router.push("/profile/menu/maganer");
+                    }}
+                  >
                     {/* <Mail className="mr-2 h-4 w-4" /> */}
                     <span>Đang quản lý</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      router.push("/profile/menu/forum");
+                    }}
+                  >
                     {/* <MessageSquare className="mr-2 h-4 w-4" /> */}
                     <span>Đang tham gia</span>
                   </DropdownMenuItem>

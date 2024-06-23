@@ -1,0 +1,48 @@
+fragment group on Group {
+    groupid
+    groupname
+    image
+    createday
+    user_group {
+        userid
+        fullname
+    }
+    reputaion
+    description
+}
+
+query GetGroupByKeyword($keyword:String, $userid:String) {
+    find_group_by_keyword(keyword:$keyword, userid:$userid) {
+        ...group
+    }
+}
+
+query GetGroupByAdmin($admin:String) {
+    get_group_by_admin(admin:$admin) {
+        ...group
+    }
+}
+
+query GetGroupByUserId($userid:String) {
+    get_group_by_userid(userid:$userid) {
+        ...group
+    }
+}
+
+query GetGroupByGroupId($groupid:Int) {
+    get_group_by_groupid(groupid:$groupid) {
+        ...group
+    }
+}
+
+mutation CreateGroup($group:GroupRequest,$admin:String) {
+    create_group(group:$group,admin:$admin)
+}
+
+mutation UpdateGroup($group:GroupRequest) {
+    update_group(group:$group)
+}
+
+mutation DeleteGroup($groupid:Int) {
+    delete_group(groupid:$groupid)
+}

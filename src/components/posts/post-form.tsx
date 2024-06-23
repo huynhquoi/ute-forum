@@ -1,6 +1,6 @@
 "use client"
 
-import { Post, PostDto, useCreatePostMutation } from "@/generated/types"
+import { Post, PostDto, useCreatePostInGroupMutation, useCreatePostMutation } from "@/generated/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ChangeEvent, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -36,14 +36,16 @@ type PostDataType = {
 }
 
 type PostFormType = {
-  post?: PostDto
+  post?: PostDto,
+  groupId?: number,
 }
 
-const PostForm = ({ post }: PostFormType) => {
+const PostForm = ({ post, groupId }: PostFormType) => {
   const [preview, setPreview] = useState("");
   const [loading, setLoading] = useState(false)
   const [imageProgress, setImageProgress] = useState(0);
   const [createPost] = useCreatePostMutation()
+  const [createGroupPost] = useCreatePostInGroupMutation()
   const userStorage = useUserStorage(state => state.user)
   const { uploadFile, setProgressCallback, deleteFile } = useFirebase()
   const router = useRouter()
@@ -77,27 +79,50 @@ const PostForm = ({ post }: PostFormType) => {
       return
     }
 
-    createPost({
-      variables: {
-        user: {
-          userid: userStorage?.userid
-        },
-        post: {
-          image: postData.image,
-          content: postData.content,
-          title: postData.title,
-          requiredreputation: parseInt(postData.requiredReputation)
-        },
-        topic: postData.topic.map(item => ({
-          topicid: parseInt(item)
-        }))
-      }
-    }).then(() => {
-      setLoading(true)
-      router.push("/home")
-    })
+    if (!groupId) {
+      createPost({
+        variables: {
+          user: {
+            userid: userStorage?.userid
+          },
+          post: {
+            image: postData.image,
+            content: postData.content,
+            title: postData.title,
+            requiredreputation: parseInt(postData.requiredReputation)
+          },
+          topic: postData.topic.map(item => ({
+            topicid: parseInt(item)
+          }))
+        }
+      }).then(() => {
+        setLoading(true)
+        router.push("/home")
+      })
+    } else {
+      createGroupPost({
+        variables: {
+          user: {
+            userid: userStorage?.userid
+          },
+          post: {
+            image: postData.image,
+            content: postData.content,
+            title: postData.title,
+            requiredreputation: parseInt(postData.requiredReputation)
+          },
+          topic: postData.topic.map(item => ({
+            topicid: parseInt(item)
+          })),
+          groupid: groupId
+        }
+      }).then(() => {
+        setLoading(true)
+        router.push(`/forum/${groupId}`)
+      })
+    }
 
-  }, [createPost, loading, postData, router, userStorage?.userid])
+  }, [createGroupPost, createPost, groupId, loading, postData, router, userStorage?.userid])
 
   const onSubmit = (values: z.infer<typeof PostChema>) => {
     setPostData(values);

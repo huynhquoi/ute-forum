@@ -1,4 +1,5 @@
-export const API = "https://kltn2024.onrender.com";
+// export const API = "https://kltn2024.onrender.com";
+export const API = "https://forumnew.onrender.com";
 
 //auth
 export const API_AUTH_LOGIN = `${API}/login`;

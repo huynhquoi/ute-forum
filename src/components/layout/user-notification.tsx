@@ -59,7 +59,7 @@ const UserNotification = () => {
                 setNotice(item?.noiticeid as number)
               }}>
               <Description value={item?.content as string} />
-              {item?.isseen === 0 ? <Dot className="text-xs text-blue-600" /> : <></>}
+              {item?.isseen === 0 ? <Dot className="text-2xl text-blue-600" /> : <></>}
             </Card>
           ))}
         </div>

@@ -1,10 +1,11 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { Post, Post_Like, User } from "@/generated/types";
+import { Bookmark, Post, Post_Like, User } from "@/generated/types";
 
 export type UserState = {
   user: User | null;
   postReacted: Post_Like[] | [];
+  bookmarks: Bookmark[] | [];
 };
 
 export type UserActions = {
@@ -13,6 +14,9 @@ export type UserActions = {
   addAllPost: (allPost: Post_Like[]) => void;
   addPost: (post: Post_Like) => void;
   removePost: (post: Post_Like) => void;
+  addAllBookmark: (allBookmark: Bookmark[]) => void;
+  addBookmark: (bookmark: Bookmark) => void;
+  removeBookmark: (bookmark: Bookmark) => void;
 };
 
 export const useUserStorage = create<UserState & UserActions>()(
@@ -20,6 +24,7 @@ export const useUserStorage = create<UserState & UserActions>()(
     (set) => ({
       user: null,
       postReacted: [],
+      bookmarks: [],
       addUser: (userInfo?: User) => {
         set(() => ({
           user: userInfo || null,
@@ -45,6 +50,23 @@ export const useUserStorage = create<UserState & UserActions>()(
           postReacted: state?.postReacted?.filter(
             (item) =>
               item?.post_postlike?.postid !== post?.post_postlike?.postid
+          ),
+        }));
+      },
+      addAllBookmark: (allBookmark: Bookmark[]) => {
+        set(() => ({
+          bookmarks: [...allBookmark]
+        }));
+      },
+      addBookmark: (bookmark: Bookmark) => {
+        set((state) => ({
+          bookmarks: [bookmark, ...state.bookmarks]
+        }));
+      },
+      removeBookmark: (bookmark: Bookmark) => {
+        set((state) => ({
+          bookmarks: state.bookmarks?.filter(
+            (item) => item?.bookmarkid !== bookmark?.bookmarkid
           ),
         }));
       },

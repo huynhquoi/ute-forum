@@ -7,9 +7,7 @@ import { Badge } from "../ui/badge";
 import Link from "next/link";
 import { Post, PostDto, useDeletePostMutation } from "@/generated/types";
 import PostAction from "./post-action";
-import { Bookmark, BookmarkFill, Trash } from "../svgs";
 import { useState } from "react";
-import Notification from "../shared/notification";
 import ImageCover from "../shared/image-cover";
 import PostMenu from "./post-menu";
 import { useUserStorage } from "@/lib/store/userStorage";
@@ -54,7 +52,7 @@ const PostCard = ({ post, firstChild }: PostCardProps) => {
           </Link>
           <CardFooter className="py-1 px-2 flex items-center justify-between">
             <PostAction post={post} useBg={true} showCommnent={true} />
-            <PostBookmark />
+            <PostBookmark postId={post?.postid}/>
           </CardFooter>
         </Card>}
     </>
