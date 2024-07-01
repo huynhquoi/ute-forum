@@ -155,14 +155,25 @@ export type Group = {
   user_group?: Maybe<User>;
 };
 
+export type GroupDto = {
+  __typename?: 'GroupDTO';
+  admin?: Maybe<Scalars['String']['output']>;
+  chanel?: Maybe<Scalars['Int']['output']>;
+  createday?: Maybe<Scalars['LocalDateTime']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  groupid?: Maybe<Scalars['Int']['output']>;
+  groupname?: Maybe<Scalars['String']['output']>;
+  image?: Maybe<Scalars['String']['output']>;
+  reputation?: Maybe<Scalars['Int']['output']>;
+  totaluser?: Maybe<Scalars['Int']['output']>;
+};
+
 export type GroupRequest = {
-  createday?: InputMaybe<Scalars['LocalDateTime']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   groupid?: InputMaybe<Scalars['Int']['input']>;
   groupname?: InputMaybe<Scalars['String']['input']>;
   image?: InputMaybe<Scalars['String']['input']>;
   reputaion?: InputMaybe<Scalars['Int']['input']>;
-  user_group?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Group_Message = {
@@ -229,7 +240,7 @@ export type Mutation = {
   /**     Follow */
   create_follow?: Maybe<Scalars['String']['output']>;
   /**    Group */
-  create_group?: Maybe<Scalars['String']['output']>;
+  create_group?: Maybe<GroupDto>;
   /**    Group_Message */
   create_group_message?: Maybe<Scalars['String']['output']>;
   /**     CommentLike */
@@ -1267,6 +1278,8 @@ export type CreateCommentChildMutation = { __typename?: 'Mutation', create_comme
 
 export type GroupFragment = { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, user_group?: { __typename?: 'User', userid: string, fullname?: string | null } | null };
 
+export type GroupDtoFragment = { __typename?: 'GroupDTO', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, admin?: string | null, description?: string | null, chanel?: number | null, totaluser?: number | null };
+
 export type GetGroupByKeywordQueryVariables = Exact<{
   keyword?: InputMaybe<Scalars['String']['input']>;
   userid?: InputMaybe<Scalars['String']['input']>;
@@ -1302,7 +1315,7 @@ export type CreateGroupMutationVariables = Exact<{
 }>;
 
 
-export type CreateGroupMutation = { __typename?: 'Mutation', create_group?: string | null };
+export type CreateGroupMutation = { __typename?: 'Mutation', create_group?: { __typename?: 'GroupDTO', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, admin?: string | null, description?: string | null, chanel?: number | null, totaluser?: number | null } | null };
 
 export type UpdateGroupMutationVariables = Exact<{
   group?: InputMaybe<GroupRequest>;
@@ -1317,6 +1330,44 @@ export type DeleteGroupMutationVariables = Exact<{
 
 
 export type DeleteGroupMutation = { __typename?: 'Mutation', delete_group?: string | null };
+
+export type MessageFragment = { __typename?: 'DetailMessage', detailmessageid: number, isblock?: number | null, detailmessage_message?: { __typename?: 'Message', messageid: number, messagename?: string | null, createday?: any | null } | null, user_detailmessage?: { __typename?: 'User', userid: string, fullname?: string | null, status?: number | null } | null };
+
+export type ContentFragment = { __typename?: 'ContentMessageDTO', contentid?: number | null, content?: string | null, createday?: any | null, updateday?: any | null, parentid?: number | null, userid?: string | null, messageid?: number | null, image?: string | null, totalicon?: Array<{ __typename?: 'TotalIcon', iconid?: number | null, total?: number | null } | null> | null };
+
+export type CreateMessageMutationVariables = Exact<{
+  userid1?: InputMaybe<Scalars['String']['input']>;
+  userid2?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type CreateMessageMutation = { __typename?: 'Mutation', create_message?: { __typename?: 'Message', messageid: number, messagename?: string | null, createday?: any | null } | null };
+
+export type CreateContentMessageMutationVariables = Exact<{
+  content?: InputMaybe<Scalars['String']['input']>;
+  image?: InputMaybe<Scalars['String']['input']>;
+  messageid?: InputMaybe<Scalars['Int']['input']>;
+  userid?: InputMaybe<Scalars['String']['input']>;
+  messageresponseid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type CreateContentMessageMutation = { __typename?: 'Mutation', create_content_message?: string | null };
+
+export type GetMessageByUserIdSubscriptionVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetMessageByUserIdSubscription = { __typename?: 'Subscription', sub_detail_message_by_userid?: Array<{ __typename?: 'DetailMessage', detailmessageid: number, isblock?: number | null, detailmessage_message?: { __typename?: 'Message', messageid: number, messagename?: string | null, createday?: any | null } | null, user_detailmessage?: { __typename?: 'User', userid: string, fullname?: string | null, status?: number | null } | null } | null> | null };
+
+export type GetDetailMessageByMessageIdSubscriptionVariables = Exact<{
+  messageid?: InputMaybe<Scalars['Int']['input']>;
+  userid?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetDetailMessageByMessageIdSubscription = { __typename?: 'Subscription', sub_content_message_by_messageid?: Array<{ __typename?: 'ContentMessageDTO', contentid?: number | null, content?: string | null, createday?: any | null, updateday?: any | null, parentid?: number | null, userid?: string | null, messageid?: number | null, image?: string | null, totalicon?: Array<{ __typename?: 'TotalIcon', iconid?: number | null, total?: number | null } | null> | null } | null> | null };
 
 export type NoticeFragment = { __typename?: 'Notice', noiticeid: number, content?: string | null, createday?: any | null, isseen?: number | null, type?: number | null, subjectid?: number | null, user_notice?: { __typename?: 'User', userid: string, fullname?: string | null } | null };
 
@@ -1578,6 +1629,51 @@ export const GroupFragmentDoc = gql`
   }
   reputaion
   description
+}
+    `;
+export const GroupDtoFragmentDoc = gql`
+    fragment groupDTO on GroupDTO {
+  groupid
+  groupname
+  image
+  createday
+  reputation
+  admin
+  description
+  chanel
+  totaluser
+}
+    `;
+export const MessageFragmentDoc = gql`
+    fragment message on DetailMessage {
+  detailmessageid
+  detailmessage_message {
+    messageid
+    messagename
+    createday
+  }
+  user_detailmessage {
+    userid
+    fullname
+    status
+  }
+  isblock
+}
+    `;
+export const ContentFragmentDoc = gql`
+    fragment content on ContentMessageDTO {
+  contentid
+  content
+  createday
+  updateday
+  parentid
+  userid
+  messageid
+  totalicon {
+    iconid
+    total
+  }
+  image
 }
     `;
 export const NoticeFragmentDoc = gql`
@@ -2095,9 +2191,11 @@ export type GetGroupByGroupIdSuspenseQueryHookResult = ReturnType<typeof useGetG
 export type GetGroupByGroupIdQueryResult = Apollo.QueryResult<GetGroupByGroupIdQuery, GetGroupByGroupIdQueryVariables>;
 export const CreateGroupDocument = gql`
     mutation CreateGroup($group: GroupRequest, $admin: String) {
-  create_group(group: $group, admin: $admin)
+  create_group(group: $group, admin: $admin) {
+    ...groupDTO
+  }
 }
-    `;
+    ${GroupDtoFragmentDoc}`;
 export type CreateGroupMutationFn = Apollo.MutationFunction<CreateGroupMutation, CreateGroupMutationVariables>;
 
 /**
@@ -2187,6 +2285,144 @@ export function useDeleteGroupMutation(baseOptions?: Apollo.MutationHookOptions<
 export type DeleteGroupMutationHookResult = ReturnType<typeof useDeleteGroupMutation>;
 export type DeleteGroupMutationResult = Apollo.MutationResult<DeleteGroupMutation>;
 export type DeleteGroupMutationOptions = Apollo.BaseMutationOptions<DeleteGroupMutation, DeleteGroupMutationVariables>;
+export const CreateMessageDocument = gql`
+    mutation CreateMessage($userid1: String, $userid2: String) {
+  create_message(userid1: $userid1, userid2: $userid2) {
+    messageid
+    messagename
+    createday
+  }
+}
+    `;
+export type CreateMessageMutationFn = Apollo.MutationFunction<CreateMessageMutation, CreateMessageMutationVariables>;
+
+/**
+ * __useCreateMessageMutation__
+ *
+ * To run a mutation, you first call `useCreateMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createMessageMutation, { data, loading, error }] = useCreateMessageMutation({
+ *   variables: {
+ *      userid1: // value for 'userid1'
+ *      userid2: // value for 'userid2'
+ *   },
+ * });
+ */
+export function useCreateMessageMutation(baseOptions?: Apollo.MutationHookOptions<CreateMessageMutation, CreateMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateMessageMutation, CreateMessageMutationVariables>(CreateMessageDocument, options);
+      }
+export type CreateMessageMutationHookResult = ReturnType<typeof useCreateMessageMutation>;
+export type CreateMessageMutationResult = Apollo.MutationResult<CreateMessageMutation>;
+export type CreateMessageMutationOptions = Apollo.BaseMutationOptions<CreateMessageMutation, CreateMessageMutationVariables>;
+export const CreateContentMessageDocument = gql`
+    mutation CreateContentMessage($content: String, $image: String, $messageid: Int, $userid: String, $messageresponseid: Int) {
+  create_content_message(
+    content: $content
+    image: $image
+    messageid: $messageid
+    userid: $userid
+    messageresponseid: $messageresponseid
+  )
+}
+    `;
+export type CreateContentMessageMutationFn = Apollo.MutationFunction<CreateContentMessageMutation, CreateContentMessageMutationVariables>;
+
+/**
+ * __useCreateContentMessageMutation__
+ *
+ * To run a mutation, you first call `useCreateContentMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateContentMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createContentMessageMutation, { data, loading, error }] = useCreateContentMessageMutation({
+ *   variables: {
+ *      content: // value for 'content'
+ *      image: // value for 'image'
+ *      messageid: // value for 'messageid'
+ *      userid: // value for 'userid'
+ *      messageresponseid: // value for 'messageresponseid'
+ *   },
+ * });
+ */
+export function useCreateContentMessageMutation(baseOptions?: Apollo.MutationHookOptions<CreateContentMessageMutation, CreateContentMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateContentMessageMutation, CreateContentMessageMutationVariables>(CreateContentMessageDocument, options);
+      }
+export type CreateContentMessageMutationHookResult = ReturnType<typeof useCreateContentMessageMutation>;
+export type CreateContentMessageMutationResult = Apollo.MutationResult<CreateContentMessageMutation>;
+export type CreateContentMessageMutationOptions = Apollo.BaseMutationOptions<CreateContentMessageMutation, CreateContentMessageMutationVariables>;
+export const GetMessageByUserIdDocument = gql`
+    subscription GetMessageByUserId($userid: String) {
+  sub_detail_message_by_userid(userid: $userid) {
+    ...message
+  }
+}
+    ${MessageFragmentDoc}`;
+
+/**
+ * __useGetMessageByUserIdSubscription__
+ *
+ * To run a query within a React component, call `useGetMessageByUserIdSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useGetMessageByUserIdSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMessageByUserIdSubscription({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *   },
+ * });
+ */
+export function useGetMessageByUserIdSubscription(baseOptions?: Apollo.SubscriptionHookOptions<GetMessageByUserIdSubscription, GetMessageByUserIdSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<GetMessageByUserIdSubscription, GetMessageByUserIdSubscriptionVariables>(GetMessageByUserIdDocument, options);
+      }
+export type GetMessageByUserIdSubscriptionHookResult = ReturnType<typeof useGetMessageByUserIdSubscription>;
+export type GetMessageByUserIdSubscriptionResult = Apollo.SubscriptionResult<GetMessageByUserIdSubscription>;
+export const GetDetailMessageByMessageIdDocument = gql`
+    subscription GetDetailMessageByMessageId($messageid: Int, $userid: String) {
+  sub_content_message_by_messageid(messageid: $messageid, userid: $userid) {
+    ...content
+  }
+}
+    ${ContentFragmentDoc}`;
+
+/**
+ * __useGetDetailMessageByMessageIdSubscription__
+ *
+ * To run a query within a React component, call `useGetDetailMessageByMessageIdSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useGetDetailMessageByMessageIdSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDetailMessageByMessageIdSubscription({
+ *   variables: {
+ *      messageid: // value for 'messageid'
+ *      userid: // value for 'userid'
+ *   },
+ * });
+ */
+export function useGetDetailMessageByMessageIdSubscription(baseOptions?: Apollo.SubscriptionHookOptions<GetDetailMessageByMessageIdSubscription, GetDetailMessageByMessageIdSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<GetDetailMessageByMessageIdSubscription, GetDetailMessageByMessageIdSubscriptionVariables>(GetDetailMessageByMessageIdDocument, options);
+      }
+export type GetDetailMessageByMessageIdSubscriptionHookResult = ReturnType<typeof useGetDetailMessageByMessageIdSubscription>;
+export type GetDetailMessageByMessageIdSubscriptionResult = Apollo.SubscriptionResult<GetDetailMessageByMessageIdSubscription>;
 export const GetNotificationByUserIdDocument = gql`
     subscription GetNotificationByUserId($userid: String) {
   sub_all_notice_by_userid(userid: $userid) {

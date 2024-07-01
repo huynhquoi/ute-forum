@@ -11,6 +11,18 @@ fragment group on Group {
     description
 }
 
+fragment groupDTO on GroupDTO {
+    groupid
+    groupname
+    image
+    createday
+    reputation
+    admin
+    description
+    chanel
+    totaluser
+}
+
 query GetGroupByKeyword($keyword:String, $userid:String) {
     find_group_by_keyword(keyword:$keyword, userid:$userid) {
         ...group
@@ -36,7 +48,9 @@ query GetGroupByGroupId($groupid:Int) {
 }
 
 mutation CreateGroup($group:GroupRequest,$admin:String) {
-    create_group(group:$group,admin:$admin)
+    create_group(group:$group,admin:$admin) {
+        ...groupDTO
+    }
 }
 
 mutation UpdateGroup($group:GroupRequest) {

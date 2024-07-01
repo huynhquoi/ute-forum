@@ -26,3 +26,4 @@ export { default as Loading } from "./Loading.svg";
 export { default as Open } from "./Open.svg";
 export { default as GroupIcon } from "./Group.svg";
 export { default as Logout } from "./Logout.svg";
+export { default as Messenger } from "./Messenger.svg";

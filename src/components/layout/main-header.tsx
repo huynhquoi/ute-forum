@@ -19,6 +19,7 @@ import useStorage from "@/hooks/useStorage";
 import { useEffect } from "react";
 import { useUserStorage } from "@/lib/store/userStorage";
 import UserNotification from "./user-notification";
+import UserMessenger from "./user-messeger";
 
 type MainHeaderProps = {
   inUser?: boolean;
@@ -112,6 +113,7 @@ const MainHeader = ({ inUser }: MainHeaderProps) => {
             </NavigationMenu>
             <div className="m-0 p-0 flex items-center">
               {inUser ? <></> : <Link href={"/create-post"}><Button className="mr-4">Đăng bài</Button></Link>}
+              <UserMessenger />
               <UserNotification />
               <UserMenu />
             </div>

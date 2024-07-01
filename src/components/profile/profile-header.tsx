@@ -1,4 +1,4 @@
-import { User } from "@/generated/types";
+import { User, useCreateMessageMutation } from "@/generated/types";
 import { Card, CardHeader } from "../ui/card";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
@@ -14,6 +14,19 @@ type ProfileHeaderProps = {
 
 const ProfileHeader = ({ user }: ProfileHeaderProps) => {
   const userStorage = useUserStorage((state) => state.user)
+  const [createMessage] = useCreateMessageMutation()
+
+  const handleCreateMessage = () => {
+    if(!user?.userid) {
+      return
+    }
+    createMessage({
+      variables: {
+        userid1: userStorage?.userid,
+        userid2: user.userid
+      }
+    })
+  }
   return (
     <>
       <Card className="shadow-none border-x-none border-t-none rounded-none fixed top-[56px] w-full z-50">
@@ -50,7 +63,7 @@ const ProfileHeader = ({ user }: ProfileHeaderProps) => {
                   <ForumForm />
                   <Link href={"/create-post"}><Button>Đăng bài</Button></Link>
                   <ProfileEdit />
-                </div> : <></>}
+                </div> : <><Button onClick={() => {handleCreateMessage()}}>Nhắn tin</Button></>}
               </div>
               <div className="col-span-1"></div>
             </div>

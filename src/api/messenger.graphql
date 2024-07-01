@@ -1,0 +1,53 @@
+fragment message on DetailMessage {
+  detailmessageid
+  detailmessage_message {
+    messageid
+    messagename
+    createday
+  }
+  user_detailmessage {
+    userid
+    fullname
+    status
+  }
+  isblock
+}
+
+fragment content on ContentMessageDTO {
+  contentid
+  content
+  createday
+  updateday
+  parentid
+  userid
+  messageid
+  totalicon {
+    iconid
+    total
+  }
+  image
+}
+
+mutation CreateMessage($userid1: String, $userid2: String) {
+  create_message(userid1: $userid1, userid2: $userid2) {
+    messageid
+    messagename
+    createday
+  }
+}
+
+mutation CreateContentMessage($content: String, $image: String, $messageid: Int, $userid: String, $messageresponseid: Int) {
+    create_content_message(content: $content, image: $image, messageid: $messageid, userid: $userid, messageresponseid: $messageresponseid)
+}
+
+subscription GetMessageByUserId($userid: String) {
+  sub_detail_message_by_userid(userid: $userid) {
+    ...message
+  }
+}
+
+subscription GetDetailMessageByMessageId($messageid: Int, $userid: String) {
+  sub_content_message_by_messageid(messageid: $messageid, userid: $userid) {
+    ...content
+  }
+}
