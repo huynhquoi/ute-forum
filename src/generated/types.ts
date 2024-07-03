@@ -46,6 +46,8 @@ export type Comment = {
   totallike?: Maybe<Scalars['Int']['output']>;
   updateday?: Maybe<Scalars['LocalDateTime']['output']>;
   user_comment?: Maybe<User>;
+  warning?: Maybe<Scalars['String']['output']>;
+  warningword?: Maybe<Scalars['String']['output']>;
 };
 
 export type CommentRequest = {
@@ -133,6 +135,17 @@ export type DetailMessage = {
   detailmessage_message?: Maybe<Message>;
   detailmessageid: Scalars['Int']['output'];
   isblock?: Maybe<Scalars['Int']['output']>;
+  lastseen?: Maybe<Scalars['LocalDateTime']['output']>;
+  user_detailmessage?: Maybe<User>;
+};
+
+export type DetailMessageDto = {
+  __typename?: 'DetailMessageDTO';
+  detailmessage_message?: Maybe<Message>;
+  detailmessageid: Scalars['Int']['output'];
+  isblock?: Maybe<Scalars['Int']['output']>;
+  lastseen?: Maybe<Scalars['LocalDateTime']['output']>;
+  lastsend?: Maybe<Scalars['LocalDateTime']['output']>;
   user_detailmessage?: Maybe<User>;
 };
 
@@ -691,6 +704,8 @@ export type Post = {
   totalread?: Maybe<Scalars['Int']['output']>;
   updateday?: Maybe<Scalars['LocalDateTime']['output']>;
   user_post?: Maybe<User>;
+  warning?: Maybe<Scalars['String']['output']>;
+  warningword?: Maybe<Scalars['String']['output']>;
 };
 
 export type PostDto = {
@@ -710,6 +725,8 @@ export type PostDto = {
   totalread?: Maybe<Scalars['Int']['output']>;
   updateday?: Maybe<Scalars['LocalDateTime']['output']>;
   user_post?: Maybe<User>;
+  warning?: Maybe<Scalars['String']['output']>;
+  warningword?: Maybe<Scalars['String']['output']>;
 };
 
 export type PostRequest = {
@@ -1092,7 +1109,7 @@ export type Subscription = {
   sub_all_notice_by_userid?: Maybe<Array<Maybe<Notice>>>;
   sub_content_message_by_messageid?: Maybe<Array<Maybe<ContentMessageDto>>>;
   sub_contentgroup_message_by_userid?: Maybe<Array<Maybe<ContentMessageDto>>>;
-  sub_detail_message_by_userid?: Maybe<Array<Maybe<DetailMessage>>>;
+  sub_detail_message_by_userid?: Maybe<Array<Maybe<DetailMessageDto>>>;
   sub_group_message_by_userid?: Maybe<Array<Maybe<Group_Message>>>;
   sub_status_user?: Maybe<User>;
 };
@@ -1331,7 +1348,7 @@ export type DeleteGroupMutationVariables = Exact<{
 
 export type DeleteGroupMutation = { __typename?: 'Mutation', delete_group?: string | null };
 
-export type MessageFragment = { __typename?: 'DetailMessage', detailmessageid: number, isblock?: number | null, detailmessage_message?: { __typename?: 'Message', messageid: number, messagename?: string | null, createday?: any | null } | null, user_detailmessage?: { __typename?: 'User', userid: string, fullname?: string | null, status?: number | null } | null };
+export type MessageFragment = { __typename?: 'DetailMessageDTO', detailmessageid: number, isblock?: number | null, lastseen?: any | null, lastsend?: any | null, detailmessage_message?: { __typename?: 'Message', messageid: number, messagename?: string | null, createday?: any | null } | null, user_detailmessage?: { __typename?: 'User', userid: string, fullname?: string | null, status?: number | null } | null };
 
 export type ContentFragment = { __typename?: 'ContentMessageDTO', contentid?: number | null, content?: string | null, createday?: any | null, updateday?: any | null, parentid?: number | null, userid?: string | null, messageid?: number | null, image?: string | null, totalicon?: Array<{ __typename?: 'TotalIcon', iconid?: number | null, total?: number | null } | null> | null };
 
@@ -1359,7 +1376,7 @@ export type GetMessageByUserIdSubscriptionVariables = Exact<{
 }>;
 
 
-export type GetMessageByUserIdSubscription = { __typename?: 'Subscription', sub_detail_message_by_userid?: Array<{ __typename?: 'DetailMessage', detailmessageid: number, isblock?: number | null, detailmessage_message?: { __typename?: 'Message', messageid: number, messagename?: string | null, createday?: any | null } | null, user_detailmessage?: { __typename?: 'User', userid: string, fullname?: string | null, status?: number | null } | null } | null> | null };
+export type GetMessageByUserIdSubscription = { __typename?: 'Subscription', sub_detail_message_by_userid?: Array<{ __typename?: 'DetailMessageDTO', detailmessageid: number, isblock?: number | null, lastseen?: any | null, lastsend?: any | null, detailmessage_message?: { __typename?: 'Message', messageid: number, messagename?: string | null, createday?: any | null } | null, user_detailmessage?: { __typename?: 'User', userid: string, fullname?: string | null, status?: number | null } | null } | null> | null };
 
 export type GetDetailMessageByMessageIdSubscriptionVariables = Exact<{
   messageid?: InputMaybe<Scalars['Int']['input']>;
@@ -1645,7 +1662,7 @@ export const GroupDtoFragmentDoc = gql`
 }
     `;
 export const MessageFragmentDoc = gql`
-    fragment message on DetailMessage {
+    fragment message on DetailMessageDTO {
   detailmessageid
   detailmessage_message {
     messageid
@@ -1658,6 +1675,8 @@ export const MessageFragmentDoc = gql`
     status
   }
   isblock
+  lastseen
+  lastsend
 }
     `;
 export const ContentFragmentDoc = gql`

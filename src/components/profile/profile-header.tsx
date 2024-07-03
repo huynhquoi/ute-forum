@@ -1,12 +1,14 @@
-import { User, useCreateMessageMutation } from "@/generated/types";
+import { Message, User, useCreateMessageMutation } from "@/generated/types";
 import { Card, CardHeader } from "../ui/card";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import ProfileEdit from "./profile-edit";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useUserStorage } from "@/lib/store/userStorage";
 import Link from "next/link";
 import ForumForm from "../forum/forum-form";
+import UserMessenger from "../layout/user-messeger";
+import { useMessageStore } from "@/lib/store/mesageStore";
 
 type ProfileHeaderProps = {
   user?: User;
@@ -14,10 +16,12 @@ type ProfileHeaderProps = {
 
 const ProfileHeader = ({ user }: ProfileHeaderProps) => {
   const userStorage = useUserStorage((state) => state.user)
-  const [createMessage] = useCreateMessageMutation()
+  const addMessage = useMessageStore((state) => state.addMessage)
+  const addUser = useMessageStore((state) => state.addUser)
+  const [createMessage, { data, loading }] = useCreateMessageMutation()
 
   const handleCreateMessage = () => {
-    if(!user?.userid) {
+    if (!user?.userid) {
       return
     }
     createMessage({
@@ -25,6 +29,10 @@ const ProfileHeader = ({ user }: ProfileHeaderProps) => {
         userid1: userStorage?.userid,
         userid2: user.userid
       }
+    }).then(() => {
+      console.log(data?.create_message)
+      addMessage(data?.create_message as Message)
+      addUser(user)
     })
   }
   return (
@@ -63,7 +71,11 @@ const ProfileHeader = ({ user }: ProfileHeaderProps) => {
                   <ForumForm />
                   <Link href={"/create-post"}><Button>Đăng bài</Button></Link>
                   <ProfileEdit />
-                </div> : <><Button onClick={() => {handleCreateMessage()}}>Nhắn tin</Button></>}
+                </div> : <><UserMessenger onClick={() => {
+                  handleCreateMessage()
+                }}>
+                  Nhắn tin
+                </UserMessenger></>}
               </div>
               <div className="col-span-1"></div>
             </div>

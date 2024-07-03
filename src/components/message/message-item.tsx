@@ -8,12 +8,16 @@ type MessageItemProps = {
     user: User
     newMessage?: string;
     read?: boolean;
+    selected: boolean;
     onCLick?: () => void;
 }
 
-const MessageItem = ({ user, newMessage, read, onCLick }: MessageItemProps) => {
+const MessageItem = ({ user, newMessage, read, selected, onCLick }: MessageItemProps) => {
     return <>
-        <Card className="flex items-center p-2 border-none shadow-none hover:bg-gray-100" onClick={() => {
+        {selected ? <div className="h-4 bg-white">
+            <div className={`h-4 ${selected ? 'rounded-br-xl' : ''} bg-gray-100`}></div>
+        </div> : <></>}
+        <Card className={`flex items-center p-2 border-none shadow-none rounded-none rounded-tl-xl rounded-bl-xl cursor-pointer ${selected ? '' : 'hover:bg-white bg-gray-100'}`} onClick={() => {
             if (typeof onCLick !== 'undefined') {
                 onCLick()
             }
@@ -27,6 +31,9 @@ const MessageItem = ({ user, newMessage, read, onCLick }: MessageItemProps) => {
                 <p className="text-sm">{newMessage || ""}</p>
             </div>
         </Card>
+        {selected ? <div className="h-4 bg-white">
+            <div className="h-4 rounded-tr-xl bg-gray-100"></div>
+        </div> : <></>}
     </>
 }
 

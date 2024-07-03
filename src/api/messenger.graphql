@@ -1,4 +1,4 @@
-fragment message on DetailMessage {
+fragment message on DetailMessageDTO {
   detailmessageid
   detailmessage_message {
     messageid
@@ -11,6 +11,8 @@ fragment message on DetailMessage {
     status
   }
   isblock
+  lastseen
+  lastsend
 }
 
 fragment content on ContentMessageDTO {
