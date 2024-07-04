@@ -41,8 +41,8 @@ const UserMessenger = ({ children, onClick }: UserMessengerProps) => {
                     onClick()
                 }
             }}>
-                <div>
-                    <Messenger className="text-2xl" />
+                <div className="flex items-center">
+                    <Messenger className="text-2xl mr-2" />
                     {children}
                 </div>
             </SheetTrigger>
@@ -53,7 +53,7 @@ const UserMessenger = ({ children, onClick }: UserMessengerProps) => {
                             <SheetTitle>Tin nhắn</SheetTitle>
                         </div>
                         <div className="col-span-4 pl-2">
-                            <UserDisplay user={selectMessage.user_detailmessage} />
+                            <UserDisplay user={selectMessage.userid} />
                         </div>
                     </div>
                 </SheetHeader>
@@ -63,7 +63,7 @@ const UserMessenger = ({ children, onClick }: UserMessengerProps) => {
                         {data?.sub_detail_message_by_userid?.map(i => (
                             <MessageItem
                                 key={i?.detailmessageid}
-                                user={i?.user_detailmessage as User}
+                                user={i?.userid as User}
                                 onCLick={() => {
                                     setSelectMessage(i as DetailMessageDto);
                                     setItem('selectMessage', JSON.stringify(i));
@@ -75,7 +75,7 @@ const UserMessenger = ({ children, onClick }: UserMessengerProps) => {
                     <div className="col-span-4 pl-4">
                         {message?.messageid
                             ? <MessageZone messageId={message.messageid as number} userId={userStorage?.userid || ""} />
-                            : <MessageZone messageId={selectMessage?.detailmessage_message?.messageid as number} userId={userStorage?.userid || ""} />}
+                            : <MessageZone messageId={selectMessage?.messageid as number} userId={userStorage?.userid || ""} />}
                     </div>
                 </div>
             </SheetContent>

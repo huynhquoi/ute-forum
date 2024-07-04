@@ -12,7 +12,7 @@ const PostOutstanding = () => {
   })
 
   const { data: topic } = useGetTopicQuery()
-  return <OutstandingZone post={data?.post as PostDto[]}  topic={topic?.topic as Topic[]} />
+  return <OutstandingZone post={data?.post?.filter(i => !i?.group_post?.groupid) as PostDto[]}  topic={topic?.topic as Topic[]} />
 }
 
 export default PostOutstanding

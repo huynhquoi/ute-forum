@@ -1,11 +1,7 @@
 fragment message on DetailMessageDTO {
   detailmessageid
-  detailmessage_message {
-    messageid
-    messagename
-    createday
-  }
-  user_detailmessage {
+  messageid
+  userid {
     userid
     fullname
     status

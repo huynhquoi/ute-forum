@@ -9,6 +9,7 @@ import Link from "next/link";
 import ForumForm from "../forum/forum-form";
 import UserMessenger from "../layout/user-messeger";
 import { useMessageStore } from "@/lib/store/mesageStore";
+import QuickMessage from "../message/quick-message";
 
 type ProfileHeaderProps = {
   user?: User;
@@ -71,11 +72,8 @@ const ProfileHeader = ({ user }: ProfileHeaderProps) => {
                   <ForumForm />
                   <Link href={"/create-post"}><Button>Đăng bài</Button></Link>
                   <ProfileEdit />
-                </div> : <><UserMessenger onClick={() => {
-                  handleCreateMessage()
-                }}>
-                  Nhắn tin
-                </UserMessenger></>}
+                </div> : <><QuickMessage user={user as User}>
+                </QuickMessage></>}
               </div>
               <div className="col-span-1"></div>
             </div>

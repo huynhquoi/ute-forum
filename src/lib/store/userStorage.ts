@@ -1,11 +1,12 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { Bookmark, Post, Post_Like, User } from "@/generated/types";
+import { Bookmark, Group, Post, Post_Like, User } from "@/generated/types";
 
 export type UserState = {
   user: User | null;
   postReacted: Post_Like[] | [];
   bookmarks: Bookmark[] | [];
+  groups: Group[] | [];
 };
 
 export type UserActions = {
@@ -17,6 +18,7 @@ export type UserActions = {
   addAllBookmark: (allBookmark: Bookmark[]) => void;
   addBookmark: (bookmark: Bookmark) => void;
   removeBookmark: (bookmark: Bookmark) => void;
+  addGroup: (group: Group[]) => void;
 };
 
 export const useUserStorage = create<UserState & UserActions>()(
@@ -25,6 +27,7 @@ export const useUserStorage = create<UserState & UserActions>()(
       user: null,
       postReacted: [],
       bookmarks: [],
+      groups: [],
       addUser: (userInfo?: User) => {
         set(() => ({
           user: userInfo || null,
@@ -70,6 +73,14 @@ export const useUserStorage = create<UserState & UserActions>()(
           ),
         }));
       },
+      addGroup: (group: Group[]) => {
+        if(!group.length) {
+          return
+        }
+        set((state) => ({
+          groups: [...group, ...state.groups]
+        }));
+      }
     }),
     { name: "user-store", skipHydration: true }
   )

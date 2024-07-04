@@ -14,7 +14,7 @@ import Image from "next/image";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import UserMenu from "../users/user-menu";
-import { Bookmark, Post, Post_Like, useGetAccountByPkQuery, useGetPostBookmarkByUserIdQuery, useGetPostReactedByUserIdQuery, User } from "@/generated/types";
+import { Bookmark, Group, Post, Post_Like, useGetAccountByPkQuery, useGetGroupByAdminQuery, useGetGroupByUserIdQuery, useGetPostBookmarkByUserIdQuery, useGetPostReactedByUserIdQuery, User } from "@/generated/types";
 import useStorage from "@/hooks/useStorage";
 import { useEffect } from "react";
 import { useUserStorage } from "@/lib/store/userStorage";
@@ -30,6 +30,7 @@ const MainHeader = ({ inUser }: MainHeaderProps) => {
   const addUser = useUserStorage((state) => state.addUser);
   const addAllPost = useUserStorage((state) => state.addAllPost)
   const addAllBookmark = useUserStorage((state) => state.addAllBookmark)
+  const addGroup = useUserStorage((state) => state.addGroup)
 
   const { data, loading, fetchMore } = useGetAccountByPkQuery({
     variables: {
@@ -48,6 +49,18 @@ const MainHeader = ({ inUser }: MainHeaderProps) => {
       userid: getItem("userId"),
     }
   })
+
+  const { data: groups } = useGetGroupByUserIdQuery({
+    variables: {
+      userid: getItem("userId"),
+    }
+  })
+
+  const {data: adminGroup} = useGetGroupByAdminQuery({
+    variables: {
+      admin: getItem("userId"),
+    }
+  })
   useEffect(() => {
     if (loading || !data?.find_account_by_id?.userid) {
       return;
@@ -55,7 +68,9 @@ const MainHeader = ({ inUser }: MainHeaderProps) => {
     addUser(data?.find_account_by_id as User);
     addAllPost(postReacted?.find_postlike_byuserid as Post_Like[] || [])
     addAllBookmark(bookmarks?.find_all_bookmark_by_userid as Bookmark[] || [])
-  }, [loading, data?.find_account_by_id?.userid, addUser, data?.find_account_by_id, addAllPost, postReacted?.find_postlike_byuserid, addAllBookmark, bookmarks?.find_all_bookmark_by_userid])
+    addGroup(groups?.get_group_by_userid as Group[])
+    addGroup(adminGroup?.get_group_by_admin as Group[])
+  }, [loading, data?.find_account_by_id?.userid, addUser, data?.find_account_by_id, addAllPost, postReacted?.find_postlike_byuserid, addAllBookmark, bookmarks?.find_all_bookmark_by_userid, addGroup, groups?.get_group_by_userid, adminGroup?.get_group_by_admin])
   return (
     <ApolloWrapper>
       <div className={inUser ? "mb-[56px]" : "mb-[72px]"}></div>
