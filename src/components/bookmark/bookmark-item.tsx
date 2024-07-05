@@ -1,6 +1,6 @@
 "use client"
 
-import { Bookmark } from "@/generated/types"
+import { Bookmark, User } from "@/generated/types"
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card"
 import UserDisplay from "../users/user-display"
 import Link from "next/link"
@@ -20,7 +20,7 @@ const BookmarkItem = ({ bookmark }: BookmarkItemProps) => {
             <Link href={`/post/${bookmark?.post_bookmark?.postid}`}>
                 <CardHeader className="py-1 px-2 flex flex-row justify-between items-start w-full transition-[width] bookmark-card-content">
                     <div className="">
-                        <UserDisplay user={bookmark?.post_bookmark?.user_post} descripttion={format(bookmark?.post_bookmark?.createday || new Date(), "dd/MM/yyyy")} />
+                        <UserDisplay user={bookmark?.post_bookmark?.user_post as User} descripttion={format(bookmark?.post_bookmark?.createday || new Date(), "dd/MM/yyyy")} />
                         <p className="text-xl font-bold mt-1">
                             {bookmark?.post_bookmark?.title}
                         </p>

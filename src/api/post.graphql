@@ -100,6 +100,12 @@ query GetPostByTopicId($topicid: Int) {
   }
 }
 
+query GetPostByListTopicId($topicids: [Int]) {
+  find_post_by_listtopicid(topicids: $topicids) {
+    ...postDto
+  }
+}
+
 query GetPostReactedByUserId($userid: String) {
   find_postlike_byuserid(userid: $userid) {
     ...post_reacted

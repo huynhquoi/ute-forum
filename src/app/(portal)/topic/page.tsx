@@ -6,7 +6,7 @@ import { Learn, Plus } from "@/components/svgs"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Form } from "@/components/ui/form"
-import { PostDto, useGetPostByTopicIdQuery, useGetTopicQuery } from "@/generated/types"
+import { PostDto, useGetPostByListTopicIdQuery, useGetPostByTopicIdQuery, useGetTopicQuery } from "@/generated/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import { useEffect, useState } from "react"
@@ -23,14 +23,20 @@ const TopicPage = () => {
     topicId: []
   })
 
+  const { data } = useGetTopicQuery()
   const [oneTopic, setOneTopic] = useState(0)
 
-  const { data: post, loading, error, fetchMore: GetPost } = useGetPostByTopicIdQuery({
+  const { data: post, error, fetchMore: GetPost } = useGetPostByTopicIdQuery({
     variables: {
       topicid: oneTopic
     }
   })
-  const { data } = useGetTopicQuery()
+
+  const { data: listPost, loading, fetchMore: GetListPost } = useGetPostByListTopicIdQuery({
+    variables: {
+      topicids: [...topicSearch.topicId.map(i => parseInt(i))]
+    }
+  })
 
   const form = useForm<z.infer<typeof topicSchema>>({
     resolver: zodResolver(topicSchema),
@@ -80,6 +86,12 @@ const TopicPage = () => {
         <PostCard post={item as PostDto} key={item?.postid} />
       ))}
     </> : <></>}
+
+    {listPost?.find_post_by_listtopicid?.length ? <>
+      {listPost?.find_post_by_listtopicid?.map((item) => (
+        <PostCard post={item as PostDto} key={item?.postid} />
+      ))}
+    </> : <><p className="p-8 text-center">Không tìm thấy bài viết nào mang cùng lúc những chủ đề trên</p></>}
   </>
 }
 

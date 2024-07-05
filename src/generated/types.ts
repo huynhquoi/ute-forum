@@ -1257,6 +1257,20 @@ export type GetUserGroupQueryVariables = Exact<{
 
 export type GetUserGroupQuery = { __typename?: 'Query', get_user_in_group?: Array<{ __typename?: 'User_Group', user_groupid?: number | null, createday?: any | null, checked?: number | null, user_usergroup?: { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isbanid?: { __typename?: 'IsBan', nameban?: string | null, description?: string | null } | null } | null, group_usergroup?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null } | null> | null };
 
+export type GetFollowerUserQueryVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetFollowerUserQuery = { __typename?: 'Query', get_all_follower_by_user?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isbanid?: { __typename?: 'IsBan', nameban?: string | null, description?: string | null } | null } | null> | null };
+
+export type GetFollowingUserQueryVariables = Exact<{
+  followerid?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetFollowingUserQuery = { __typename?: 'Query', get_all_user_by_follower?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isbanid?: { __typename?: 'IsBan', nameban?: string | null, description?: string | null } | null } | null> | null };
+
 export type UpdateUserInfoMutationVariables = Exact<{
   user?: InputMaybe<UserRequest>;
 }>;
@@ -1479,6 +1493,13 @@ export type GetPostByTopicIdQueryVariables = Exact<{
 
 
 export type GetPostByTopicIdQuery = { __typename?: 'Query', find_post_by_topicid?: Array<{ __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, totalcomment?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, createday?: any | null, bio?: string | null, address?: string | null, image?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null } | null> | null };
+
+export type GetPostByListTopicIdQueryVariables = Exact<{
+  topicids?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>> | InputMaybe<Scalars['Int']['input']>>;
+}>;
+
+
+export type GetPostByListTopicIdQuery = { __typename?: 'Query', find_post_by_listtopicid?: Array<{ __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, totalcomment?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, createday?: any | null, bio?: string | null, address?: string | null, image?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null } | null> | null };
 
 export type GetPostReactedByUserIdQueryVariables = Exact<{
   userid?: InputMaybe<Scalars['String']['input']>;
@@ -1928,6 +1949,86 @@ export type GetUserGroupQueryHookResult = ReturnType<typeof useGetUserGroupQuery
 export type GetUserGroupLazyQueryHookResult = ReturnType<typeof useGetUserGroupLazyQuery>;
 export type GetUserGroupSuspenseQueryHookResult = ReturnType<typeof useGetUserGroupSuspenseQuery>;
 export type GetUserGroupQueryResult = Apollo.QueryResult<GetUserGroupQuery, GetUserGroupQueryVariables>;
+export const GetFollowerUserDocument = gql`
+    query GetFollowerUser($userid: String) {
+  get_all_follower_by_user(userid: $userid) {
+    ...user
+  }
+}
+    ${UserFragmentDoc}`;
+
+/**
+ * __useGetFollowerUserQuery__
+ *
+ * To run a query within a React component, call `useGetFollowerUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFollowerUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFollowerUserQuery({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *   },
+ * });
+ */
+export function useGetFollowerUserQuery(baseOptions?: Apollo.QueryHookOptions<GetFollowerUserQuery, GetFollowerUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetFollowerUserQuery, GetFollowerUserQueryVariables>(GetFollowerUserDocument, options);
+      }
+export function useGetFollowerUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetFollowerUserQuery, GetFollowerUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetFollowerUserQuery, GetFollowerUserQueryVariables>(GetFollowerUserDocument, options);
+        }
+export function useGetFollowerUserSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetFollowerUserQuery, GetFollowerUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetFollowerUserQuery, GetFollowerUserQueryVariables>(GetFollowerUserDocument, options);
+        }
+export type GetFollowerUserQueryHookResult = ReturnType<typeof useGetFollowerUserQuery>;
+export type GetFollowerUserLazyQueryHookResult = ReturnType<typeof useGetFollowerUserLazyQuery>;
+export type GetFollowerUserSuspenseQueryHookResult = ReturnType<typeof useGetFollowerUserSuspenseQuery>;
+export type GetFollowerUserQueryResult = Apollo.QueryResult<GetFollowerUserQuery, GetFollowerUserQueryVariables>;
+export const GetFollowingUserDocument = gql`
+    query GetFollowingUser($followerid: String) {
+  get_all_user_by_follower(followerid: $followerid) {
+    ...user
+  }
+}
+    ${UserFragmentDoc}`;
+
+/**
+ * __useGetFollowingUserQuery__
+ *
+ * To run a query within a React component, call `useGetFollowingUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFollowingUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFollowingUserQuery({
+ *   variables: {
+ *      followerid: // value for 'followerid'
+ *   },
+ * });
+ */
+export function useGetFollowingUserQuery(baseOptions?: Apollo.QueryHookOptions<GetFollowingUserQuery, GetFollowingUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetFollowingUserQuery, GetFollowingUserQueryVariables>(GetFollowingUserDocument, options);
+      }
+export function useGetFollowingUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetFollowingUserQuery, GetFollowingUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetFollowingUserQuery, GetFollowingUserQueryVariables>(GetFollowingUserDocument, options);
+        }
+export function useGetFollowingUserSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetFollowingUserQuery, GetFollowingUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetFollowingUserQuery, GetFollowingUserQueryVariables>(GetFollowingUserDocument, options);
+        }
+export type GetFollowingUserQueryHookResult = ReturnType<typeof useGetFollowingUserQuery>;
+export type GetFollowingUserLazyQueryHookResult = ReturnType<typeof useGetFollowingUserLazyQuery>;
+export type GetFollowingUserSuspenseQueryHookResult = ReturnType<typeof useGetFollowingUserSuspenseQuery>;
+export type GetFollowingUserQueryResult = Apollo.QueryResult<GetFollowingUserQuery, GetFollowingUserQueryVariables>;
 export const UpdateUserInfoDocument = gql`
     mutation UpdateUserInfo($user: UserRequest) {
   account_update(user: $user) {
@@ -2855,6 +2956,46 @@ export type GetPostByTopicIdQueryHookResult = ReturnType<typeof useGetPostByTopi
 export type GetPostByTopicIdLazyQueryHookResult = ReturnType<typeof useGetPostByTopicIdLazyQuery>;
 export type GetPostByTopicIdSuspenseQueryHookResult = ReturnType<typeof useGetPostByTopicIdSuspenseQuery>;
 export type GetPostByTopicIdQueryResult = Apollo.QueryResult<GetPostByTopicIdQuery, GetPostByTopicIdQueryVariables>;
+export const GetPostByListTopicIdDocument = gql`
+    query GetPostByListTopicId($topicids: [Int]) {
+  find_post_by_listtopicid(topicids: $topicids) {
+    ...postDto
+  }
+}
+    ${PostDtoFragmentDoc}`;
+
+/**
+ * __useGetPostByListTopicIdQuery__
+ *
+ * To run a query within a React component, call `useGetPostByListTopicIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPostByListTopicIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPostByListTopicIdQuery({
+ *   variables: {
+ *      topicids: // value for 'topicids'
+ *   },
+ * });
+ */
+export function useGetPostByListTopicIdQuery(baseOptions?: Apollo.QueryHookOptions<GetPostByListTopicIdQuery, GetPostByListTopicIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPostByListTopicIdQuery, GetPostByListTopicIdQueryVariables>(GetPostByListTopicIdDocument, options);
+      }
+export function useGetPostByListTopicIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPostByListTopicIdQuery, GetPostByListTopicIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPostByListTopicIdQuery, GetPostByListTopicIdQueryVariables>(GetPostByListTopicIdDocument, options);
+        }
+export function useGetPostByListTopicIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetPostByListTopicIdQuery, GetPostByListTopicIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetPostByListTopicIdQuery, GetPostByListTopicIdQueryVariables>(GetPostByListTopicIdDocument, options);
+        }
+export type GetPostByListTopicIdQueryHookResult = ReturnType<typeof useGetPostByListTopicIdQuery>;
+export type GetPostByListTopicIdLazyQueryHookResult = ReturnType<typeof useGetPostByListTopicIdLazyQuery>;
+export type GetPostByListTopicIdSuspenseQueryHookResult = ReturnType<typeof useGetPostByListTopicIdSuspenseQuery>;
+export type GetPostByListTopicIdQueryResult = Apollo.QueryResult<GetPostByListTopicIdQuery, GetPostByListTopicIdQueryVariables>;
 export const GetPostReactedByUserIdDocument = gql`
     query GetPostReactedByUserId($userid: String) {
   find_postlike_byuserid(userid: $userid) {

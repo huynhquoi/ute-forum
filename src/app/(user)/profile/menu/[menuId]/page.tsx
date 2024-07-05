@@ -10,6 +10,10 @@ import { UserActions, UserState, useUserStorage } from "@/lib/store/userStorage"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useParams, useRouter } from "next/navigation";
 import SavedZone from "@/components/menu/saved-zone";
+import FollowingZone from "@/components/menu/following-zone";
+import FollowerZone from "@/components/menu/follower-zone";
+import MaganerZone from "@/components/menu/manager-zone";
+import ForumZone from "@/components/menu/forum-zone";
 
 const MenuPage = () => {
   const param = useParams()
@@ -43,16 +47,16 @@ const MenuPage = () => {
                 <SavedZone />
               </TabsContent>
               <TabsContent value="following">
-                Đang theo dõi
+                <FollowingZone />
               </TabsContent>
               <TabsContent value="follower">
-                Được theo dõi
+                <FollowerZone />
               </TabsContent>
               <TabsContent value="maganer">
-                Quản lý
+                <MaganerZone />
               </TabsContent>
               <TabsContent value="forum">
-                Tham gia
+                <ForumZone />
               </TabsContent>
             </Tabs>
           </div>

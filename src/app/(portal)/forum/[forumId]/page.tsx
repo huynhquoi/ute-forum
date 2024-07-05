@@ -105,7 +105,7 @@ const ForumDetailPage = () => {
     <div className="grid grid-cols-7 h-[calc(100vh-72px)]">
       <div className="col-span-4">
         <div className="mt-4">
-          {!loadPosts && groupPost?.find_post_in_group?.map((post, index) => <PostCard post={post as PostDto} key={index} firstChild={index === 0} />)}
+          {!loadPosts && groupPost?.find_post_in_group?.map((post, index) => <PostCard post={post as PostDto} key={index} firstChild={index === 0} inGroup={true} />)}
         </div>
       </div>
       <div className="col-span-3"></div>

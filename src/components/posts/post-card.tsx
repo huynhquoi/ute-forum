@@ -19,9 +19,10 @@ import { ArrowTo } from "../svgs";
 type PostCardProps = {
   post: PostDto
   firstChild?: boolean
+  inGroup?: boolean
 }
 
-const PostCard = ({ post, firstChild }: PostCardProps) => {
+const PostCard = ({ post, firstChild, inGroup }: PostCardProps) => {
   const [iseDeleted, setIsDeleted] = useState(false)
   const userStorage = useUserStorage(state => state.user)
   return (
@@ -38,7 +39,7 @@ const PostCard = ({ post, firstChild }: PostCardProps) => {
         </Card>
         : <Card className="w-full shadow-none border-none hover:bg-gray-100 cursor-pointer">
           <CardHeader className="py-1 px-2 flex flex-row justify-between items-start">
-            {post?.group_post?.groupid
+            {post?.group_post?.groupid && !inGroup
               ? <Link href={`/forum/${post?.group_post?.groupid}`} className="flex items-center">
                 <Avatar>
                   <AvatarImage src={post?.group_post?.image || "/userLogo.png"} alt="CN"></AvatarImage>

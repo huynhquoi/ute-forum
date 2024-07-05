@@ -46,6 +46,18 @@ query GetUserGroup($groupid: Int, $limit: Int, $pacing: Int) {
   }
 }
 
+query GetFollowerUser($userid: String) {
+  get_all_follower_by_user(userid: $userid) {
+    ...user
+  }
+}
+
+query GetFollowingUser($followerid: String) {
+  get_all_user_by_follower(followerid: $followerid) {
+    ...user
+  }
+}
+
 mutation UpdateUserInfo($user: UserRequest) {
   account_update(user: $user) {
     userid
