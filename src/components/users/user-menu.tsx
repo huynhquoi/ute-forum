@@ -27,10 +27,11 @@ const UserMenu = () => {
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="w-8 h-8 rounded-full p-0">
             <Image
-              src={"/userLogo.png"}
+              src={ userStorage?.image ||"/userLogo.png"}
               alt="logo user"
               width={32}
               height={32}
+              className="rounded-full"
             />
           </Button>
         </DropdownMenuTrigger>

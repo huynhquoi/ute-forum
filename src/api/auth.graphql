@@ -31,6 +31,21 @@ query GetAccountByPk($userId: String!) {
   }
 }
 
+query GetUserGroup($groupid: Int, $limit: Int, $pacing: Int) {
+  get_user_in_group(groupid: $groupid, limit: $limit, pacing: $pacing) {
+    user_groupid
+    user_usergroup {
+      ...user
+    }
+    group_usergroup {
+      groupid
+      groupname
+    }
+    createday
+    checked
+  }
+}
+
 mutation UpdateUserInfo($user: UserRequest) {
   account_update(user: $user) {
     userid

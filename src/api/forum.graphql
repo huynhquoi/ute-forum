@@ -60,3 +60,15 @@ mutation UpdateGroup($group:GroupRequest) {
 mutation DeleteGroup($groupid:Int) {
     delete_group(groupid:$groupid)
 }
+
+mutation JoinGroup($userid: String, $groupid: Int) {
+    join_group(userid: $userid, groupid: $groupid)
+}
+
+mutation LeaveGroup($userid: String, $groupid: Int) {
+    leave_group(userid: $userid, groupid: $groupid)
+}
+
+mutation AcceptUserToGroup($userid: String, $groupid: Int, $check:Int) {
+    update_check(userid: $userid, groupid: $groupid, check:$check)
+}

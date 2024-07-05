@@ -15,7 +15,7 @@ const PostZone = () => {
   return (
     <>
       <ScrollArea className="w-full h-[calc(100vh-116px)]">
-        {loading ? <>Loading...</> :data?.post?.filter(i => !i?.group_post?.groupid || userGroup.find(g => g.groupid === i.group_post?.groupid)).map((post, index) => (
+        {loading ? <>Loading...</> :data?.post?.filter(i => !i?.group_post?.groupid || userGroup.find(g => g.groupid === i.group_post?.groupid))?.map((post, index) => (
           <PostCard
             key={post?.postid}
             post={post as PostDto}

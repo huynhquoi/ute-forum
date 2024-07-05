@@ -5,7 +5,7 @@ import UserDisplay from "../users/user-display";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import Link from "next/link";
-import { Post, PostDto, useDeletePostMutation } from "@/generated/types";
+import { Post, PostDto, useDeletePostMutation, User } from "@/generated/types";
 import PostAction from "./post-action";
 import { useState } from "react";
 import ImageCover from "../shared/image-cover";
@@ -13,6 +13,8 @@ import PostMenu from "./post-menu";
 import { useUserStorage } from "@/lib/store/userStorage";
 import { format } from "date-fns";
 import PostBookmark from "./post-bookmark";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { ArrowTo } from "../svgs";
 
 type PostCardProps = {
   post: PostDto
@@ -36,7 +38,21 @@ const PostCard = ({ post, firstChild }: PostCardProps) => {
         </Card>
         : <Card className="w-full shadow-none border-none hover:bg-gray-100 cursor-pointer">
           <CardHeader className="py-1 px-2 flex flex-row justify-between items-start">
-            <UserDisplay user={post?.user_post} descripttion={format(post?.createday, "dd/MM/yyyy")} />
+            {post?.group_post?.groupid
+              ? <Link href={`/forum/${post?.group_post?.groupid}`} className="flex items-center">
+                <Avatar>
+                  <AvatarImage src={post?.group_post?.image || "/userLogo.png"} alt="CN"></AvatarImage>
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+                <div className="ml-2">
+                  <p className="font-bold flex items-center space-x-1">
+                    <span>{post?.user_post?.fullname}</span>
+                    <ArrowTo className="text-sm font-bold text-green-500" />
+                    <span>{post?.group_post?.groupname}</span></p>
+                  <p className="text-sm">{format(post?.createday, "dd/MM/yyyy")}</p>
+                </div>
+              </Link>
+              : <UserDisplay user={post?.user_post as User} descripttion={format(post?.createday, "dd/MM/yyyy")} />}
             {userStorage?.userid === post?.user_post?.userid ? <PostMenu post={post} onDeleted={() => setIsDeleted(true)} /> : <></>}
           </CardHeader>
           <Link href={`/post/${post.postid}`}>
@@ -52,7 +68,7 @@ const PostCard = ({ post, firstChild }: PostCardProps) => {
           </Link>
           <CardFooter className="py-1 px-2 flex items-center justify-between">
             <PostAction post={post} useBg={true} showCommnent={true} />
-            <PostBookmark postId={post?.postid}/>
+            <PostBookmark postId={post?.postid} />
           </CardFooter>
         </Card>}
     </>

@@ -1,22 +1,29 @@
 "use client"
 
+import ForumForm from "@/components/forum/forum-form"
+import ForumRequest from "@/components/forum/forum-request"
 import PostCard from "@/components/posts/post-card"
-import { Bell, Logout, Plus } from "@/components/svgs"
+import { Bell, Login, Logout, Plus } from "@/components/svgs"
 import { Button } from "@/components/ui/button"
 import { Card, CardFooter, CardHeader } from "@/components/ui/card"
-import { PostDto, useGetGroupByGroupIdQuery, useGetPostbyGroupIdQuery } from "@/generated/types"
+import { Group, PostDto, useGetGroupByGroupIdQuery, useGetPostbyGroupIdQuery, useJoinGroupMutation, useLeaveGroupMutation } from "@/generated/types"
 import useScroll from "@/hooks/useScroll"
 import { useUserStorage } from "@/lib/store/userStorage"
 import Image from "next/image"
 import Link from "next/link"
 import { useParams } from "next/navigation"
+import { useState } from "react"
 
 const ForumDetailPage = () => {
   const { scrollY, scrollDirection, lastScrollY } = useScroll();
   const showFullHeader = scrollDirection === 'up' && scrollY < 40;
-
+  const [requested, setRequested] = useState(false)
+  const [out, setOut] = useState(false)
   const param = useParams()
   const authStorage = useUserStorage(state => state.user)
+  const groups = useUserStorage(state => state.groups)
+  const [joinGroup] = useJoinGroupMutation()
+  const [leaveGroup] = useLeaveGroupMutation()
   const { data, loading } = useGetGroupByGroupIdQuery({
     variables: {
       groupid: parseInt(param.forumId as string)
@@ -28,6 +35,30 @@ const ForumDetailPage = () => {
       groupid: parseInt(param.forumId as string)
     }
   })
+
+  const handleJoinGroup = () => {
+    if (requested) {
+      return
+    }
+    joinGroup({
+      variables: {
+        groupid: parseInt(param.forumId as string),
+        userid: authStorage?.userid
+      }
+    }).then(() => setRequested(true))
+  }
+
+  const handleLeaveGroup = () => {
+    if (out) {
+      return
+    }
+    leaveGroup({
+      variables: {
+        groupid: parseInt(param.forumId as string),
+        userid: authStorage?.userid
+      }
+    }).then(() => setOut(true))
+  }
   return <>
     <div className="bg-white">
       <div className={`fixed top-[72px] w-[calc(100%*5/7)] z-50`}>
@@ -42,14 +73,29 @@ const ForumDetailPage = () => {
                 <Button><Bell className="text-2xl text-white" /></Button>
               </div>
               <div className="">
-                {data?.get_group_by_groupid?.user_group?.userid === authStorage?.userid && <Button>Chỉnh sửa nhóm</Button>}
-                <Button variant={"outline"} className="border-red-500 text-red-500 hover:bg-red-500 hover:text-white ml-2">
-                  Rời nhóm
-                  <Logout className="text-2xl ml-2" />
-                </Button>
+                {data?.get_group_by_groupid?.user_group?.userid === authStorage?.userid ? <div className="space-x-2">
+                  <ForumForm forum={data?.get_group_by_groupid as Group} />
+                  <ForumRequest forumId={data?.get_group_by_groupid?.groupid as number} />
+                </div>
+                  : <>
+                    {groups?.find(g => g.groupid === parseInt(param.forumId as string))
+                      ? <Button variant={"outline"} className="border-red-500 text-red-500 hover:bg-red-500 hover:text-white ml-2">
+                        Rời nhóm
+                        <Logout className="text-2xl ml-2" />
+                      </Button>
+                      : <Button
+                        variant={"outline"}
+                        className="border-green-500 text-green-500 hover:bg-green-500 hover:text-white ml-2"
+                        onClick={() => {
+                          handleJoinGroup()
+                        }}>
+                        {requested ? 'Đã yêu cầu' : 'Vào nhóm'}
+                        <Login className="text-2xl ml-2" />
+                      </Button>}
+                  </>}
               </div>
             </div>
-            <Image src={'/group.png'} alt="Group Image" height={124} width={124} className="rounded-full border-blue-400 border-4" />
+            <Image src={data?.get_group_by_groupid?.image || '/group.png'} alt="Group Image" height={124} width={124} className="rounded-full border-blue-400 border-4" />
 
           </CardFooter>
         </Card>}

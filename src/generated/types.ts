@@ -773,6 +773,8 @@ export type Query = {
   /**     User */
   account?: Maybe<Array<Maybe<User>>>;
   check_comment_in_comment?: Maybe<Scalars['Int']['output']>;
+  /**    DetailMessage */
+  check_detail_message?: Maybe<Scalars['Boolean']['output']>;
   /**     Comment */
   comment?: Maybe<Array<Maybe<Comment>>>;
   find_account_by_id?: Maybe<User>;
@@ -809,7 +811,6 @@ export type Query = {
   get_content_groupmessage_by_groupmessageid?: Maybe<Array<Maybe<Content_GroupMessage>>>;
   /**    Content_Message */
   get_content_message_by_messageid?: Maybe<Array<Maybe<Content_Message>>>;
-  /**    DetailMessage */
   get_detail_message_by_userid?: Maybe<Array<Maybe<DetailMessage>>>;
   /**    DetailGroup_Message */
   get_detailgroup_message_by_userid?: Maybe<Array<Maybe<DetailGroup_Message>>>;
@@ -849,6 +850,12 @@ export type QueryAccountArgs = {
 
 export type QueryCheck_Comment_In_CommentArgs = {
   commentid?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryCheck_Detail_MessageArgs = {
+  userid1?: InputMaybe<Scalars['String']['input']>;
+  userid2?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -1241,6 +1248,15 @@ export type GetAccountByPkQueryVariables = Exact<{
 
 export type GetAccountByPkQuery = { __typename?: 'Query', find_account_by_id?: { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isbanid?: { __typename?: 'IsBan', nameban?: string | null, description?: string | null } | null } | null };
 
+export type GetUserGroupQueryVariables = Exact<{
+  groupid?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  pacing?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetUserGroupQuery = { __typename?: 'Query', get_user_in_group?: Array<{ __typename?: 'User_Group', user_groupid?: number | null, createday?: any | null, checked?: number | null, user_usergroup?: { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isbanid?: { __typename?: 'IsBan', nameban?: string | null, description?: string | null } | null } | null, group_usergroup?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null } | null> | null };
+
 export type UpdateUserInfoMutationVariables = Exact<{
   user?: InputMaybe<UserRequest>;
 }>;
@@ -1348,6 +1364,31 @@ export type DeleteGroupMutationVariables = Exact<{
 
 export type DeleteGroupMutation = { __typename?: 'Mutation', delete_group?: string | null };
 
+export type JoinGroupMutationVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+  groupid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type JoinGroupMutation = { __typename?: 'Mutation', join_group?: string | null };
+
+export type LeaveGroupMutationVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+  groupid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type LeaveGroupMutation = { __typename?: 'Mutation', leave_group?: string | null };
+
+export type AcceptUserToGroupMutationVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+  groupid?: InputMaybe<Scalars['Int']['input']>;
+  check?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type AcceptUserToGroupMutation = { __typename?: 'Mutation', update_check?: string | null };
+
 export type MessageFragment = { __typename?: 'DetailMessageDTO', detailmessageid: number, messageid?: number | null, isblock?: number | null, lastseen?: any | null, lastsend?: any | null, userid?: { __typename?: 'User', userid: string, fullname?: string | null, status?: number | null } | null };
 
 export type ContentFragment = { __typename?: 'ContentMessageDTO', contentid?: number | null, content?: string | null, createday?: any | null, updateday?: any | null, parentid?: number | null, userid?: string | null, messageid?: number | null, image?: string | null, totalicon?: Array<{ __typename?: 'TotalIcon', iconid?: number | null, total?: number | null } | null> | null };
@@ -1402,13 +1443,13 @@ export type IsSeenMutationVariables = Exact<{
 
 export type IsSeenMutation = { __typename?: 'Mutation', update_isseen_true?: { __typename?: 'Notice', noiticeid: number, content?: string | null, createday?: any | null, isseen?: number | null, type?: number | null, subjectid?: number | null, user_notice?: { __typename?: 'User', userid: string, fullname?: string | null } | null } | null };
 
-export type PostFragment = { __typename?: 'Post', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, isdelete?: number | null, requiredreputation?: number | null, totalread?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null };
+export type PostFragment = { __typename?: 'Post', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, isdelete?: number | null, requiredreputation?: number | null, totalread?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null } | null };
 
-export type PostDtoFragment = { __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, totalcomment?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, createday?: any | null, bio?: string | null, address?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null };
+export type PostDtoFragment = { __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, totalcomment?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, createday?: any | null, bio?: string | null, address?: string | null, image?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null };
 
 export type Post_ReactedFragment = { __typename?: 'Post_Like', postlikeid: number, post_postlike?: { __typename?: 'Post', postid: number } | null, icon_postlike?: { __typename?: 'Icon', iconid: number } | null };
 
-export type BookmarkFragment = { __typename?: 'Bookmark', bookmarkid: number, post_bookmark?: { __typename?: 'Post', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, isdelete?: number | null, requiredreputation?: number | null, totalread?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null } | null, user_bookmark?: { __typename?: 'User', userid: string } | null };
+export type BookmarkFragment = { __typename?: 'Bookmark', bookmarkid: number, post_bookmark?: { __typename?: 'Post', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, isdelete?: number | null, requiredreputation?: number | null, totalread?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null } | null } | null, user_bookmark?: { __typename?: 'User', userid: string } | null };
 
 export type GetPostQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -1416,28 +1457,28 @@ export type GetPostQueryVariables = Exact<{
 }>;
 
 
-export type GetPostQuery = { __typename?: 'Query', post?: Array<{ __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, totalcomment?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, createday?: any | null, bio?: string | null, address?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null } | null> | null };
+export type GetPostQuery = { __typename?: 'Query', post?: Array<{ __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, totalcomment?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, createday?: any | null, bio?: string | null, address?: string | null, image?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null } | null> | null };
 
 export type GetPostByUserIdQueryVariables = Exact<{
   userid?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type GetPostByUserIdQuery = { __typename?: 'Query', find_post_by_userid?: Array<{ __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, totalcomment?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, createday?: any | null, bio?: string | null, address?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null } | null> | null };
+export type GetPostByUserIdQuery = { __typename?: 'Query', find_post_by_userid?: Array<{ __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, totalcomment?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, createday?: any | null, bio?: string | null, address?: string | null, image?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null } | null> | null };
 
 export type GetPostByIdQueryVariables = Exact<{
   postid?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
-export type GetPostByIdQuery = { __typename?: 'Query', find_post_by_id?: { __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, totalcomment?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, createday?: any | null, bio?: string | null, address?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null } | null };
+export type GetPostByIdQuery = { __typename?: 'Query', find_post_by_id?: { __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, totalcomment?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, createday?: any | null, bio?: string | null, address?: string | null, image?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null } | null };
 
 export type GetPostByTopicIdQueryVariables = Exact<{
   topicid?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
-export type GetPostByTopicIdQuery = { __typename?: 'Query', find_post_by_topicid?: Array<{ __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, totalcomment?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, createday?: any | null, bio?: string | null, address?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null } | null> | null };
+export type GetPostByTopicIdQuery = { __typename?: 'Query', find_post_by_topicid?: Array<{ __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, totalcomment?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, createday?: any | null, bio?: string | null, address?: string | null, image?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null } | null> | null };
 
 export type GetPostReactedByUserIdQueryVariables = Exact<{
   userid?: InputMaybe<Scalars['String']['input']>;
@@ -1451,21 +1492,21 @@ export type GetPostByFollowingQueryVariables = Exact<{
 }>;
 
 
-export type GetPostByFollowingQuery = { __typename?: 'Query', find_post_by_follow?: Array<{ __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, totalcomment?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, createday?: any | null, bio?: string | null, address?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null } | null> | null };
+export type GetPostByFollowingQuery = { __typename?: 'Query', find_post_by_follow?: Array<{ __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, totalcomment?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, createday?: any | null, bio?: string | null, address?: string | null, image?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null } | null> | null };
 
 export type GetPostBookmarkByUserIdQueryVariables = Exact<{
   userid?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type GetPostBookmarkByUserIdQuery = { __typename?: 'Query', find_all_bookmark_by_userid?: Array<{ __typename?: 'Bookmark', bookmarkid: number, createday?: any | null, post_bookmark?: { __typename?: 'Post', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, isdelete?: number | null, requiredreputation?: number | null, totalread?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null } | null, user_bookmark?: { __typename?: 'User', userid: string, fullname?: string | null } | null } | null> | null };
+export type GetPostBookmarkByUserIdQuery = { __typename?: 'Query', find_all_bookmark_by_userid?: Array<{ __typename?: 'Bookmark', bookmarkid: number, createday?: any | null, post_bookmark?: { __typename?: 'Post', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, isdelete?: number | null, requiredreputation?: number | null, totalread?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null } | null } | null, user_bookmark?: { __typename?: 'User', userid: string, fullname?: string | null } | null } | null> | null };
 
 export type GetPostbyGroupIdQueryVariables = Exact<{
   groupid?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
-export type GetPostbyGroupIdQuery = { __typename?: 'Query', find_post_in_group?: Array<{ __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, totalcomment?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, createday?: any | null, bio?: string | null, address?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null } | null> | null };
+export type GetPostbyGroupIdQuery = { __typename?: 'Query', find_post_in_group?: Array<{ __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, totalcomment?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, createday?: any | null, bio?: string | null, address?: string | null, image?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null } | null> | null };
 
 export type CreateReadPostMutationVariables = Exact<{
   postid?: InputMaybe<Scalars['Int']['input']>;
@@ -1714,6 +1755,7 @@ export const PostDtoFragmentDoc = gql`
     createday
     bio
     address
+    image
   }
   content
   title
@@ -1726,6 +1768,7 @@ export const PostDtoFragmentDoc = gql`
   group_post {
     groupid
     groupname
+    image
   }
   totallike
   totaldislike
@@ -1756,6 +1799,7 @@ export const PostFragmentDoc = gql`
   user_post {
     userid
     fullname
+    image
   }
   content
   title
@@ -1769,6 +1813,7 @@ export const PostFragmentDoc = gql`
   group_post {
     groupid
     groupname
+    image
   }
 }
     `;
@@ -1832,6 +1877,57 @@ export type GetAccountByPkQueryHookResult = ReturnType<typeof useGetAccountByPkQ
 export type GetAccountByPkLazyQueryHookResult = ReturnType<typeof useGetAccountByPkLazyQuery>;
 export type GetAccountByPkSuspenseQueryHookResult = ReturnType<typeof useGetAccountByPkSuspenseQuery>;
 export type GetAccountByPkQueryResult = Apollo.QueryResult<GetAccountByPkQuery, GetAccountByPkQueryVariables>;
+export const GetUserGroupDocument = gql`
+    query GetUserGroup($groupid: Int, $limit: Int, $pacing: Int) {
+  get_user_in_group(groupid: $groupid, limit: $limit, pacing: $pacing) {
+    user_groupid
+    user_usergroup {
+      ...user
+    }
+    group_usergroup {
+      groupid
+      groupname
+    }
+    createday
+    checked
+  }
+}
+    ${UserFragmentDoc}`;
+
+/**
+ * __useGetUserGroupQuery__
+ *
+ * To run a query within a React component, call `useGetUserGroupQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserGroupQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserGroupQuery({
+ *   variables: {
+ *      groupid: // value for 'groupid'
+ *      limit: // value for 'limit'
+ *      pacing: // value for 'pacing'
+ *   },
+ * });
+ */
+export function useGetUserGroupQuery(baseOptions?: Apollo.QueryHookOptions<GetUserGroupQuery, GetUserGroupQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserGroupQuery, GetUserGroupQueryVariables>(GetUserGroupDocument, options);
+      }
+export function useGetUserGroupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserGroupQuery, GetUserGroupQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserGroupQuery, GetUserGroupQueryVariables>(GetUserGroupDocument, options);
+        }
+export function useGetUserGroupSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetUserGroupQuery, GetUserGroupQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetUserGroupQuery, GetUserGroupQueryVariables>(GetUserGroupDocument, options);
+        }
+export type GetUserGroupQueryHookResult = ReturnType<typeof useGetUserGroupQuery>;
+export type GetUserGroupLazyQueryHookResult = ReturnType<typeof useGetUserGroupLazyQuery>;
+export type GetUserGroupSuspenseQueryHookResult = ReturnType<typeof useGetUserGroupSuspenseQuery>;
+export type GetUserGroupQueryResult = Apollo.QueryResult<GetUserGroupQuery, GetUserGroupQueryVariables>;
 export const UpdateUserInfoDocument = gql`
     mutation UpdateUserInfo($user: UserRequest) {
   account_update(user: $user) {
@@ -2300,6 +2396,103 @@ export function useDeleteGroupMutation(baseOptions?: Apollo.MutationHookOptions<
 export type DeleteGroupMutationHookResult = ReturnType<typeof useDeleteGroupMutation>;
 export type DeleteGroupMutationResult = Apollo.MutationResult<DeleteGroupMutation>;
 export type DeleteGroupMutationOptions = Apollo.BaseMutationOptions<DeleteGroupMutation, DeleteGroupMutationVariables>;
+export const JoinGroupDocument = gql`
+    mutation JoinGroup($userid: String, $groupid: Int) {
+  join_group(userid: $userid, groupid: $groupid)
+}
+    `;
+export type JoinGroupMutationFn = Apollo.MutationFunction<JoinGroupMutation, JoinGroupMutationVariables>;
+
+/**
+ * __useJoinGroupMutation__
+ *
+ * To run a mutation, you first call `useJoinGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useJoinGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [joinGroupMutation, { data, loading, error }] = useJoinGroupMutation({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *      groupid: // value for 'groupid'
+ *   },
+ * });
+ */
+export function useJoinGroupMutation(baseOptions?: Apollo.MutationHookOptions<JoinGroupMutation, JoinGroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<JoinGroupMutation, JoinGroupMutationVariables>(JoinGroupDocument, options);
+      }
+export type JoinGroupMutationHookResult = ReturnType<typeof useJoinGroupMutation>;
+export type JoinGroupMutationResult = Apollo.MutationResult<JoinGroupMutation>;
+export type JoinGroupMutationOptions = Apollo.BaseMutationOptions<JoinGroupMutation, JoinGroupMutationVariables>;
+export const LeaveGroupDocument = gql`
+    mutation LeaveGroup($userid: String, $groupid: Int) {
+  leave_group(userid: $userid, groupid: $groupid)
+}
+    `;
+export type LeaveGroupMutationFn = Apollo.MutationFunction<LeaveGroupMutation, LeaveGroupMutationVariables>;
+
+/**
+ * __useLeaveGroupMutation__
+ *
+ * To run a mutation, you first call `useLeaveGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLeaveGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [leaveGroupMutation, { data, loading, error }] = useLeaveGroupMutation({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *      groupid: // value for 'groupid'
+ *   },
+ * });
+ */
+export function useLeaveGroupMutation(baseOptions?: Apollo.MutationHookOptions<LeaveGroupMutation, LeaveGroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LeaveGroupMutation, LeaveGroupMutationVariables>(LeaveGroupDocument, options);
+      }
+export type LeaveGroupMutationHookResult = ReturnType<typeof useLeaveGroupMutation>;
+export type LeaveGroupMutationResult = Apollo.MutationResult<LeaveGroupMutation>;
+export type LeaveGroupMutationOptions = Apollo.BaseMutationOptions<LeaveGroupMutation, LeaveGroupMutationVariables>;
+export const AcceptUserToGroupDocument = gql`
+    mutation AcceptUserToGroup($userid: String, $groupid: Int, $check: Int) {
+  update_check(userid: $userid, groupid: $groupid, check: $check)
+}
+    `;
+export type AcceptUserToGroupMutationFn = Apollo.MutationFunction<AcceptUserToGroupMutation, AcceptUserToGroupMutationVariables>;
+
+/**
+ * __useAcceptUserToGroupMutation__
+ *
+ * To run a mutation, you first call `useAcceptUserToGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAcceptUserToGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [acceptUserToGroupMutation, { data, loading, error }] = useAcceptUserToGroupMutation({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *      groupid: // value for 'groupid'
+ *      check: // value for 'check'
+ *   },
+ * });
+ */
+export function useAcceptUserToGroupMutation(baseOptions?: Apollo.MutationHookOptions<AcceptUserToGroupMutation, AcceptUserToGroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AcceptUserToGroupMutation, AcceptUserToGroupMutationVariables>(AcceptUserToGroupDocument, options);
+      }
+export type AcceptUserToGroupMutationHookResult = ReturnType<typeof useAcceptUserToGroupMutation>;
+export type AcceptUserToGroupMutationResult = Apollo.MutationResult<AcceptUserToGroupMutation>;
+export type AcceptUserToGroupMutationOptions = Apollo.BaseMutationOptions<AcceptUserToGroupMutation, AcceptUserToGroupMutationVariables>;
 export const CreateMessageDocument = gql`
     mutation CreateMessage($userid1: String, $userid2: String) {
   create_message(userid1: $userid1, userid2: $userid2) {

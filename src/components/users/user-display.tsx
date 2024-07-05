@@ -2,9 +2,10 @@ import { AvatarProps } from "@radix-ui/react-avatar";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useRouter } from "next/navigation";
 import { useUserStorage } from "@/lib/store/userStorage";
+import { User } from "@/generated/types";
 
 type UserDisplayProps = {
-  user?: any;
+  user?: User;
   descripttion?: string;
   useName?: boolean;
   useDescription?: boolean;
@@ -28,7 +29,7 @@ const UserDisplay = ({
         }
       }}>
         <Avatar>
-          <AvatarImage src={"/userLogo.png"} alt="CN"></AvatarImage>
+          <AvatarImage src={user?.image || "/userLogo.png"} alt="CN"></AvatarImage>
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
         <div className="ml-2">

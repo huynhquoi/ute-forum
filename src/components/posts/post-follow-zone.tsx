@@ -8,6 +8,7 @@ import PostCard from "./post-card";
 
 const PostFollowZone = () => {
   const userStorage = useUserStorage((state) => state.user)
+  const userGroup = useUserStorage((state) => state.groups)
   const { data, loading, fetchMore } = useGetPostByFollowingQuery({
     variables: {
       userid: userStorage?.userid as string
@@ -16,7 +17,7 @@ const PostFollowZone = () => {
   return (
     <>
       <ScrollArea className="w-full h-[calc(100vh-116px)]">
-        {loading ? <>Loading...</> : data?.find_post_by_follow?.map((post, index) => (
+        {loading ? <>Loading...</> : data?.find_post_by_follow?.filter(i => !i?.group_post?.groupid || userGroup.find(g => g.groupid === i.group_post?.groupid)).map((post, index) => (
           <PostCard
             key={post?.postid}
             post={post as PostDto}

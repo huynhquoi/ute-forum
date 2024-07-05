@@ -3,6 +3,7 @@ fragment post on Post {
   user_post {
     userid
     fullname
+    image
   }
   content
   title
@@ -16,6 +17,7 @@ fragment post on Post {
   group_post {
     groupid
     groupname
+    image
   }
 }
 
@@ -27,6 +29,7 @@ fragment postDto on PostDto {
     createday
     bio
     address
+    image
   }
   content
   title
@@ -39,6 +42,7 @@ fragment postDto on PostDto {
   group_post {
     groupid
     groupname
+    image
   }
   totallike
   totaldislike

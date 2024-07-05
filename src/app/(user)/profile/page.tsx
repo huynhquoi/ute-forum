@@ -26,7 +26,7 @@ const ProfilePage = () => {
         </div>
         <div className="col-span-3">
           <div className="mt-4">
-            {data?.find_post_by_userid?.map((post, index) => (
+            {data?.find_post_by_userid?.filter(p => !p?.group_post?.groupid)?.map((post, index) => (
               <PostCard post={post as PostDto} key={post?.postid} firstChild={index === 0} />
             ))}
           </div>

@@ -27,3 +27,7 @@ export { default as Open } from "./Open.svg";
 export { default as GroupIcon } from "./Group.svg";
 export { default as Logout } from "./Logout.svg";
 export { default as Messenger } from "./Messenger.svg";
+export { default as Login } from "./Login.svg";
+export { default as Check } from "./Check.svg";
+export { default as XIcon } from "./XIcon.svg";
+export { default as ArrowTo } from "./ArrowTo.svg";
