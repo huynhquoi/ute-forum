@@ -94,10 +94,7 @@ const LoginPage = () => {
       <CardHeader>
         <h2 className="text-2xl font-bold">Đăng nhập</h2>
         <p>
-          Đăng nhập vào tài khoản của bạn, hoặc bắt đầu với{" "}
-          <Link className="font-bold" href={"register"}>
-            đăng ký tài khoản
-          </Link>
+          Admin page của Forum UTE
         </p>
       </CardHeader>
       <CardContent>

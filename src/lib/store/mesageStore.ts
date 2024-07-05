@@ -20,7 +20,6 @@ export const useMessageStore = create<MessageState & MessageActions>()(
       message: undefined,
       anotherUser: undefined,
       addMessage: (messageItem: Message) => {
-        console.log(messageItem)
         set(() => ({
           message: messageItem,
         }));

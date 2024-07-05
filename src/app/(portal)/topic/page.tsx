@@ -41,7 +41,6 @@ const TopicPage = () => {
 
   const onSubmit = (values: z.infer<typeof topicSchema>) => {
     setTopicSearch(values)
-    console.log(values)
   };
   return <>
     {search ? <Form {...form}>

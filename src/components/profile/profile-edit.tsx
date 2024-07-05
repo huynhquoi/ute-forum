@@ -27,6 +27,8 @@ import { UserActions, UserState, useUserStorage } from "@/lib/store/userStorage"
 import useZustandHook from "@/hooks/useZustandHook";
 import DatePickerForm from "../shared/date-picker-form";
 import Editor from "../shared/editor";
+import AvatarUpload from "./avatar-upload";
+import Image from "next/image";
 
 const profileInfoSchema = z.object({
   fullname: z.string(),
@@ -37,6 +39,7 @@ const profileInfoSchema = z.object({
   birthday: z.date(),
   image: z.string(),
   bio: z.string(),
+  color: z.string(),
 });
 
 type ProfileInfoType = {
@@ -48,11 +51,13 @@ type ProfileInfoType = {
   birthday: Date;
   image: string;
   bio: string;
+  color: string;
 };
 
 const ProfileEdit = () => {
   const userStorage = useUserStorage(state => state.user)
   const [loading, setLoading] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState(userStorage?.image || "");
 
   const [updateAccount] = useUpdateUserInfoMutation()
 
@@ -65,6 +70,7 @@ const ProfileEdit = () => {
     birthday: new Date(),
     image: "",
     bio: "",
+    color: "",
   });
 
   const form = useForm<z.infer<typeof profileInfoSchema>>({
@@ -78,6 +84,7 @@ const ProfileEdit = () => {
       birthday: new Date(userStorage?.birthday) || new Date(),
       image: (userStorage?.image as string) || "",
       bio: (userStorage?.bio as string) || "",
+      color: (userStorage?.color as string) || "",
     }),
   });
 
@@ -96,11 +103,14 @@ const ProfileEdit = () => {
     })
   }, [loading, updateAccount, profileInfo, userStorage?.userid])
 
+  const handleAvatarUpload = (url: string) => {
+    setAvatarUrl(url);
+    form.setValue("image", url);
+  };
+
   const onSubmit = (values: z.infer<typeof profileInfoSchema>) => {
     setProfileInfo(values);
     setLoading(true);
-
-    console.log(values);
   };
   return (
     <>
@@ -110,7 +120,7 @@ const ProfileEdit = () => {
             Chỉnh sửa trang cá nhân
           </Button>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className="h-[80vh] overflow-y-auto ">
           <DialogHeader>
             <DialogTitle>Chỉnh sửa trang cá nhân</DialogTitle>
             <DialogDescription>
@@ -120,6 +130,22 @@ const ProfileEdit = () => {
 
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="image"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-bold">Ảnh đại diện</FormLabel>
+                    <FormControl>
+                      <AvatarUpload onUploadComplete={handleAvatarUpload} />
+                    </FormControl>
+                    <div className="flex items-center justify-center mt-4">
+                      {avatarUrl && <Image src={avatarUrl} alt="Avatar" className="w-40 h-40 rounded-full" width={200} height={200} />}
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="fullname"
@@ -199,6 +225,19 @@ const ProfileEdit = () => {
                     <FormLabel className="font-bold">Mô tả bản thân</FormLabel>
                     <FormControl>
                       <Input placeholder="Mô tả" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="color"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-bold">Màu chủ đạo trang cá nhân</FormLabel>
+                    <FormControl>
+                      <Input placeholder="#XXXXXX" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

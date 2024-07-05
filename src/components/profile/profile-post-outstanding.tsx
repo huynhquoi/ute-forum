@@ -37,7 +37,6 @@ const ProfilePostOutstanding = ({ post }: ProfilePostOutstandingProps) => {
           <CarouselContent>
             {post?.length ? postItem.map((item, index) => {
               if (index < 3) {
-                console.log(item)
                 return (
                   <CarouselItem key={item?.postid}>
                     <Link href={`/post/${item?.postid}`} className="hover:cursor-pointer">

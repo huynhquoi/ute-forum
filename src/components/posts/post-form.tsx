@@ -127,7 +127,6 @@ const PostForm = ({ post, groupId }: PostFormType) => {
   const onSubmit = (values: z.infer<typeof PostChema>) => {
     setPostData(values);
     setLoading(true)
-    // console.log(values)
   };
 
   const getImageData = (event: ChangeEvent<HTMLInputElement>) => {

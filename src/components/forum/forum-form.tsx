@@ -55,8 +55,6 @@ const ForumForm = () => {
     const onSubmit = (values: z.infer<typeof ForumFormSchema>) => {
         setForumInfo(values);
         setLoading(true)
-
-        console.log(values)
     }
 
     return <>

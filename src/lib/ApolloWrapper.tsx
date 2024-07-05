@@ -22,7 +22,7 @@ function getToken() {
 function makeClient() {
   const httpLink = new HttpLink({
     // uri: "https://kltn2024.onrender.com/graphql",
-    uri: "https://forumnew-225d.onrender.com/graphql",
+    uri: "https://forumnew-a642.onrender.com/graphql",
     fetchOptions: { cache: "no-store" },
   });
 
@@ -38,7 +38,7 @@ function makeClient() {
 
   const wsLink = new GraphQLWsLink(createClient({
     // url: 'ws://kltn2024.onrender.com/graphql',
-    url: 'ws://forumnew-225d.onrender.com/graphql',
+    url: 'ws://forumnew-a642.onrender.com/graphql',
     connectionParams: () => {
       const token = getToken();
       return {

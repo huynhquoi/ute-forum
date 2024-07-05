@@ -31,7 +31,6 @@ const UserMessenger = ({ children, onClick }: UserMessengerProps) => {
         if (!message?.messageid) {
             return
         }
-        console.log(message)
     }, [message])
 
     return (

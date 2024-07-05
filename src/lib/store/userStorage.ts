@@ -74,7 +74,7 @@ export const useUserStorage = create<UserState & UserActions>()(
         }));
       },
       addGroup: (group: Group[]) => {
-        if(!group.length) {
+        if(!group?.length) {
           return
         }
         set((state) => ({

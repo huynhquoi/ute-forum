@@ -43,13 +43,11 @@ const CommentForm = ({ postId, commentId }: CommentFormProps) => {
     }
 
     if (data?.create_comment?.commentid) {
-      console.log(data?.create_comment)
       addComment(data.create_comment as Comment)
       setOnAdd(false)
     }
 
     if (child?.create_comment_in_comment?.commentid) {
-      console.log(child?.create_comment_in_comment)
       addComment(child.create_comment_in_comment as Comment)
       setOnAdd(false)
     }

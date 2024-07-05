@@ -31,7 +31,6 @@ const ProfileHeader = ({ user }: ProfileHeaderProps) => {
         userid2: user.userid
       }
     }).then(() => {
-      console.log(data?.create_message)
       addMessage(data?.create_message as Message)
       addUser(user)
     })
