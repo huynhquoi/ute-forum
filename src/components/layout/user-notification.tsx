@@ -7,6 +7,8 @@ import { useGetNoticeSubscription, useGetNotificationByUserIdSubscription, useIs
 import Description from "../shared/description"
 import { Card } from "../ui/card"
 import { useEffect, useState } from "react"
+import DotItem from "../shared/dot-item"
+import './styles.scss'
 
 const UserNotification = () => {
   const userStorage = useUserStorage((state) => state.user)
@@ -36,7 +38,7 @@ const UserNotification = () => {
       <div className="relative inline-block mr-4 hover:cursor-pointer">
         <Bell className="text-2xl" />
         {data?.sub_all_notice_by_userid?.filter(item => !item?.isseen).length
-          ? <span className="absolute top-[-10px] right-[-10px] bg-red-500 rounded-full text-xs font-bold text-white h-4 w-4 flex items-center justify-center">
+          ? <span className="bell_dot">
             {data?.sub_all_notice_by_userid?.filter(item => !item?.isseen).length}
           </span>
           : <></>}
@@ -59,7 +61,7 @@ const UserNotification = () => {
                 setNotice(item?.noiticeid as number)
               }}>
               <Description value={item?.content as string} />
-              {item?.isseen === 0 ? <Dot className="text-2xl text-blue-600" /> : <></>}
+              {item?.isseen === 0 ? <DotItem className="w-2 h-2 rounded-full bg-blue-500" /> : <></>}
             </Card>
           ))}
         </div>

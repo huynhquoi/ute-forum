@@ -27,7 +27,7 @@ const UserMenu = () => {
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="w-8 h-8 rounded-full p-0">
             <Image
-              src={ userStorage?.image ||"/userLogo.png"}
+              src={userStorage?.image || "/userLogo.png"}
               alt="logo user"
               width={32}
               height={32}
@@ -126,7 +126,11 @@ const UserMenu = () => {
                     <span>Đang tham gia</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      router.push("/forum");
+                    }}
+                  >
                     {/* <MessageSquare className="mr-2 h-4 w-4" /> */}
                     <span>Tìm kiếm...</span>
                   </DropdownMenuItem>

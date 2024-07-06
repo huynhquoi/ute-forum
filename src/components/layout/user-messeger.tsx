@@ -52,7 +52,7 @@ const UserMessenger = ({ children, onClick }: UserMessengerProps) => {
                             <SheetTitle>Tin nhắn</SheetTitle>
                         </div>
                         <div className="col-span-4 pl-2">
-                            <UserDisplay user={selectMessage.userid} />
+                            <UserDisplay user={selectMessage.userid as User} />
                         </div>
                     </div>
                 </SheetHeader>
