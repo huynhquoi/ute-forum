@@ -1,5 +1,5 @@
 // export const API = "https://kltn2024.onrender.com";
-export const API = "http://localhost:8081";
+export const API = process.env.NEXT_PUBLIC_API_REST;
 
 //auth
 export const API_AUTH_LOGIN = `${API}/login`;
