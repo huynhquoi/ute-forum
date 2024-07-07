@@ -6,7 +6,7 @@ export const { getClient } = registerApolloClient(() => {
     cache: new InMemoryCache(),
     link: new HttpLink({
       // uri: "https://kltn2024.onrender.com/graphql",
-      uri: "https://kltn2024.onrender.com/graphql",
+      uri: "http://localhost:8081/graphql",
     }),
   });
 });

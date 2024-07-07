@@ -82,6 +82,12 @@ query GetPost($limit: Int, $pacing: Int) {
   }
 }
 
+query GetPostByKeyword($keyword: String, $userid: String) {
+  find_post_by_keyword(keyword: $keyword, userid: $userid) {
+    ...postDto
+  }
+}
+
 query GetPostByUserId($userid: String) {
   find_post_by_userid(userid: $userid) {
     ...postDto
@@ -164,9 +170,14 @@ mutation CreatePostInGroup(
   $post: PostRequest
   $user: UserRequest
   $topic: [TopicRequest]
-  $groupid:Int
+  $groupid: Int
 ) {
-  create_post_in_group(post: $post, user: $user, topic: $topic,groupid:$groupid)
+  create_post_in_group(
+    post: $post
+    user: $user
+    topic: $topic
+    groupid: $groupid
+  )
 }
 
 mutation DeletePost($postid: Int) {

@@ -833,6 +833,7 @@ export type Query = {
   list_commentlike_by_commentid?: Maybe<Array<Maybe<Comment_Like>>>;
   /**     Post */
   post?: Maybe<Array<Maybe<PostDto>>>;
+  post_for_user?: Maybe<Array<Maybe<PostDto>>>;
   statistic_post?: Maybe<Array<Maybe<Scalars['Int']['output']>>>;
   statistic_post_in_topic?: Maybe<Array<Maybe<Scalars['Int']['output']>>>;
   /**    Statistic */
@@ -1071,6 +1072,13 @@ export type QueryPostArgs = {
 };
 
 
+export type QueryPost_For_UserArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  pacing?: InputMaybe<Scalars['Int']['input']>;
+  userid?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type QueryStatistic_PostArgs = {
   year?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -1270,6 +1278,29 @@ export type GetFollowingUserQueryVariables = Exact<{
 
 
 export type GetFollowingUserQuery = { __typename?: 'Query', get_all_user_by_follower?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isbanid?: { __typename?: 'IsBan', nameban?: string | null, description?: string | null } | null } | null> | null };
+
+export type GetTopHightReputationUserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetTopHightReputationUserQuery = { __typename?: 'Query', get_top_reputation_user?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isbanid?: { __typename?: 'IsBan', nameban?: string | null, description?: string | null } | null } | null> | null };
+
+export type GetTopLowReputationUserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetTopLowReputationUserQuery = { __typename?: 'Query', get_list_low_reputation?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isbanid?: { __typename?: 'IsBan', nameban?: string | null, description?: string | null } | null } | null> | null };
+
+export type GetListBanUserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetListBanUserQuery = { __typename?: 'Query', get_list_ban_user?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isbanid?: { __typename?: 'IsBan', nameban?: string | null, description?: string | null } | null } | null> | null };
+
+export type GetUserByKeywordQueryVariables = Exact<{
+  keyword?: InputMaybe<Scalars['String']['input']>;
+  userid?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetUserByKeywordQuery = { __typename?: 'Query', get_user_by_keyword?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isbanid?: { __typename?: 'IsBan', nameban?: string | null, description?: string | null } | null } | null> | null };
 
 export type UpdateUserInfoMutationVariables = Exact<{
   user?: InputMaybe<UserRequest>;
@@ -2029,6 +2060,164 @@ export type GetFollowingUserQueryHookResult = ReturnType<typeof useGetFollowingU
 export type GetFollowingUserLazyQueryHookResult = ReturnType<typeof useGetFollowingUserLazyQuery>;
 export type GetFollowingUserSuspenseQueryHookResult = ReturnType<typeof useGetFollowingUserSuspenseQuery>;
 export type GetFollowingUserQueryResult = Apollo.QueryResult<GetFollowingUserQuery, GetFollowingUserQueryVariables>;
+export const GetTopHightReputationUserDocument = gql`
+    query GetTopHightReputationUser {
+  get_top_reputation_user {
+    ...user
+  }
+}
+    ${UserFragmentDoc}`;
+
+/**
+ * __useGetTopHightReputationUserQuery__
+ *
+ * To run a query within a React component, call `useGetTopHightReputationUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTopHightReputationUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTopHightReputationUserQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetTopHightReputationUserQuery(baseOptions?: Apollo.QueryHookOptions<GetTopHightReputationUserQuery, GetTopHightReputationUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetTopHightReputationUserQuery, GetTopHightReputationUserQueryVariables>(GetTopHightReputationUserDocument, options);
+      }
+export function useGetTopHightReputationUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTopHightReputationUserQuery, GetTopHightReputationUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetTopHightReputationUserQuery, GetTopHightReputationUserQueryVariables>(GetTopHightReputationUserDocument, options);
+        }
+export function useGetTopHightReputationUserSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetTopHightReputationUserQuery, GetTopHightReputationUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetTopHightReputationUserQuery, GetTopHightReputationUserQueryVariables>(GetTopHightReputationUserDocument, options);
+        }
+export type GetTopHightReputationUserQueryHookResult = ReturnType<typeof useGetTopHightReputationUserQuery>;
+export type GetTopHightReputationUserLazyQueryHookResult = ReturnType<typeof useGetTopHightReputationUserLazyQuery>;
+export type GetTopHightReputationUserSuspenseQueryHookResult = ReturnType<typeof useGetTopHightReputationUserSuspenseQuery>;
+export type GetTopHightReputationUserQueryResult = Apollo.QueryResult<GetTopHightReputationUserQuery, GetTopHightReputationUserQueryVariables>;
+export const GetTopLowReputationUserDocument = gql`
+    query GetTopLowReputationUser {
+  get_list_low_reputation {
+    ...user
+  }
+}
+    ${UserFragmentDoc}`;
+
+/**
+ * __useGetTopLowReputationUserQuery__
+ *
+ * To run a query within a React component, call `useGetTopLowReputationUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTopLowReputationUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTopLowReputationUserQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetTopLowReputationUserQuery(baseOptions?: Apollo.QueryHookOptions<GetTopLowReputationUserQuery, GetTopLowReputationUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetTopLowReputationUserQuery, GetTopLowReputationUserQueryVariables>(GetTopLowReputationUserDocument, options);
+      }
+export function useGetTopLowReputationUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTopLowReputationUserQuery, GetTopLowReputationUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetTopLowReputationUserQuery, GetTopLowReputationUserQueryVariables>(GetTopLowReputationUserDocument, options);
+        }
+export function useGetTopLowReputationUserSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetTopLowReputationUserQuery, GetTopLowReputationUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetTopLowReputationUserQuery, GetTopLowReputationUserQueryVariables>(GetTopLowReputationUserDocument, options);
+        }
+export type GetTopLowReputationUserQueryHookResult = ReturnType<typeof useGetTopLowReputationUserQuery>;
+export type GetTopLowReputationUserLazyQueryHookResult = ReturnType<typeof useGetTopLowReputationUserLazyQuery>;
+export type GetTopLowReputationUserSuspenseQueryHookResult = ReturnType<typeof useGetTopLowReputationUserSuspenseQuery>;
+export type GetTopLowReputationUserQueryResult = Apollo.QueryResult<GetTopLowReputationUserQuery, GetTopLowReputationUserQueryVariables>;
+export const GetListBanUserDocument = gql`
+    query GetListBanUser {
+  get_list_ban_user {
+    ...user
+  }
+}
+    ${UserFragmentDoc}`;
+
+/**
+ * __useGetListBanUserQuery__
+ *
+ * To run a query within a React component, call `useGetListBanUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetListBanUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetListBanUserQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetListBanUserQuery(baseOptions?: Apollo.QueryHookOptions<GetListBanUserQuery, GetListBanUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetListBanUserQuery, GetListBanUserQueryVariables>(GetListBanUserDocument, options);
+      }
+export function useGetListBanUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetListBanUserQuery, GetListBanUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetListBanUserQuery, GetListBanUserQueryVariables>(GetListBanUserDocument, options);
+        }
+export function useGetListBanUserSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetListBanUserQuery, GetListBanUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetListBanUserQuery, GetListBanUserQueryVariables>(GetListBanUserDocument, options);
+        }
+export type GetListBanUserQueryHookResult = ReturnType<typeof useGetListBanUserQuery>;
+export type GetListBanUserLazyQueryHookResult = ReturnType<typeof useGetListBanUserLazyQuery>;
+export type GetListBanUserSuspenseQueryHookResult = ReturnType<typeof useGetListBanUserSuspenseQuery>;
+export type GetListBanUserQueryResult = Apollo.QueryResult<GetListBanUserQuery, GetListBanUserQueryVariables>;
+export const GetUserByKeywordDocument = gql`
+    query GetUserByKeyword($keyword: String, $userid: String) {
+  get_user_by_keyword(keyword: $keyword, userid: $userid) {
+    ...user
+  }
+}
+    ${UserFragmentDoc}`;
+
+/**
+ * __useGetUserByKeywordQuery__
+ *
+ * To run a query within a React component, call `useGetUserByKeywordQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserByKeywordQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserByKeywordQuery({
+ *   variables: {
+ *      keyword: // value for 'keyword'
+ *      userid: // value for 'userid'
+ *   },
+ * });
+ */
+export function useGetUserByKeywordQuery(baseOptions?: Apollo.QueryHookOptions<GetUserByKeywordQuery, GetUserByKeywordQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserByKeywordQuery, GetUserByKeywordQueryVariables>(GetUserByKeywordDocument, options);
+      }
+export function useGetUserByKeywordLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserByKeywordQuery, GetUserByKeywordQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserByKeywordQuery, GetUserByKeywordQueryVariables>(GetUserByKeywordDocument, options);
+        }
+export function useGetUserByKeywordSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetUserByKeywordQuery, GetUserByKeywordQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetUserByKeywordQuery, GetUserByKeywordQueryVariables>(GetUserByKeywordDocument, options);
+        }
+export type GetUserByKeywordQueryHookResult = ReturnType<typeof useGetUserByKeywordQuery>;
+export type GetUserByKeywordLazyQueryHookResult = ReturnType<typeof useGetUserByKeywordLazyQuery>;
+export type GetUserByKeywordSuspenseQueryHookResult = ReturnType<typeof useGetUserByKeywordSuspenseQuery>;
+export type GetUserByKeywordQueryResult = Apollo.QueryResult<GetUserByKeywordQuery, GetUserByKeywordQueryVariables>;
 export const UpdateUserInfoDocument = gql`
     mutation UpdateUserInfo($user: UserRequest) {
   account_update(user: $user) {

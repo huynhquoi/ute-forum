@@ -20,6 +20,7 @@ import { useEffect } from "react";
 import { useUserStorage } from "@/lib/store/userStorage";
 import UserNotification from "./user-notification";
 import UserMessenger from "./user-messeger";
+import SearchInput from "./SearchInput";
 
 type MainHeaderProps = {
   inUser?: boolean;
@@ -90,10 +91,9 @@ const MainHeader = ({ inUser }: MainHeaderProps) => {
                   height={48}
                 />
               </Link>
-              <Input
-                placeholder="Tìm kiếm..."
+              <SearchInput
                 className="ml-4 w-[400px]"
-              ></Input>
+              ></SearchInput>
             </div>
             <NavigationMenu className="relative left-[-10%]">
               <NavigationMenuList>

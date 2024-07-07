@@ -204,7 +204,7 @@ const PostForm = ({ post, groupId }: PostFormType) => {
                         </div>
                       </> : <>
                         <Input
-                          placeholder="Tiêu đề bài viết"
+                          placeholder="Ảnh"
                           type="file"
                           {...rest}
                           onChange={(event) => {

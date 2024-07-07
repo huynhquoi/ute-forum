@@ -22,7 +22,7 @@ function getToken() {
 function makeClient() {
   const httpLink = new HttpLink({
     // uri: "https://kltn2024.onrender.com/graphql",
-    uri: "https://kltn2024.onrender.com/graphql",
+    uri: "http://localhost:8081/graphql",
     fetchOptions: { cache: "no-store" },
   });
 
@@ -38,7 +38,7 @@ function makeClient() {
 
   const wsLink = new GraphQLWsLink(createClient({
     // url: 'ws://kltn2024.onrender.com/graphql',
-    url: 'ws://kltn2024.onrender.com/graphql',
+    url: 'ws://localhost:8081/graphql',
     connectionParams: () => {
       const token = getToken();
       return {

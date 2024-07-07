@@ -58,6 +58,30 @@ query GetFollowingUser($followerid: String) {
   }
 }
 
+query GetTopHightReputationUser {
+  get_top_reputation_user {
+    ...user
+  }
+}
+
+query GetTopLowReputationUser {
+  get_list_low_reputation {
+    ...user
+  }
+}
+
+query GetListBanUser {
+  get_list_ban_user {
+    ...user
+  }
+}
+
+query GetUserByKeyword($keyword: String, $userid: String) {
+  get_user_by_keyword(keyword: $keyword, userid: $userid) {
+    ...user
+  }
+}
+
 mutation UpdateUserInfo($user: UserRequest) {
   account_update(user: $user) {
     userid
