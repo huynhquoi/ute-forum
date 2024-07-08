@@ -21,8 +21,6 @@ const SearchSchema = z.object({
     keyword: z.string().min(1),
 });
 
-const suggestions = ["Suggestion 1", "Suggestion 2", "Suggestion 3", "Suggestion 4"]; // Example suggestions
-
 const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
     const router = useRouter();
     const { user: auth } = useUserStorage()
@@ -93,7 +91,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
             {open && inputValue && (
                 <div className="absolute bg-white border border-gray-200 mt-2 w-[400px] rounded-md p-2 space-y-2">
                     <div
-                        className="p-4 cursor-pointer hover:bg-gray-100 rounded-md"
+                        className="p-2 py-4 cursor-pointer hover:bg-gray-100 rounded-md"
                         onClick={() => {
                             setOpen(false);
                             router.push(`/home/${inputValue}`);
@@ -102,8 +100,14 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
                         {inputValue}
                     </div>
                     {user?.get_user_by_keyword?.map((u, index) => (
-                        <Link href={`/profile/${u?.userid}`} key={index} className="hover:bg-gray-100 cursor-pointer p-2 rounded-md">
-                            <UserDisplay user={u as User} />
+                        <Link href={`/profile/${u?.userid}`} key={index} className="hover:bg-gray-100 cursor-pointer p-2 rounded-md flex items-center">
+                            <Avatar>
+                                <AvatarImage src={u?.image || "/userLogo.png"} alt="CN"></AvatarImage>
+                                <AvatarFallback>CN</AvatarFallback>
+                            </Avatar>
+                            <div className="ml-2">
+                                <p className="font-bold">{u?.fullname}</p>
+                            </div>
                         </Link>
                     ))}
 

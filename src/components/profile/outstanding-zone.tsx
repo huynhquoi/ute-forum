@@ -82,11 +82,6 @@ const OutstandingZone = ({ post, topic }: OutstandingZoneProps) => {
           }}
           orientation="vertical"
           className="w-full"
-          plugins={[
-            Autoplay({
-              delay: 4000,
-            })
-          ]}
         >
           <CarouselContent className="-mt-1 h-[200px]">
             {data?.get_top_reputation_user?.map((u, index) => (

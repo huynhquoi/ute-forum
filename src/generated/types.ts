@@ -1249,6 +1249,14 @@ export type ViewPost = {
 
 export type UserFragment = { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isbanid?: { __typename?: 'IsBan', nameban?: string | null, description?: string | null } | null };
 
+export type GetAccountQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  pacing?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetAccountQuery = { __typename?: 'Query', account?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isbanid?: { __typename?: 'IsBan', nameban?: string | null, description?: string | null } | null } | null> | null };
+
 export type GetAccountByPkQueryVariables = Exact<{
   userId: Scalars['String']['input'];
 }>;
@@ -1324,6 +1332,22 @@ export type DeleteFollowMutationVariables = Exact<{
 
 
 export type DeleteFollowMutation = { __typename?: 'Mutation', delete_follow?: string | null };
+
+export type BanUserMutationVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+  isbanid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type BanUserMutation = { __typename?: 'Mutation', ban_user?: { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isbanid?: { __typename?: 'IsBan', nameban?: string | null, description?: string | null } | null } | null };
+
+export type UpdateReputationMutationVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+  reputation?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type UpdateReputationMutation = { __typename?: 'Mutation', update_reputation?: string | null };
 
 export type CommentFragment = { __typename?: 'Comment', commentid: number, content?: string | null, createday?: any | null, updateday?: any | null, isdelete?: number | null, user_comment?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null };
 
@@ -1503,6 +1527,14 @@ export type GetPostQueryVariables = Exact<{
 
 
 export type GetPostQuery = { __typename?: 'Query', post?: Array<{ __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, totalcomment?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, createday?: any | null, bio?: string | null, address?: string | null, image?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null } | null> | null };
+
+export type GetPostByKeywordQueryVariables = Exact<{
+  keyword?: InputMaybe<Scalars['String']['input']>;
+  userid?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetPostByKeywordQuery = { __typename?: 'Query', find_post_by_keyword?: Array<{ __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, totalcomment?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, createday?: any | null, bio?: string | null, address?: string | null, image?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null } | null> | null };
 
 export type GetPostByUserIdQueryVariables = Exact<{
   userid?: InputMaybe<Scalars['String']['input']>;
@@ -1889,6 +1921,47 @@ export const TopicFragmentDoc = gql`
   isdelete
 }
     `;
+export const GetAccountDocument = gql`
+    query GetAccount($limit: Int, $pacing: Int) {
+  account(limit: $limit, pacing: $pacing) {
+    ...user
+  }
+}
+    ${UserFragmentDoc}`;
+
+/**
+ * __useGetAccountQuery__
+ *
+ * To run a query within a React component, call `useGetAccountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAccountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAccountQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      pacing: // value for 'pacing'
+ *   },
+ * });
+ */
+export function useGetAccountQuery(baseOptions?: Apollo.QueryHookOptions<GetAccountQuery, GetAccountQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAccountQuery, GetAccountQueryVariables>(GetAccountDocument, options);
+      }
+export function useGetAccountLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAccountQuery, GetAccountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAccountQuery, GetAccountQueryVariables>(GetAccountDocument, options);
+        }
+export function useGetAccountSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAccountQuery, GetAccountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAccountQuery, GetAccountQueryVariables>(GetAccountDocument, options);
+        }
+export type GetAccountQueryHookResult = ReturnType<typeof useGetAccountQuery>;
+export type GetAccountLazyQueryHookResult = ReturnType<typeof useGetAccountLazyQuery>;
+export type GetAccountSuspenseQueryHookResult = ReturnType<typeof useGetAccountSuspenseQuery>;
+export type GetAccountQueryResult = Apollo.QueryResult<GetAccountQuery, GetAccountQueryVariables>;
 export const GetAccountByPkDocument = gql`
     query GetAccountByPk($userId: String!) {
   find_account_by_id(userid: $userId) {
@@ -2315,6 +2388,72 @@ export function useDeleteFollowMutation(baseOptions?: Apollo.MutationHookOptions
 export type DeleteFollowMutationHookResult = ReturnType<typeof useDeleteFollowMutation>;
 export type DeleteFollowMutationResult = Apollo.MutationResult<DeleteFollowMutation>;
 export type DeleteFollowMutationOptions = Apollo.BaseMutationOptions<DeleteFollowMutation, DeleteFollowMutationVariables>;
+export const BanUserDocument = gql`
+    mutation BanUser($userid: String, $isbanid: Int) {
+  ban_user(userid: $userid, isbanid: $isbanid) {
+    ...user
+  }
+}
+    ${UserFragmentDoc}`;
+export type BanUserMutationFn = Apollo.MutationFunction<BanUserMutation, BanUserMutationVariables>;
+
+/**
+ * __useBanUserMutation__
+ *
+ * To run a mutation, you first call `useBanUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBanUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [banUserMutation, { data, loading, error }] = useBanUserMutation({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *      isbanid: // value for 'isbanid'
+ *   },
+ * });
+ */
+export function useBanUserMutation(baseOptions?: Apollo.MutationHookOptions<BanUserMutation, BanUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BanUserMutation, BanUserMutationVariables>(BanUserDocument, options);
+      }
+export type BanUserMutationHookResult = ReturnType<typeof useBanUserMutation>;
+export type BanUserMutationResult = Apollo.MutationResult<BanUserMutation>;
+export type BanUserMutationOptions = Apollo.BaseMutationOptions<BanUserMutation, BanUserMutationVariables>;
+export const UpdateReputationDocument = gql`
+    mutation UpdateReputation($userid: String, $reputation: Int) {
+  update_reputation(userid: $userid, reputation: $reputation)
+}
+    `;
+export type UpdateReputationMutationFn = Apollo.MutationFunction<UpdateReputationMutation, UpdateReputationMutationVariables>;
+
+/**
+ * __useUpdateReputationMutation__
+ *
+ * To run a mutation, you first call `useUpdateReputationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateReputationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateReputationMutation, { data, loading, error }] = useUpdateReputationMutation({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *      reputation: // value for 'reputation'
+ *   },
+ * });
+ */
+export function useUpdateReputationMutation(baseOptions?: Apollo.MutationHookOptions<UpdateReputationMutation, UpdateReputationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateReputationMutation, UpdateReputationMutationVariables>(UpdateReputationDocument, options);
+      }
+export type UpdateReputationMutationHookResult = ReturnType<typeof useUpdateReputationMutation>;
+export type UpdateReputationMutationResult = Apollo.MutationResult<UpdateReputationMutation>;
+export type UpdateReputationMutationOptions = Apollo.BaseMutationOptions<UpdateReputationMutation, UpdateReputationMutationVariables>;
 export const GetCommentByPostIdDocument = gql`
     query GetCommentByPostId($postid: Int) {
   find_all_comment_by_postid(postid: $postid) {
@@ -3025,6 +3164,47 @@ export type GetPostQueryHookResult = ReturnType<typeof useGetPostQuery>;
 export type GetPostLazyQueryHookResult = ReturnType<typeof useGetPostLazyQuery>;
 export type GetPostSuspenseQueryHookResult = ReturnType<typeof useGetPostSuspenseQuery>;
 export type GetPostQueryResult = Apollo.QueryResult<GetPostQuery, GetPostQueryVariables>;
+export const GetPostByKeywordDocument = gql`
+    query GetPostByKeyword($keyword: String, $userid: String) {
+  find_post_by_keyword(keyword: $keyword, userid: $userid) {
+    ...postDto
+  }
+}
+    ${PostDtoFragmentDoc}`;
+
+/**
+ * __useGetPostByKeywordQuery__
+ *
+ * To run a query within a React component, call `useGetPostByKeywordQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPostByKeywordQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPostByKeywordQuery({
+ *   variables: {
+ *      keyword: // value for 'keyword'
+ *      userid: // value for 'userid'
+ *   },
+ * });
+ */
+export function useGetPostByKeywordQuery(baseOptions?: Apollo.QueryHookOptions<GetPostByKeywordQuery, GetPostByKeywordQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPostByKeywordQuery, GetPostByKeywordQueryVariables>(GetPostByKeywordDocument, options);
+      }
+export function useGetPostByKeywordLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPostByKeywordQuery, GetPostByKeywordQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPostByKeywordQuery, GetPostByKeywordQueryVariables>(GetPostByKeywordDocument, options);
+        }
+export function useGetPostByKeywordSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetPostByKeywordQuery, GetPostByKeywordQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetPostByKeywordQuery, GetPostByKeywordQueryVariables>(GetPostByKeywordDocument, options);
+        }
+export type GetPostByKeywordQueryHookResult = ReturnType<typeof useGetPostByKeywordQuery>;
+export type GetPostByKeywordLazyQueryHookResult = ReturnType<typeof useGetPostByKeywordLazyQuery>;
+export type GetPostByKeywordSuspenseQueryHookResult = ReturnType<typeof useGetPostByKeywordSuspenseQuery>;
+export type GetPostByKeywordQueryResult = Apollo.QueryResult<GetPostByKeywordQuery, GetPostByKeywordQueryVariables>;
 export const GetPostByUserIdDocument = gql`
     query GetPostByUserId($userid: String) {
   find_post_by_userid(userid: $userid) {

@@ -17,7 +17,9 @@ const ForumPage = () => {
       <div className="col-span-4">
         {!loading && data?.find_group_by_keyword?.map((item, index) => <ForumCard key={index} forum={item as Group} />)}
       </div>
-      <div className="col-span-3"></div>
+      <div className="col-span-3">
+        <div className=""></div>
+      </div>
     </div>
   </>
 }

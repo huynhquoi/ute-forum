@@ -20,7 +20,7 @@ const ForumCard = ({ forum }: ForumCardType) => {
             <Card className="w-full shadow-none cursor-pointer mb-4 relative forum-card bg-transparent">
                 <CardHeader className="flex flex-row justify-between items-start w-full transition-[width] forum-card-content rounded-xl bg-white">
                     <div className="flex items-center">
-                        <Image src={"/group.png"} alt="Group Image" width={100} height={100} className="rounded-lg" />
+                        <Image src={ forum?.image || "/group.png"} alt="Group Image" width={100} height={100} className="rounded-full" />
                         <div className="ml-4 flex flex-col items-start justify-between h-[100px]">
                             <div className="">
                                 <p className="font-bold text-xl">{forum?.groupname}</p>

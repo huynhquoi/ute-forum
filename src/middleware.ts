@@ -22,7 +22,10 @@ export function middleware(req: NextRequest) {
   }
 
   // Kiểm tra vai trò admin khi vào route admin
-  if (pathname.startsWith(adminRoutePrefix) && userRole !== 1) {
+  if (
+    pathname.startsWith(adminRoutePrefix) 
+    // && userRole !== 1
+  ) {
     return NextResponse.redirect(new URL(homeRoute, req.url));
   }
 
