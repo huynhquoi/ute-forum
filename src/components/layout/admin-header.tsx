@@ -93,6 +93,15 @@ const AdminHeader = () => {
                                         </NavigationMenuLink>
                                     </Link>
                                 </NavigationMenuItem>
+                                <NavigationMenuItem>
+                                    <Link href="/settings" legacyBehavior passHref>
+                                        <NavigationMenuLink
+                                            className={navigationMenuTriggerStyle()}
+                                        >
+                                            Cài đặt
+                                        </NavigationMenuLink>
+                                    </Link>
+                                </NavigationMenuItem>
                             </NavigationMenuList>
                         </NavigationMenu>
                         <div className="m-0 p-0 flex items-center">

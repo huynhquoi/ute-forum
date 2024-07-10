@@ -1,5 +1,6 @@
 "use client"
 
+import DetailGroup from "@/components/admin/detail-group"
 import ForumForm from "@/components/forum/forum-form"
 import ForumRequest from "@/components/forum/forum-request"
 import PostCard from "@/components/posts/post-card"
@@ -108,7 +109,9 @@ const ForumDetailPage = () => {
           {!loadPosts && groupPost?.find_post_in_group?.map((post, index) => <PostCard post={post as PostDto} key={index} firstChild={index === 0} inGroup={true} />)}
         </div>
       </div>
-      <div className="col-span-3"></div>
+      <div className="col-span-3 pt-4">
+        <DetailGroup group={data?.get_group_by_groupid as Group} />
+      </div>
     </div>
   </>
 }

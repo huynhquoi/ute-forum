@@ -24,7 +24,7 @@ const PostAuth = ({ user }: PostAuthProps) => {
         <CardHeader className="flex flex-col p-0">
           <div className="relative bg-blue-400 w-full h-10 rounded-t-md">
             <Avatar className="absolute top-1/2 left-[10%] bg-white h-12 w-12">
-              <AvatarImage src="/userLogo.png" />
+              <AvatarImage src={user?.image || "/userLogo.png"} />
             </Avatar>
           </div>
           <div className="w-full h-8 relative">

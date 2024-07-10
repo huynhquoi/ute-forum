@@ -6,6 +6,7 @@ fragment group on Group {
     user_group {
         userid
         fullname
+        image
     }
     reputaion
     description
@@ -21,6 +22,12 @@ fragment groupDTO on GroupDTO {
     description
     chanel
     totaluser
+}
+
+query GetAllGroup($limit: Int, $pacing: Int) {
+    get_all_group(limit: $limit, pacing: $pacing) {
+        ...group
+    }
 }
 
 query GetGroupByKeyword($keyword:String, $userid:String) {

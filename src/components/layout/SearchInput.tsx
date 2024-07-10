@@ -1,5 +1,3 @@
-"use client";
-
 import { z } from "zod";
 import { Input } from "../ui/input";
 import * as React from "react";
@@ -27,19 +25,22 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
     const [open, setOpen] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const [debouncedInputValue, setDebouncedInputValue] = useState("");
 
-    const { data: user, loading } = useGetUserByKeywordQuery({
+    const { data: userData, loading: userLoading, refetch: refetchUsers } = useGetUserByKeywordQuery({
         variables: {
-            keyword: inputValue,
+            keyword: debouncedInputValue,
             userid: auth?.userid
-        }
+        },
+        skip: !open || !debouncedInputValue,
     })
 
-    const { data: group } = useGetGroupByKeywordQuery({
+    const { data: groupData, loading: groupLoading, refetch: refetchGroups } = useGetGroupByKeywordQuery({
         variables: {
-            keyword: inputValue,
+            keyword: debouncedInputValue,
             userid: auth?.userid
-        }
+        },
+        skip: !open || !debouncedInputValue,
     })
 
     const form = useForm<z.infer<typeof SearchSchema>>({
@@ -63,6 +64,30 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
         };
     }, [dropdownRef]);
 
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedInputValue(inputValue);
+        }, 1000);
+
+        return () => clearTimeout(timer);
+    }, [inputValue]);
+
+    useEffect(() => {
+        if (open && debouncedInputValue) {
+            refetchUsers();
+            refetchGroups();
+        }
+    }, [open, debouncedInputValue, refetchUsers, refetchGroups]);
+
+    useEffect(() => {
+        if (!open) {
+            setDebouncedInputValue("");
+            setInputValue("");
+        }
+    }, [open]);
+
+    const loading = userLoading || groupLoading;
+
     return (
         <div {...props} ref={dropdownRef}>
             <Form {...form}>
@@ -76,9 +101,11 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
                                     <Input
                                         placeholder="Tìm kiếm"
                                         {...field}
+                                        value={inputValue}
                                         onFocus={() => setOpen(true)}
                                         onChange={(e) => {
                                             setInputValue(e.target.value);
+                                            field.onChange(e);
                                             setOpen(true);
                                         }}
                                     />
@@ -88,7 +115,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
                     />
                 </form>
             </Form>
-            {open && inputValue && (
+            {open && debouncedInputValue && (
                 <div className="absolute bg-white border border-gray-200 mt-2 w-[400px] rounded-md p-2 space-y-2">
                     <div
                         className="p-2 py-4 cursor-pointer hover:bg-gray-100 rounded-md"
@@ -99,7 +126,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
                     >
                         {inputValue}
                     </div>
-                    {user?.get_user_by_keyword?.map((u, index) => (
+                    {userData?.get_user_by_keyword?.map((u, index) => (
                         <Link href={`/profile/${u?.userid}`} key={index} className="hover:bg-gray-100 cursor-pointer p-2 rounded-md flex items-center">
                             <Avatar>
                                 <AvatarImage src={u?.image || "/userLogo.png"} alt="CN"></AvatarImage>
@@ -111,7 +138,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
                         </Link>
                     ))}
 
-                    {group?.find_group_by_keyword?.map((g, index) => (
+                    {groupData?.find_group_by_keyword?.map((g, index) => (
                         <Link href={`/forum/${g?.groupid}`} key={index} className="hover:bg-gray-100 cursor-pointer p-2 rounded-md flex items-center">
                             <Avatar>
                                 <AvatarImage src={g?.image || "/userLogo.png"} alt="CN"></AvatarImage>

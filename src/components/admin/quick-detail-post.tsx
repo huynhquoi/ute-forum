@@ -24,7 +24,7 @@ const QuickDetailPost: React.FC<QuickDetailPostProps> = ({ post, children, ...pr
                     <DialogHeader>
                         <DialogTitle>Chi tiết bài viết</DialogTitle>
                     </DialogHeader>
-                    <ScrollArea className="w-full h-[80vh]">
+                    <ScrollArea className="w-full h-[80vh] pr-2">
                         <div className="h-[80vh] overflow-y-auto">
                             <ImageCover image={post?.image as string} />
                             <Card className="rounded-md shadow-none">

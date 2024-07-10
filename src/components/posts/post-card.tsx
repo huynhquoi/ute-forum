@@ -27,9 +27,9 @@ const PostCard = ({ post, firstChild, inGroup }: PostCardProps) => {
   const userStorage = useUserStorage(state => state.user)
   return (
     <>
-      {!firstChild ? <Separator className="my-1" /> : <></>}
+      {!firstChild ? <Separator className="my-1 max-w-[680px] 2xl:w-[680px] min-[1400px]:w-[600px] xl:w-[500px]" /> : <></>}
       {iseDeleted ?
-        <Card className="text-base">
+        <Card className="text-base max-w-[680px]">
           <CardHeader className="text-xl font-bold py-3">
             Xóa bài viết
           </CardHeader>
@@ -37,7 +37,7 @@ const PostCard = ({ post, firstChild, inGroup }: PostCardProps) => {
             Bài viết này đã bị xóa. <Link href={"/create-post"} className="font-bold">Tạo bài viết mới ngay</Link>
           </CardContent>
         </Card>
-        : <Card className="w-full shadow-none border-none hover:bg-gray-100 cursor-pointer">
+        : <Card className="max-w-[680px] shadow-none border-none hover:bg-gray-100 cursor-pointer 2xl:w-[680px] min-[1400px]:w-[600px] xl:w-[500px]">
           <CardHeader className="py-1 px-2 flex flex-row justify-between items-start">
             {post?.group_post?.groupid && !inGroup
               ? <Link href={`/forum/${post?.group_post?.groupid}`} className="flex items-center">
@@ -61,7 +61,7 @@ const PostCard = ({ post, firstChild, inGroup }: PostCardProps) => {
               <p className="text-xl font-bold">
                 {post.title}
               </p>
-              <div className="flex items-center">
+              <div className="flex items-center mb-2">
                 {post?.listtopic?.map(item => (<Badge key={item?.topic_posttopic?.topicid} className="mr-1">{item?.topic_posttopic?.topicname}</Badge>))}
               </div>
               <ImageCover image={post?.image as string} />

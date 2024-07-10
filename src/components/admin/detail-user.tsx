@@ -50,7 +50,7 @@ const DetailUser = ({ user }: DetailUserProps) => {
                     </CardContent>
 
                     <CardFooter>
-                        <DetailUserAction userId={user?.userid as string} isBan={user?.isbanid ? 1 : 0}/>
+                        <DetailUserAction userId={user?.userid as string} isBan={user?.isban?.isbanid ? 1 : 0}/>
                     </CardFooter>
                 </Card>
                 : <Card>

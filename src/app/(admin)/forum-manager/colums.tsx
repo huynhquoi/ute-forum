@@ -1,13 +1,14 @@
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
-import { User } from "@/generated/types"
+import UserDisplay from "@/components/users/user-display"
+import { Group, User } from "@/generated/types"
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
 import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { ColumnDef } from "@tanstack/react-table"
 import Link from "next/link"
 
-export const columns: ColumnDef<User>[] = [
+export const columns: ColumnDef<Group>[] = [
     {
         id: "select",
         header: ({ table }) => (
@@ -31,7 +32,7 @@ export const columns: ColumnDef<User>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "fullname",
+        accessorKey: "groupname",
         header: ({ column }) => {
             return (
                 <Button
@@ -43,22 +44,31 @@ export const columns: ColumnDef<User>[] = [
                 </Button>
             )
         },
-        cell: ({ row }) => <div className="ml-4 capitalize">{row.getValue("fullname")}</div>,
+        cell: ({ row }) => <div className="ml-4 capitalize">{row.getValue("groupname")}</div>,
     },
     {
-        accessorKey: "email",
+        accessorKey: "user_group",
+        header: "Quản lý",
+        cell: ({ row }) => (
+            <div className="">
+                <UserDisplay user={row.original?.user_group as User} />
+            </div>
+        ),
+    },
+    {
+        accessorKey: "description",
         header: ({ column }) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Email
+                    Mô tả
                     <CaretSortIcon className="ml-2 h-4 w-4" />
                 </Button>
             )
         },
-        cell: ({ row }) => <div className="ml-4 lowercase">{row.getValue("email")}</div>,
+        cell: ({ row }) => <div className="ml-4 lowercase">{row.getValue("description")}</div>,
     },
     {
         accessorKey: "reputation",
@@ -80,25 +90,6 @@ export const columns: ColumnDef<User>[] = [
         },
     },
     {
-        accessorKey: "status",
-        header: "Status",
-        cell: ({ row }) => (
-            <div
-                className={`capitalize text-xs text-center border rounded-full ${row.getValue("status") ? 'border-green-500 text-green-500 bg-green-100' : 'border-red-500 text-red-500 bg-red-100'}`}>
-                {row.getValue("status") ? 'Đã duyệt' : 'Chưa duyệt'}
-            </div>
-        ),
-    },
-    {
-        accessorKey: "isbanid",
-        header: "Cấm",
-        cell: ({ row }) => (
-            <div className={`w-12 capitalize text-xs text-center ${row.original.isban?.isbanid ? 'border rounded-full border-red-500 text-red-500 bg-red-100' : ''}`}>
-                {row.original.isban?.isbanid ? `Cấp ${row.original.isban?.isbanid}` : ''}
-            </div>
-        ),
-    },
-    {
         id: "actions",
         enableHiding: false,
         cell: ({ row }) => {
@@ -115,14 +106,14 @@ export const columns: ColumnDef<User>[] = [
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(row.original.userid || "")}
+                            onClick={() => navigator.clipboard.writeText(row.original.groupid?.toString() || "")}
                         >
-                            Copy User Id
+                            Copy Forum Id
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>View user</DropdownMenuItem>
-                        <Link href={`/profile/${user?.userid}`} target="_blank">
-                            <DropdownMenuItem>View user in portal</DropdownMenuItem>
+                        <Link href={`/forum/${user?.groupid}`} target="_blank">
+                            <DropdownMenuItem>View forum in portal</DropdownMenuItem>
                         </Link>
                     </DropdownMenuContent>
                 </DropdownMenu>

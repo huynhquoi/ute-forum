@@ -7,9 +7,10 @@ import { Card, CardContent, CardHeader } from "../ui/card"
 import ImageCover from "../shared/image-cover"
 import Image from "next/image"
 import Link from "next/link"
-import { Flame, Increase } from "../svgs"
+import { ArrowDownCircle, ArrowUpCircle, Eye, Flame, Increase } from "../svgs"
 import Autoplay from "embla-carousel-autoplay"
 import UserDisplay from "../users/user-display"
+import { ScrollArea } from "../ui/scroll-area"
 
 
 type OutstandingZoneProps = {
@@ -43,7 +44,7 @@ const OutstandingZone = ({ post, topic }: OutstandingZoneProps) => {
           className="w-full"
           plugins={[
             Autoplay({
-              delay: 4000,
+              delay: 8000,
             })
           ]}
         >
@@ -53,11 +54,29 @@ const OutstandingZone = ({ post, topic }: OutstandingZoneProps) => {
                 return (
                   <CarouselItem key={item?.postid}>
                     <Link href={`/post/${item?.postid}`} className="hover:cursor-pointer">
-                      <Card className="p-0 relative border-none shadow-none">
-                        <ImageCover image={item?.image || ""} height={0} />
-                        <div className="absolute w-full bottom-0 left-0 h-12 rounded-md bg-black opacity-40"></div>
-                        <div className="absolute w-full bottom-0 left-0 h-12 rounded-md flex items-center justify-center font-bold text-xl text-white">
-                          {item?.title}
+                      <Card className="p-0 rounded-lg relative shadow-none flex flex-col items-start">
+                        <div className="w-full">
+                          <ImageCover image={item?.image || ""} height={200} />
+                        </div>
+                        <div className="pt-2 mt-2 w-[50%] p-3 space-y-2">
+                          <UserDisplay user={item?.user_post as User} />
+                          <div className="text-xl font-bold">
+                            {item?.title}
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-2">
+                              <p>{item?.totalread}</p>
+                              <Eye className="text-xl" />
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <p>{item?.totallike}</p>
+                              <ArrowUpCircle className="text-xl" />
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <p>{item?.totaldislike}</p>
+                              <ArrowDownCircle className="text-xl" />
+                            </div>
+                          </div>
                         </div>
                       </Card>
                     </Link>
@@ -76,33 +95,24 @@ const OutstandingZone = ({ post, topic }: OutstandingZoneProps) => {
         <span className="font-bold text-xl">Top Hight Reputation</span>
       </CardHeader>
       <CardContent className=" flex flex-col space-y-2 pb-0 mr-3">
-        <Carousel
-          opts={{
-            align: "start",
-          }}
-          orientation="vertical"
-          className="w-full"
-        >
-          <CarouselContent className="-mt-1 h-[200px]">
-            {data?.get_top_reputation_user?.map((u, index) => (
-              <CarouselItem key={index} className="pt-1 md:basis-1/2">
-                <div className="">
-                  <Card>
-                    <CardContent className="flex items-center justify-between p-6">
-                      <UserDisplay user={u as User} />
-                      <div className="font-bold flex items-center">
-                        <p>{u?.reputation}</p>
-                        <Flame className="text-2xl text-red-500" />
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="right-0 left-[80%] -top-11 translate-x-1/2" />
-          <CarouselNext className="ml-10 right-0 left-[80%] -top-11 translate-x-1/2" />
-        </Carousel>
+        <ScrollArea className="w-full h-[100%-544px] pr-2">
+          {data?.get_top_reputation_user?.map((u, index) => (
+            <div key={index} className=" mb-2">
+              <Card>
+                <CardContent className="flex items-center justify-between p-6">
+                  <div className="flex items-center space-x-4">
+                    <p className="text-xl font-bold">{index + 1}</p>
+                    <UserDisplay user={u as User} />
+                  </div>
+                  <div className="font-bold flex items-center">
+                    <p>{u?.reputation}</p>
+                    <Flame className="text-2xl text-red-500" />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          ))}
+        </ScrollArea>
       </CardContent>
     </Card>
   </>

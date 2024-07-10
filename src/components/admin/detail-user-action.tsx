@@ -1,7 +1,8 @@
-import { useBanUserMutation, useUpdateReputationMutation } from "@/generated/types"
+import { useGetAccountQuery, useUpdateReputationMutation } from "@/generated/types"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { useState } from "react"
+import BanUserDialog from "./ban-user-dialog"
 
 type DetailUserActionProps = {
     userId: string
@@ -10,25 +11,25 @@ type DetailUserActionProps = {
 
 const DetailUserAction = ({ userId, isBan }: DetailUserActionProps) => {
     const [reputation, setReputation] = useState('')
-    const [handleBan] = useBanUserMutation()
     const [handleUpdateReputation] = useUpdateReputationMutation()
+
+    const {refetch} = useGetAccountQuery({
+        variables: {
+            limit: 100,
+            pacing: 1
+        }
+    })
     return (
         <>
             <div className="w-full flex items-center justify-between">
-                <Button
-                    variant={"outline"}
-                    className="border-red-500 text-red-500 bg-red-200"
-                    onClick={() => {
-                        handleBan({
-                            variables: {
-                                userid: userId,
-                                isbanid: isBan ? 0 : 1
-                            }
-                        })
-                    }}
-                >
-                    Cấm
-                </Button>
+                <BanUserDialog userId={userId}>
+                    <Button
+                        variant={"outline"}
+                        className="border-red-500 text-red-500 bg-red-200"
+                    >
+                        Cấm
+                    </Button>
+                </BanUserDialog>
 
                 <div className="flex items-center space-x-2">
                     <Input value={reputation} onChange={(e) => setReputation(e.target.value)} />
@@ -41,7 +42,10 @@ const DetailUserAction = ({ userId, isBan }: DetailUserActionProps) => {
                                     reputation: parseInt(reputation),
                                     userid: userId
                                 }
-                            }).then(() => setReputation(''))
+                            }).then(() => {
+                                refetch()
+                                setReputation('')
+                            })
                         }}
                     >
                         Cộng / Trừ

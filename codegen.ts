@@ -2,8 +2,8 @@ import type { CodegenConfig } from "@graphql-codegen/cli";
 
 const config: CodegenConfig = {
   overwrite: true,
-  schema: "https://kltn2024.onrender.com/graphql",
-  // schema: "http://localhost:8081/graphql",
+  // schema: "https://kltn2024.onrender.com/graphql",
+  schema: "http://14.225.204.217:8081/graphql",
   documents: "src/**/*.graphql",
   generates: {
     "src/generated/types.ts": {

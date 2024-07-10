@@ -311,6 +311,7 @@ export type Mutation = {
   /**     Post */
   update_post_by_pk?: Maybe<Scalars['String']['output']>;
   update_reputation?: Maybe<Scalars['String']['output']>;
+  update_topic?: Maybe<Topic>;
   update_totalread_post?: Maybe<Scalars['String']['output']>;
 };
 
@@ -665,6 +666,11 @@ export type MutationUpdate_ReputationArgs = {
 };
 
 
+export type MutationUpdate_TopicArgs = {
+  topic?: InputMaybe<TopicRequest>;
+};
+
+
 export type MutationUpdate_Totalread_PostArgs = {
   postid?: InputMaybe<Scalars['Int']['input']>;
   userid?: InputMaybe<Scalars['String']['input']>;
@@ -806,6 +812,7 @@ export type Query = {
   find_topic_by_topicname?: Maybe<Array<Maybe<Topic>>>;
   /**    Follow */
   get_all_follower_by_user?: Maybe<Array<Maybe<User>>>;
+  get_all_group?: Maybe<Array<Maybe<Group>>>;
   get_all_user_by_follower?: Maybe<Array<Maybe<User>>>;
   /**    Content_GroupMessage */
   get_content_groupmessage_by_groupmessageid?: Maybe<Array<Maybe<Content_GroupMessage>>>;
@@ -993,6 +1000,12 @@ export type QueryGet_All_Follower_By_UserArgs = {
 };
 
 
+export type QueryGet_All_GroupArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  pacing?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
 export type QueryGet_All_User_By_FollowerArgs = {
   followerid?: InputMaybe<Scalars['String']['input']>;
 };
@@ -1173,7 +1186,9 @@ export type Topic = {
 };
 
 export type TopicRequest = {
+  color?: InputMaybe<Scalars['String']['input']>;
   createday?: InputMaybe<Scalars['LocalDateTime']['input']>;
+  image?: InputMaybe<Scalars['String']['input']>;
   isdelete?: InputMaybe<Scalars['Int']['input']>;
   ishide?: InputMaybe<Scalars['Int']['input']>;
   topicid?: InputMaybe<Scalars['Int']['input']>;
@@ -1198,7 +1213,7 @@ export type User = {
   fullname?: Maybe<Scalars['String']['output']>;
   gender?: Maybe<Scalars['String']['output']>;
   image?: Maybe<Scalars['String']['output']>;
-  isbanid?: Maybe<IsBan>;
+  isban?: Maybe<IsBan>;
   mssv?: Maybe<Scalars['String']['output']>;
   phone?: Maybe<Scalars['String']['output']>;
   reputation?: Maybe<Scalars['Int']['output']>;
@@ -1247,7 +1262,7 @@ export type ViewPost = {
   viewid: Scalars['Int']['output'];
 };
 
-export type UserFragment = { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isbanid?: { __typename?: 'IsBan', nameban?: string | null, description?: string | null } | null };
+export type UserFragment = { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isban?: { __typename?: 'IsBan', isbanid: number, nameban?: string | null, description?: string | null } | null };
 
 export type GetAccountQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -1255,14 +1270,14 @@ export type GetAccountQueryVariables = Exact<{
 }>;
 
 
-export type GetAccountQuery = { __typename?: 'Query', account?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isbanid?: { __typename?: 'IsBan', nameban?: string | null, description?: string | null } | null } | null> | null };
+export type GetAccountQuery = { __typename?: 'Query', account?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isban?: { __typename?: 'IsBan', isbanid: number, nameban?: string | null, description?: string | null } | null } | null> | null };
 
 export type GetAccountByPkQueryVariables = Exact<{
   userId: Scalars['String']['input'];
 }>;
 
 
-export type GetAccountByPkQuery = { __typename?: 'Query', find_account_by_id?: { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isbanid?: { __typename?: 'IsBan', nameban?: string | null, description?: string | null } | null } | null };
+export type GetAccountByPkQuery = { __typename?: 'Query', find_account_by_id?: { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isban?: { __typename?: 'IsBan', isbanid: number, nameban?: string | null, description?: string | null } | null } | null };
 
 export type GetUserGroupQueryVariables = Exact<{
   groupid?: InputMaybe<Scalars['Int']['input']>;
@@ -1271,36 +1286,36 @@ export type GetUserGroupQueryVariables = Exact<{
 }>;
 
 
-export type GetUserGroupQuery = { __typename?: 'Query', get_user_in_group?: Array<{ __typename?: 'User_Group', user_groupid?: number | null, createday?: any | null, checked?: number | null, user_usergroup?: { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isbanid?: { __typename?: 'IsBan', nameban?: string | null, description?: string | null } | null } | null, group_usergroup?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null } | null> | null };
+export type GetUserGroupQuery = { __typename?: 'Query', get_user_in_group?: Array<{ __typename?: 'User_Group', user_groupid?: number | null, createday?: any | null, checked?: number | null, user_usergroup?: { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isban?: { __typename?: 'IsBan', isbanid: number, nameban?: string | null, description?: string | null } | null } | null, group_usergroup?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null } | null } | null> | null };
 
 export type GetFollowerUserQueryVariables = Exact<{
   userid?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type GetFollowerUserQuery = { __typename?: 'Query', get_all_follower_by_user?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isbanid?: { __typename?: 'IsBan', nameban?: string | null, description?: string | null } | null } | null> | null };
+export type GetFollowerUserQuery = { __typename?: 'Query', get_all_follower_by_user?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isban?: { __typename?: 'IsBan', isbanid: number, nameban?: string | null, description?: string | null } | null } | null> | null };
 
 export type GetFollowingUserQueryVariables = Exact<{
   followerid?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type GetFollowingUserQuery = { __typename?: 'Query', get_all_user_by_follower?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isbanid?: { __typename?: 'IsBan', nameban?: string | null, description?: string | null } | null } | null> | null };
+export type GetFollowingUserQuery = { __typename?: 'Query', get_all_user_by_follower?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isban?: { __typename?: 'IsBan', isbanid: number, nameban?: string | null, description?: string | null } | null } | null> | null };
 
 export type GetTopHightReputationUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetTopHightReputationUserQuery = { __typename?: 'Query', get_top_reputation_user?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isbanid?: { __typename?: 'IsBan', nameban?: string | null, description?: string | null } | null } | null> | null };
+export type GetTopHightReputationUserQuery = { __typename?: 'Query', get_top_reputation_user?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isban?: { __typename?: 'IsBan', isbanid: number, nameban?: string | null, description?: string | null } | null } | null> | null };
 
 export type GetTopLowReputationUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetTopLowReputationUserQuery = { __typename?: 'Query', get_list_low_reputation?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isbanid?: { __typename?: 'IsBan', nameban?: string | null, description?: string | null } | null } | null> | null };
+export type GetTopLowReputationUserQuery = { __typename?: 'Query', get_list_low_reputation?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isban?: { __typename?: 'IsBan', isbanid: number, nameban?: string | null, description?: string | null } | null } | null> | null };
 
 export type GetListBanUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetListBanUserQuery = { __typename?: 'Query', get_list_ban_user?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isbanid?: { __typename?: 'IsBan', nameban?: string | null, description?: string | null } | null } | null> | null };
+export type GetListBanUserQuery = { __typename?: 'Query', get_list_ban_user?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isban?: { __typename?: 'IsBan', isbanid: number, nameban?: string | null, description?: string | null } | null } | null> | null };
 
 export type GetUserByKeywordQueryVariables = Exact<{
   keyword?: InputMaybe<Scalars['String']['input']>;
@@ -1308,7 +1323,7 @@ export type GetUserByKeywordQueryVariables = Exact<{
 }>;
 
 
-export type GetUserByKeywordQuery = { __typename?: 'Query', get_user_by_keyword?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isbanid?: { __typename?: 'IsBan', nameban?: string | null, description?: string | null } | null } | null> | null };
+export type GetUserByKeywordQuery = { __typename?: 'Query', get_user_by_keyword?: Array<{ __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isban?: { __typename?: 'IsBan', isbanid: number, nameban?: string | null, description?: string | null } | null } | null> | null };
 
 export type UpdateUserInfoMutationVariables = Exact<{
   user?: InputMaybe<UserRequest>;
@@ -1339,7 +1354,7 @@ export type BanUserMutationVariables = Exact<{
 }>;
 
 
-export type BanUserMutation = { __typename?: 'Mutation', ban_user?: { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isbanid?: { __typename?: 'IsBan', nameban?: string | null, description?: string | null } | null } | null };
+export type BanUserMutation = { __typename?: 'Mutation', ban_user?: { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isban?: { __typename?: 'IsBan', isbanid: number, nameban?: string | null, description?: string | null } | null } | null };
 
 export type UpdateReputationMutationVariables = Exact<{
   userid?: InputMaybe<Scalars['String']['input']>;
@@ -1378,9 +1393,17 @@ export type CreateCommentChildMutationVariables = Exact<{
 
 export type CreateCommentChildMutation = { __typename?: 'Mutation', create_comment_in_comment?: { __typename?: 'Comment', commentid: number, content?: string | null, createday?: any | null, updateday?: any | null, isdelete?: number | null, comment_comment?: { __typename?: 'Comment', commentid: number, content?: string | null, createday?: any | null, updateday?: any | null, isdelete?: number | null, user_comment?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null, user_comment?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null };
 
-export type GroupFragment = { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, user_group?: { __typename?: 'User', userid: string, fullname?: string | null } | null };
+export type GroupFragment = { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, user_group?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null };
 
 export type GroupDtoFragment = { __typename?: 'GroupDTO', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, admin?: string | null, description?: string | null, chanel?: number | null, totaluser?: number | null };
+
+export type GetAllGroupQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  pacing?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetAllGroupQuery = { __typename?: 'Query', get_all_group?: Array<{ __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, user_group?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null } | null> | null };
 
 export type GetGroupByKeywordQueryVariables = Exact<{
   keyword?: InputMaybe<Scalars['String']['input']>;
@@ -1388,28 +1411,28 @@ export type GetGroupByKeywordQueryVariables = Exact<{
 }>;
 
 
-export type GetGroupByKeywordQuery = { __typename?: 'Query', find_group_by_keyword?: Array<{ __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, user_group?: { __typename?: 'User', userid: string, fullname?: string | null } | null } | null> | null };
+export type GetGroupByKeywordQuery = { __typename?: 'Query', find_group_by_keyword?: Array<{ __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, user_group?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null } | null> | null };
 
 export type GetGroupByAdminQueryVariables = Exact<{
   admin?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type GetGroupByAdminQuery = { __typename?: 'Query', get_group_by_admin?: Array<{ __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, user_group?: { __typename?: 'User', userid: string, fullname?: string | null } | null } | null> | null };
+export type GetGroupByAdminQuery = { __typename?: 'Query', get_group_by_admin?: Array<{ __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, user_group?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null } | null> | null };
 
 export type GetGroupByUserIdQueryVariables = Exact<{
   userid?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type GetGroupByUserIdQuery = { __typename?: 'Query', get_group_by_userid?: Array<{ __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, user_group?: { __typename?: 'User', userid: string, fullname?: string | null } | null } | null> | null };
+export type GetGroupByUserIdQuery = { __typename?: 'Query', get_group_by_userid?: Array<{ __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, user_group?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null } | null> | null };
 
 export type GetGroupByGroupIdQueryVariables = Exact<{
   groupid?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
-export type GetGroupByGroupIdQuery = { __typename?: 'Query', get_group_by_groupid?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, user_group?: { __typename?: 'User', userid: string, fullname?: string | null } | null } | null };
+export type GetGroupByGroupIdQuery = { __typename?: 'Query', get_group_by_groupid?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, user_group?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null } | null };
 
 export type CreateGroupMutationVariables = Exact<{
   group?: InputMaybe<GroupRequest>;
@@ -1724,7 +1747,8 @@ export const UserFragmentDoc = gql`
   }
   reputation
   status
-  isbanid {
+  isban {
+    isbanid
     nameban
     description
   }
@@ -1768,6 +1792,7 @@ export const GroupFragmentDoc = gql`
   user_group {
     userid
     fullname
+    image
   }
   reputaion
   description
@@ -2568,6 +2593,47 @@ export function useCreateCommentChildMutation(baseOptions?: Apollo.MutationHookO
 export type CreateCommentChildMutationHookResult = ReturnType<typeof useCreateCommentChildMutation>;
 export type CreateCommentChildMutationResult = Apollo.MutationResult<CreateCommentChildMutation>;
 export type CreateCommentChildMutationOptions = Apollo.BaseMutationOptions<CreateCommentChildMutation, CreateCommentChildMutationVariables>;
+export const GetAllGroupDocument = gql`
+    query GetAllGroup($limit: Int, $pacing: Int) {
+  get_all_group(limit: $limit, pacing: $pacing) {
+    ...group
+  }
+}
+    ${GroupFragmentDoc}`;
+
+/**
+ * __useGetAllGroupQuery__
+ *
+ * To run a query within a React component, call `useGetAllGroupQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllGroupQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllGroupQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      pacing: // value for 'pacing'
+ *   },
+ * });
+ */
+export function useGetAllGroupQuery(baseOptions?: Apollo.QueryHookOptions<GetAllGroupQuery, GetAllGroupQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllGroupQuery, GetAllGroupQueryVariables>(GetAllGroupDocument, options);
+      }
+export function useGetAllGroupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllGroupQuery, GetAllGroupQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllGroupQuery, GetAllGroupQueryVariables>(GetAllGroupDocument, options);
+        }
+export function useGetAllGroupSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAllGroupQuery, GetAllGroupQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAllGroupQuery, GetAllGroupQueryVariables>(GetAllGroupDocument, options);
+        }
+export type GetAllGroupQueryHookResult = ReturnType<typeof useGetAllGroupQuery>;
+export type GetAllGroupLazyQueryHookResult = ReturnType<typeof useGetAllGroupLazyQuery>;
+export type GetAllGroupSuspenseQueryHookResult = ReturnType<typeof useGetAllGroupSuspenseQuery>;
+export type GetAllGroupQueryResult = Apollo.QueryResult<GetAllGroupQuery, GetAllGroupQueryVariables>;
 export const GetGroupByKeywordDocument = gql`
     query GetGroupByKeyword($keyword: String, $userid: String) {
   find_group_by_keyword(keyword: $keyword, userid: $userid) {

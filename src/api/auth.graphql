@@ -15,7 +15,8 @@ fragment user on User {
   }
   reputation
   status
-  isbanid {
+  isban {
+    isbanid
     nameban
     description
   }
