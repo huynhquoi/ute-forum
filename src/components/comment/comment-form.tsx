@@ -9,6 +9,7 @@ import { useUserStorage } from "@/lib/store/userStorage"
 import { Comment, useCreateCommentChildMutation, useCreateCommentMutation } from "@/generated/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useCommentStorage } from "@/lib/store/commentStorage"
+import useStorage from "@/hooks/useStorage"
 
 type CommentFormProps = {
   postId: number,
@@ -20,7 +21,7 @@ const commentSchema = z.object({
 })
 
 const CommentForm = ({ postId, commentId }: CommentFormProps) => {
-
+  const {getItem} = useStorage()
   const [submit, setSubmit] = useState(false)
   const [onAdd, setOnAdd] = useState(true)
   const userStorage = useUserStorage((state) => state.user)
@@ -72,7 +73,7 @@ const CommentForm = ({ postId, commentId }: CommentFormProps) => {
               comment: {
                 content: content
               },
-              userid: userStorage?.userid as string,
+              userid: getItem('userId') as string,
               comment_parentid: commentId
             }
           });
@@ -83,7 +84,7 @@ const CommentForm = ({ postId, commentId }: CommentFormProps) => {
                 content: content
               },
               postid: postId,
-              userid: userStorage?.userid as string
+              userid: getItem('userId') as string
             }
           });
         }
@@ -97,7 +98,7 @@ const CommentForm = ({ postId, commentId }: CommentFormProps) => {
 
     submitComment();
     setSubmit(false);
-  }, [CreateComment, CreateCommentChild, addComment, commentId, content, form, postId, submit, userStorage?.userid])
+  }, [CreateComment, CreateCommentChild, addComment, commentId, content, form, getItem, postId, submit])
 
   const onSubmit = (value: z.infer<typeof commentSchema>) => {
     setContent(value.content)

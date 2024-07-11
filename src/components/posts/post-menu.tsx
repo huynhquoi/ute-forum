@@ -11,6 +11,8 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { AlertDialogTitle } from "@radix-ui/react-alert-dialog"
 import useFirebase from "@/hooks/useFirebase"
 import { imageLocation } from "@/lib/utils"
+import PostForm from "./post-form"
+import { ScrollArea } from "../ui/scroll-area"
 
 type PostMenuProps = {
   post: PostDto
@@ -19,6 +21,7 @@ type PostMenuProps = {
 
 const PostMenu = ({ post, onDeleted }: PostMenuProps) => {
   const [open, setOpen] = useState(false)
+  const [openEdit, setOpenEdit] = useState(false)
   const [DeletePost] = useDeletePostMutation()
   const { deleteFile } = useFirebase()
   return (
@@ -35,7 +38,7 @@ const PostMenu = ({ post, onDeleted }: PostMenuProps) => {
               <Trash className="text-2xl text-red-500 mr-4" />
               <span>Xóa bài viết</span>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setOpenEdit(true)}>
               <Edit className="text-2xl text-blue-500 mr-4" />
               <span>Chỉnh sửa bài viết</span>
             </DropdownMenuItem>
@@ -64,6 +67,19 @@ const PostMenu = ({ post, onDeleted }: PostMenuProps) => {
               })
             }}>Xác nhận</AlertDialogAction>
           </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={openEdit} onOpenChange={setOpenEdit}>
+        <AlertDialogContent className="h-[80vh] sm:max-w-none w-[1000px]">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Chỉnh sửa bài viết</AlertDialogTitle>
+          </AlertDialogHeader>
+          <ScrollArea className="h-[70vh] pr-3">
+            <div className="">
+              <PostForm post={post as PostDto} onSubmitEdit={() => setOpenEdit(false)} />
+            </div>
+          </ScrollArea>
         </AlertDialogContent>
       </AlertDialog>
     </>

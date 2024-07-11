@@ -6,53 +6,13 @@ import { format } from "date-fns"
 import { Button } from "../ui/button"
 import { useUserStorage } from "@/lib/store/userStorage"
 import { useEffect, useState } from "react"
+import FollowBtn from "../shared/follow-btn"
 
 type ProfileInfoProps = {
   user: User
 }
 
 const ProfileInfo = ({ user }: ProfileInfoProps) => {
-  const [follow, setFollow] = useState(false);
-  const userStorage = useUserStorage(state => state.user)
-  const [CreateFollow] = useCreateFollowMutation()
-  const [DeleteFollow] = useDeleteFollowMutation()
-
-  const { data: followingU, refetch } = useGetFollowingUserQuery({
-    variables: {
-      followerid: userStorage?.userid
-    }
-  })
-
-  useEffect(() => {
-    if (!followingU?.get_all_user_by_follower?.length) {
-      setFollow(false)
-      return
-    }
-
-    if (followingU?.get_all_user_by_follower?.find(i => i?.userid === user?.userid)) {
-      setFollow(true)
-    } else {
-      setFollow(false)
-    }
-  }, [followingU?.get_all_user_by_follower, user?.userid])
-
-  const handleActionFollow = (type: 'follow' | 'unfollow') => {
-    if (type === 'follow') {
-      CreateFollow({
-        variables: {
-          followerid: userStorage?.userid,
-          userid: user?.userid,
-        }
-      }).then(() => refetch())
-    } else if (type === 'unfollow') {
-      DeleteFollow({
-        variables: {
-          followerid: userStorage?.userid,
-          userid: user?.userid,
-        }
-      }).then(() => refetch())
-    }
-  }
   return <>
     <Card className="mt-4 mr-4 rounded-md shadow-none">
       <CardHeader className="pb-4">
@@ -85,23 +45,7 @@ const ProfileInfo = ({ user }: ProfileInfoProps) => {
         </div>
       </CardContent>
       <CardFooter>
-        {user?.userid === userStorage?.userid
-          ? <></>
-          : follow
-            ? <Button
-              variant={"outline"}
-              className="border-red-500 text-red-500 hover:bg-red-500 hover:text-white w-full"
-              onClick={() => handleActionFollow('unfollow')}
-            >
-              Bỏ theo dõi
-            </Button>
-            : <Button
-              variant={"outline"}
-              className="border-green-500 text-green-500 hover:bg-green-500 hover:text-white w-full"
-              onClick={() => handleActionFollow('follow')}
-            >
-              Theo dõi
-            </Button>}
+        <FollowBtn userId={user?.userid} />
       </CardFooter>
     </Card>
   </>

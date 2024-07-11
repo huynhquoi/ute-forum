@@ -32,3 +32,4 @@ export { default as Check } from "./Check.svg";
 export { default as XIcon } from "./XIcon.svg";
 export { default as ArrowTo } from "./ArrowTo.svg";
 export { default as Flame } from "./Flame.svg";
+export { default as Flag } from "./Flag.svg";

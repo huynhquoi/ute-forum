@@ -1,6 +1,6 @@
 "use client"
 
-import { Post, PostDto, useCreatePostInGroupMutation, useCreatePostMutation } from "@/generated/types"
+import { Post, PostDto, useCreatePostInGroupMutation, useCreatePostMutation, useUpdatePostMutation } from "@/generated/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ChangeEvent, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -38,13 +38,15 @@ type PostDataType = {
 type PostFormType = {
   post?: PostDto,
   groupId?: number,
+  onSubmitEdit?: () => void
 }
 
-const PostForm = ({ post, groupId }: PostFormType) => {
-  const [preview, setPreview] = useState("");
+const PostForm = ({ post, groupId, onSubmitEdit }: PostFormType) => {
+  const [preview, setPreview] = useState(post?.image || "");
   const [loading, setLoading] = useState(false)
   const [imageProgress, setImageProgress] = useState(0);
   const [createPost] = useCreatePostMutation()
+  const [updatePost] = useUpdatePostMutation()
   const [createGroupPost] = useCreatePostInGroupMutation()
   const userStorage = useUserStorage(state => state.user)
   const { uploadFile, setProgressCallback, deleteFile } = useFirebase()
@@ -79,7 +81,33 @@ const PostForm = ({ post, groupId }: PostFormType) => {
       return
     }
 
+    if (post?.postid) {
+      updatePost({
+        variables: {
+          post: {
+            postid: post?.postid,
+            image: postData.image,
+            content: postData.content,
+            title: postData.title,
+            requiredreputation: parseInt(postData.requiredReputation)
+          },
+          topic: postData.topic.map(item => ({
+            topicid: parseInt(item)
+          }))
+        }
+      }).then(() => {
+        setLoading(true)
+        if (typeof onSubmitEdit !== 'undefined') {
+          onSubmitEdit()
+        }
+        return
+      })
+    }
+
     if (!groupId) {
+      if (post?.postid) {
+        return
+      }
       createPost({
         variables: {
           user: {
@@ -100,6 +128,9 @@ const PostForm = ({ post, groupId }: PostFormType) => {
         router.push("/home")
       })
     } else {
+      if (post?.postid) {
+        return
+      }
       createGroupPost({
         variables: {
           user: {
@@ -122,7 +153,7 @@ const PostForm = ({ post, groupId }: PostFormType) => {
       })
     }
 
-  }, [createGroupPost, createPost, groupId, loading, postData, router, userStorage?.userid])
+  }, [createGroupPost, createPost, groupId, loading, onSubmitEdit, post?.postid, postData, router, updatePost, userStorage?.userid])
 
   const onSubmit = (values: z.infer<typeof PostChema>) => {
     setPostData(values);
@@ -170,12 +201,12 @@ const PostForm = ({ post, groupId }: PostFormType) => {
           render={({ field: { onChange, value, ...rest } }) => (
             <FormItem>
               <FormLabel className="font-bold">
-                Tiêu đề bài viết <span className="text-red-600">*</span>
+                Ảnh <span className="text-red-600">*</span>
               </FormLabel>
               <FormControl>
                 <>
                   <div className="flex items-center justify-center">
-                    {value ?
+                    {value && preview ?
                       <div className="w-[400px] relative">
                         <Close
                           className="text-2xl absolute top-8 right-1 translate-x-[-50%] translate-y-[-100%] hover:cursor-pointer"

@@ -5,9 +5,11 @@ import { Button } from "../ui/button"
 import { useState } from "react"
 import CommentForm from "./comment-form"
 import { format } from "date-fns"
-import { Reply } from "../svgs"
+import { Flag, Reply } from "../svgs"
 import { useUserStorage } from "@/lib/store/userStorage"
 import Link from "next/link"
+import ReportDialog from "../shared/report-dialog"
+import { REPORT_COMMENT } from "@/generated/default-types"
 
 type CommentItemsProps = {
   comment: Comment
@@ -38,12 +40,22 @@ const CommentItems = ({ comment, onReload, onComment }: CommentItemsProps) => {
         </CardContent>
       </Card>
       <div className="flex flex-col items-start ml-12">
-        <Button
-          variant={"ghost"}
-          className="p-0"
-          onClick={() => {
-            setReply(!reply)
-          }}>Phản hồi</Button>
+        <div className="flex items-center space-x-2">
+          <Button
+            variant={"ghost"}
+            className="p-0"
+            onClick={() => {
+              setReply(!reply)
+            }}>Phản hồi</Button>
+          <ReportDialog type={REPORT_COMMENT} title={'bình luận này'} commentId={comment?.commentid}>
+            <Button
+              variant={"secondary"}
+              className={`rounded-full shadow-none bg-white hover:bg-gray-200 px-2`}
+            >
+              <Flag className="text-base text-red-500" />
+            </Button>
+          </ReportDialog>
+        </div>
         {reply
           ? <CommentForm
             postId={comment?.post_comment?.postid as number}

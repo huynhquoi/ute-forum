@@ -75,6 +75,7 @@ const LoginPage = () => {
       const responseLogin = await loginApi(values);
       setLoading(false);
       setUserId(responseLogin.id);
+      setItem('userId', responseLogin.id)
       setCookie(null, 'userId', responseLogin.id, {
         maxAge: 30 * 24 * 60 * 60,
         path: '/',

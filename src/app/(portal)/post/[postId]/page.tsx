@@ -14,10 +14,12 @@ import Description from "@/components/shared/description";
 import CommentArea from "@/components/comment/comment-area";
 import ImageCover from "@/components/shared/image-cover";
 import { useCommentStorage } from "@/lib/store/commentStorage";
-import { ArrowDownCircle, ArrowUpCircle, Eye } from "@/components/svgs";
+import { ArrowDownCircle, ArrowUpCircle, Eye, Flag } from "@/components/svgs";
 import { useUserStorage } from "@/lib/store/userStorage";
 import PostAction from "@/components/posts/post-action";
 import { format } from "date-fns";
+import ReportDialog from "@/components/shared/report-dialog";
+import { REPORT_POST } from "@/generated/default-types";
 
 const PostDetail = () => {
   const param = useParams();
@@ -57,7 +59,7 @@ const PostDetail = () => {
     <>
       <div className="w-full flex justify-between min-h-[calc(100vh-72px)]">
         <div className="w-16">
-          <div className="flex flex-col items-center space-y-4 mt-16">
+          <div className="flex flex-col items-start space-y-4 mt-16">
             {loading ? <></> : <>
               <PostAction post={data?.find_post_by_id as PostDto} isVertical={true} />
               <Button
@@ -67,12 +69,20 @@ const PostDetail = () => {
                 <Eye className="text-2xl" />
                 <p className="ml-2 text-sm text-black">{data?.find_post_by_id?.totalread}</p>
               </Button>
+              <ReportDialog type={REPORT_POST} title={data?.find_post_by_id?.title || ''} postId={parseInt(param?.postId as string)}>
+                <Button
+                  variant={"secondary"}
+                  className={`rounded-full shadow-none bg-white hover:bg-gray-200`}
+                >
+                  <Flag className="text-2xl text-red-500" />
+                </Button>
+              </ReportDialog>
             </>}
           </div>
         </div>
         <div className="grid grid-cols-3 w-[calc(100%-80px)]">
           <div className="col-span-2">
-            <ScrollArea className="w-full h-[calc(100vh-72px)] pr-2">
+            <ScrollArea className="w-full h-[calc(100vh-72px)] pr-3">
               <ImageCover image={data?.find_post_by_id?.image as string} />
               <Card className="rounded-md shadow-none">
                 <CardHeader>

@@ -7,6 +7,7 @@ import { Label } from "../ui/label";
 import { User, useGetPostByUserIdQuery } from "@/generated/types";
 import { format } from "date-fns";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "../ui/hover-card";
+import FollowBtn from "../shared/follow-btn";
 
 type PostAuthProps = {
   user: User
@@ -34,9 +35,7 @@ const PostAuth = ({ user }: PostAuthProps) => {
           </div>
         </CardHeader>
         <CardContent className="mt-4">
-          <Button className="w-full font-bold" variant={"outline"}>
-            Theo dõi
-          </Button>
+          <FollowBtn userId={user?.userid} />
           <div className="mt-4">
             {user?.bio}
           </div>

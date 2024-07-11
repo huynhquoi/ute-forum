@@ -1648,6 +1648,14 @@ export type CreatePostMutationVariables = Exact<{
 
 export type CreatePostMutation = { __typename?: 'Mutation', create_post?: string | null };
 
+export type UpdatePostMutationVariables = Exact<{
+  post?: InputMaybe<PostRequest>;
+  topic?: InputMaybe<Array<InputMaybe<TopicRequest>> | InputMaybe<TopicRequest>>;
+}>;
+
+
+export type UpdatePostMutation = { __typename?: 'Mutation', update_post_by_pk?: string | null };
+
 export type CreatePostInGroupMutationVariables = Exact<{
   post?: InputMaybe<PostRequest>;
   user?: InputMaybe<UserRequest>;
@@ -1707,6 +1715,63 @@ export type DeleteCommentReactionMutationVariables = Exact<{
 
 
 export type DeleteCommentReactionMutation = { __typename?: 'Mutation', delete_icon_for_commentlike?: string | null };
+
+export type ReportFragment = { __typename?: 'Report', reportid: number, reason?: string | null, content?: string | null, type?: number | null, createday?: any | null, user_report?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_report?: { __typename?: 'Post', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, isdelete?: number | null, requiredreputation?: number | null, totalread?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null } | null } | null, comment_report?: { __typename?: 'Comment', commentid: number, content?: string | null, createday?: any | null, updateday?: any | null, isdelete?: number | null, user_comment?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null, user_reporter?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null };
+
+export type GetReportByTypeQueryVariables = Exact<{
+  type?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetReportByTypeQuery = { __typename?: 'Query', get_report_by_type?: Array<{ __typename?: 'Report', reportid: number, reason?: string | null, content?: string | null, type?: number | null, createday?: any | null, user_report?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_report?: { __typename?: 'Post', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, isdelete?: number | null, requiredreputation?: number | null, totalread?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null } | null } | null, comment_report?: { __typename?: 'Comment', commentid: number, content?: string | null, createday?: any | null, updateday?: any | null, isdelete?: number | null, user_comment?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null, user_reporter?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null } | null> | null };
+
+export type CreateReportUserMutationVariables = Exact<{
+  report?: InputMaybe<ReportRequest>;
+  userid?: InputMaybe<Scalars['String']['input']>;
+  reporterid?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type CreateReportUserMutation = { __typename?: 'Mutation', create_report_user?: string | null };
+
+export type CreateReportPostMutationVariables = Exact<{
+  report?: InputMaybe<ReportRequest>;
+  postid?: InputMaybe<Scalars['Int']['input']>;
+  reporterid?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type CreateReportPostMutation = { __typename?: 'Mutation', create_report_post?: string | null };
+
+export type CreateReportCommentMutationVariables = Exact<{
+  report?: InputMaybe<ReportRequest>;
+  commentid?: InputMaybe<Scalars['Int']['input']>;
+  reporterid?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type CreateReportCommentMutation = { __typename?: 'Mutation', create_report_comment?: string | null };
+
+export type DeleteReportUserMutationVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type DeleteReportUserMutation = { __typename?: 'Mutation', delete_report_by_userid?: string | null };
+
+export type DeleteReportPostMutationVariables = Exact<{
+  postid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type DeleteReportPostMutation = { __typename?: 'Mutation', delete_report_by_postid?: string | null };
+
+export type DeleteReportCommentMutationVariables = Exact<{
+  commentid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type DeleteReportCommentMutation = { __typename?: 'Mutation', delete_report_by_commentid?: string | null };
 
 export type GetUserSubscriptionVariables = Exact<{
   userid?: InputMaybe<Scalars['String']['input']>;
@@ -1937,6 +2002,62 @@ export const BookmarkFragmentDoc = gql`
   }
 }
     ${PostFragmentDoc}`;
+export const ReportFragmentDoc = gql`
+    fragment report on Report {
+  reportid
+  reason
+  content
+  type
+  createday
+  user_report {
+    userid
+    fullname
+    image
+  }
+  post_report {
+    postid
+    user_post {
+      userid
+      fullname
+      image
+    }
+    content
+    title
+    createday
+    updateday
+    image
+    ishide
+    isdelete
+    requiredreputation
+    totalread
+    group_post {
+      groupid
+      groupname
+      image
+    }
+  }
+  comment_report {
+    commentid
+    user_comment {
+      userid
+      fullname
+      image
+    }
+    post_comment {
+      postid
+    }
+    content
+    createday
+    updateday
+    isdelete
+  }
+  user_reporter {
+    userid
+    fullname
+    image
+  }
+}
+    `;
 export const TopicFragmentDoc = gql`
     fragment topic on Topic {
   topicid
@@ -3730,6 +3851,38 @@ export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
+export const UpdatePostDocument = gql`
+    mutation UpdatePost($post: PostRequest, $topic: [TopicRequest]) {
+  update_post_by_pk(post: $post, topic: $topic)
+}
+    `;
+export type UpdatePostMutationFn = Apollo.MutationFunction<UpdatePostMutation, UpdatePostMutationVariables>;
+
+/**
+ * __useUpdatePostMutation__
+ *
+ * To run a mutation, you first call `useUpdatePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdatePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updatePostMutation, { data, loading, error }] = useUpdatePostMutation({
+ *   variables: {
+ *      post: // value for 'post'
+ *      topic: // value for 'topic'
+ *   },
+ * });
+ */
+export function useUpdatePostMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePostMutation, UpdatePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdatePostMutation, UpdatePostMutationVariables>(UpdatePostDocument, options);
+      }
+export type UpdatePostMutationHookResult = ReturnType<typeof useUpdatePostMutation>;
+export type UpdatePostMutationResult = Apollo.MutationResult<UpdatePostMutation>;
+export type UpdatePostMutationOptions = Apollo.BaseMutationOptions<UpdatePostMutation, UpdatePostMutationVariables>;
 export const CreatePostInGroupDocument = gql`
     mutation CreatePostInGroup($post: PostRequest, $user: UserRequest, $topic: [TopicRequest], $groupid: Int) {
   create_post_in_group(post: $post, user: $user, topic: $topic, groupid: $groupid)
@@ -3966,6 +4119,242 @@ export function useDeleteCommentReactionMutation(baseOptions?: Apollo.MutationHo
 export type DeleteCommentReactionMutationHookResult = ReturnType<typeof useDeleteCommentReactionMutation>;
 export type DeleteCommentReactionMutationResult = Apollo.MutationResult<DeleteCommentReactionMutation>;
 export type DeleteCommentReactionMutationOptions = Apollo.BaseMutationOptions<DeleteCommentReactionMutation, DeleteCommentReactionMutationVariables>;
+export const GetReportByTypeDocument = gql`
+    query GetReportByType($type: Int) {
+  get_report_by_type(type: $type) {
+    ...report
+  }
+}
+    ${ReportFragmentDoc}`;
+
+/**
+ * __useGetReportByTypeQuery__
+ *
+ * To run a query within a React component, call `useGetReportByTypeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetReportByTypeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetReportByTypeQuery({
+ *   variables: {
+ *      type: // value for 'type'
+ *   },
+ * });
+ */
+export function useGetReportByTypeQuery(baseOptions?: Apollo.QueryHookOptions<GetReportByTypeQuery, GetReportByTypeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetReportByTypeQuery, GetReportByTypeQueryVariables>(GetReportByTypeDocument, options);
+      }
+export function useGetReportByTypeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetReportByTypeQuery, GetReportByTypeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetReportByTypeQuery, GetReportByTypeQueryVariables>(GetReportByTypeDocument, options);
+        }
+export function useGetReportByTypeSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetReportByTypeQuery, GetReportByTypeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetReportByTypeQuery, GetReportByTypeQueryVariables>(GetReportByTypeDocument, options);
+        }
+export type GetReportByTypeQueryHookResult = ReturnType<typeof useGetReportByTypeQuery>;
+export type GetReportByTypeLazyQueryHookResult = ReturnType<typeof useGetReportByTypeLazyQuery>;
+export type GetReportByTypeSuspenseQueryHookResult = ReturnType<typeof useGetReportByTypeSuspenseQuery>;
+export type GetReportByTypeQueryResult = Apollo.QueryResult<GetReportByTypeQuery, GetReportByTypeQueryVariables>;
+export const CreateReportUserDocument = gql`
+    mutation CreateReportUser($report: ReportRequest, $userid: String, $reporterid: String) {
+  create_report_user(report: $report, userid: $userid, reporterid: $reporterid)
+}
+    `;
+export type CreateReportUserMutationFn = Apollo.MutationFunction<CreateReportUserMutation, CreateReportUserMutationVariables>;
+
+/**
+ * __useCreateReportUserMutation__
+ *
+ * To run a mutation, you first call `useCreateReportUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateReportUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createReportUserMutation, { data, loading, error }] = useCreateReportUserMutation({
+ *   variables: {
+ *      report: // value for 'report'
+ *      userid: // value for 'userid'
+ *      reporterid: // value for 'reporterid'
+ *   },
+ * });
+ */
+export function useCreateReportUserMutation(baseOptions?: Apollo.MutationHookOptions<CreateReportUserMutation, CreateReportUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateReportUserMutation, CreateReportUserMutationVariables>(CreateReportUserDocument, options);
+      }
+export type CreateReportUserMutationHookResult = ReturnType<typeof useCreateReportUserMutation>;
+export type CreateReportUserMutationResult = Apollo.MutationResult<CreateReportUserMutation>;
+export type CreateReportUserMutationOptions = Apollo.BaseMutationOptions<CreateReportUserMutation, CreateReportUserMutationVariables>;
+export const CreateReportPostDocument = gql`
+    mutation CreateReportPost($report: ReportRequest, $postid: Int, $reporterid: String) {
+  create_report_post(report: $report, postid: $postid, reporterid: $reporterid)
+}
+    `;
+export type CreateReportPostMutationFn = Apollo.MutationFunction<CreateReportPostMutation, CreateReportPostMutationVariables>;
+
+/**
+ * __useCreateReportPostMutation__
+ *
+ * To run a mutation, you first call `useCreateReportPostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateReportPostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createReportPostMutation, { data, loading, error }] = useCreateReportPostMutation({
+ *   variables: {
+ *      report: // value for 'report'
+ *      postid: // value for 'postid'
+ *      reporterid: // value for 'reporterid'
+ *   },
+ * });
+ */
+export function useCreateReportPostMutation(baseOptions?: Apollo.MutationHookOptions<CreateReportPostMutation, CreateReportPostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateReportPostMutation, CreateReportPostMutationVariables>(CreateReportPostDocument, options);
+      }
+export type CreateReportPostMutationHookResult = ReturnType<typeof useCreateReportPostMutation>;
+export type CreateReportPostMutationResult = Apollo.MutationResult<CreateReportPostMutation>;
+export type CreateReportPostMutationOptions = Apollo.BaseMutationOptions<CreateReportPostMutation, CreateReportPostMutationVariables>;
+export const CreateReportCommentDocument = gql`
+    mutation CreateReportComment($report: ReportRequest, $commentid: Int, $reporterid: String) {
+  create_report_comment(
+    report: $report
+    commentid: $commentid
+    reporterid: $reporterid
+  )
+}
+    `;
+export type CreateReportCommentMutationFn = Apollo.MutationFunction<CreateReportCommentMutation, CreateReportCommentMutationVariables>;
+
+/**
+ * __useCreateReportCommentMutation__
+ *
+ * To run a mutation, you first call `useCreateReportCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateReportCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createReportCommentMutation, { data, loading, error }] = useCreateReportCommentMutation({
+ *   variables: {
+ *      report: // value for 'report'
+ *      commentid: // value for 'commentid'
+ *      reporterid: // value for 'reporterid'
+ *   },
+ * });
+ */
+export function useCreateReportCommentMutation(baseOptions?: Apollo.MutationHookOptions<CreateReportCommentMutation, CreateReportCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateReportCommentMutation, CreateReportCommentMutationVariables>(CreateReportCommentDocument, options);
+      }
+export type CreateReportCommentMutationHookResult = ReturnType<typeof useCreateReportCommentMutation>;
+export type CreateReportCommentMutationResult = Apollo.MutationResult<CreateReportCommentMutation>;
+export type CreateReportCommentMutationOptions = Apollo.BaseMutationOptions<CreateReportCommentMutation, CreateReportCommentMutationVariables>;
+export const DeleteReportUserDocument = gql`
+    mutation DeleteReportUser($userid: String) {
+  delete_report_by_userid(userid: $userid)
+}
+    `;
+export type DeleteReportUserMutationFn = Apollo.MutationFunction<DeleteReportUserMutation, DeleteReportUserMutationVariables>;
+
+/**
+ * __useDeleteReportUserMutation__
+ *
+ * To run a mutation, you first call `useDeleteReportUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteReportUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteReportUserMutation, { data, loading, error }] = useDeleteReportUserMutation({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *   },
+ * });
+ */
+export function useDeleteReportUserMutation(baseOptions?: Apollo.MutationHookOptions<DeleteReportUserMutation, DeleteReportUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteReportUserMutation, DeleteReportUserMutationVariables>(DeleteReportUserDocument, options);
+      }
+export type DeleteReportUserMutationHookResult = ReturnType<typeof useDeleteReportUserMutation>;
+export type DeleteReportUserMutationResult = Apollo.MutationResult<DeleteReportUserMutation>;
+export type DeleteReportUserMutationOptions = Apollo.BaseMutationOptions<DeleteReportUserMutation, DeleteReportUserMutationVariables>;
+export const DeleteReportPostDocument = gql`
+    mutation DeleteReportPost($postid: Int) {
+  delete_report_by_postid(postid: $postid)
+}
+    `;
+export type DeleteReportPostMutationFn = Apollo.MutationFunction<DeleteReportPostMutation, DeleteReportPostMutationVariables>;
+
+/**
+ * __useDeleteReportPostMutation__
+ *
+ * To run a mutation, you first call `useDeleteReportPostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteReportPostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteReportPostMutation, { data, loading, error }] = useDeleteReportPostMutation({
+ *   variables: {
+ *      postid: // value for 'postid'
+ *   },
+ * });
+ */
+export function useDeleteReportPostMutation(baseOptions?: Apollo.MutationHookOptions<DeleteReportPostMutation, DeleteReportPostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteReportPostMutation, DeleteReportPostMutationVariables>(DeleteReportPostDocument, options);
+      }
+export type DeleteReportPostMutationHookResult = ReturnType<typeof useDeleteReportPostMutation>;
+export type DeleteReportPostMutationResult = Apollo.MutationResult<DeleteReportPostMutation>;
+export type DeleteReportPostMutationOptions = Apollo.BaseMutationOptions<DeleteReportPostMutation, DeleteReportPostMutationVariables>;
+export const DeleteReportCommentDocument = gql`
+    mutation DeleteReportComment($commentid: Int) {
+  delete_report_by_commentid(commentid: $commentid)
+}
+    `;
+export type DeleteReportCommentMutationFn = Apollo.MutationFunction<DeleteReportCommentMutation, DeleteReportCommentMutationVariables>;
+
+/**
+ * __useDeleteReportCommentMutation__
+ *
+ * To run a mutation, you first call `useDeleteReportCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteReportCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteReportCommentMutation, { data, loading, error }] = useDeleteReportCommentMutation({
+ *   variables: {
+ *      commentid: // value for 'commentid'
+ *   },
+ * });
+ */
+export function useDeleteReportCommentMutation(baseOptions?: Apollo.MutationHookOptions<DeleteReportCommentMutation, DeleteReportCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteReportCommentMutation, DeleteReportCommentMutationVariables>(DeleteReportCommentDocument, options);
+      }
+export type DeleteReportCommentMutationHookResult = ReturnType<typeof useDeleteReportCommentMutation>;
+export type DeleteReportCommentMutationResult = Apollo.MutationResult<DeleteReportCommentMutation>;
+export type DeleteReportCommentMutationOptions = Apollo.BaseMutationOptions<DeleteReportCommentMutation, DeleteReportCommentMutationVariables>;
 export const GetUserDocument = gql`
     subscription GetUser($userid: String) {
   sub_status_user(userid: $userid) {

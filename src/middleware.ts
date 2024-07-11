@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 const loginRoute = '/login';
+const registerRoute = '/register';
 const homeRoute = '/home';
 const adminRoutePrefix = '/admin';
 
@@ -12,20 +13,18 @@ export function middleware(req: NextRequest) {
   const isLoggedIn = checkUserLoggedIn(req);
   const userRole = getUserRole(req);
 
-  // Kiểm tra đăng nhập
-  if (!isLoggedIn && pathname !== loginRoute) {
+  // Cho phép truy cập vào trang đăng nhập và đăng ký khi chưa đăng nhập
+  if (!isLoggedIn && pathname !== loginRoute && pathname !== registerRoute) {
     return NextResponse.redirect(new URL(loginRoute, req.url));
   }
 
-  if (isLoggedIn && pathname === loginRoute) {
+  // Nếu đã đăng nhập, chuyển hướng khỏi trang đăng nhập và đăng ký
+  if (isLoggedIn && (pathname === loginRoute || pathname === registerRoute)) {
     return NextResponse.redirect(new URL(homeRoute, req.url));
   }
 
   // Kiểm tra vai trò admin khi vào route admin
-  if (
-    pathname.startsWith(adminRoutePrefix) 
-    // && userRole !== 1
-  ) {
+  if (pathname.startsWith(adminRoutePrefix) && userRole !== 1) {
     return NextResponse.redirect(new URL(homeRoute, req.url));
   }
 

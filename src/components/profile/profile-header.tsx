@@ -10,6 +10,9 @@ import ForumForm from "../forum/forum-form";
 import UserMessenger from "../layout/user-messeger";
 import { useMessageStore } from "@/lib/store/mesageStore";
 import QuickMessage from "../message/quick-message";
+import ReportDialog from "../shared/report-dialog";
+import { Flag } from "../svgs";
+import { REPORT_USER } from "@/generated/default-types";
 
 type ProfileHeaderProps = {
   user?: User;
@@ -71,8 +74,21 @@ const ProfileHeader = ({ user }: ProfileHeaderProps) => {
                   <ForumForm />
                   <Link href={"/create-post"}><Button>Đăng bài</Button></Link>
                   <ProfileEdit />
-                </div> : <><QuickMessage user={user as User}>
-                </QuickMessage></>}
+                </div> : <>
+                  <div className="flex items-center space-x-2">
+                    <ReportDialog type={REPORT_USER} title={user?.fullname || ''} userId={user?.userid}>
+                      <Button
+                        variant={"destructive"}
+                        className={`px-2 space-x-2`}
+                      >
+                        <Flag className="text-xl text-white" />
+                        <p>Báo cáo</p>
+                      </Button>
+                    </ReportDialog>
+                    <QuickMessage user={user as User}>
+                    </QuickMessage>
+                  </div>
+                </>}
               </div>
               <div className="col-span-1"></div>
             </div>

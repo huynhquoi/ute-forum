@@ -166,6 +166,10 @@ mutation CreatePost(
   create_post(post: $post, user: $user, topic: $topic)
 }
 
+mutation UpdatePost($post: PostRequest, $topic: [TopicRequest]) {
+  update_post_by_pk(post: $post, topic: $topic)
+}
+
 mutation CreatePostInGroup(
   $post: PostRequest
   $user: UserRequest
