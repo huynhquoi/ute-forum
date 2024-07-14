@@ -1,6 +1,6 @@
 "use client"
 
-import { Post, PostDto, useCreatePostInGroupMutation, useCreatePostMutation, useUpdatePostMutation } from "@/generated/types"
+import { Post, PostDto, useCreatePostInGroupMutation, useCreatePostMutation, useGetPostQuery, useUpdatePostMutation } from "@/generated/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ChangeEvent, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -14,10 +14,11 @@ import { useUserStorage } from "@/lib/store/userStorage"
 import Image from "next/image"
 import useFirebase from "@/hooks/useFirebase"
 import { Progress } from "../ui/progress"
-import { Close } from "../svgs"
+import { Close, Loading } from "../svgs"
 import Notification from "../shared/notification"
 import { imageLocation, sanitizeString } from "@/lib/utils"
 import { useRouter } from "next/navigation"
+import ChatAI from "./chat-ai"
 
 const PostChema = z.object({
   title: z.string(),
@@ -45,12 +46,19 @@ const PostForm = ({ post, groupId, onSubmitEdit }: PostFormType) => {
   const [preview, setPreview] = useState(post?.image || "");
   const [loading, setLoading] = useState(false)
   const [imageProgress, setImageProgress] = useState(0);
-  const [createPost] = useCreatePostMutation()
+  const [createPost, { error }] = useCreatePostMutation()
   const [updatePost] = useUpdatePostMutation()
   const [createGroupPost] = useCreatePostInGroupMutation()
   const userStorage = useUserStorage(state => state.user)
   const { uploadFile, setProgressCallback, deleteFile } = useFirebase()
   const router = useRouter()
+
+  const { fetchMore } = useGetPostQuery({
+    variables: {
+      limit: 100,
+      pacing: 1
+    }
+  })
 
   const [postData, setPostData] = useState<PostDataType>({
     title: "",
@@ -96,10 +104,15 @@ const PostForm = ({ post, groupId, onSubmitEdit }: PostFormType) => {
           }))
         }
       }).then(() => {
-        setLoading(true)
-        if (typeof onSubmitEdit !== 'undefined') {
-          onSubmitEdit()
-        }
+        fetchMore({
+          variables: {
+            limit: 100,
+            pacing: 1
+          }
+        }).then(() => {
+          setLoading(true)
+          router.push("/home")
+        })
         return
       })
     }
@@ -124,8 +137,18 @@ const PostForm = ({ post, groupId, onSubmitEdit }: PostFormType) => {
           }))
         }
       }).then(() => {
-        setLoading(true)
-        router.push("/home")
+        fetchMore({
+          variables: {
+            limit: 100,
+            pacing: 1
+          }
+        }).then(() => {
+          setLoading(true)
+          router.push("/home")
+        })
+      }).catch((error) => {
+        console.log(error)
+        return
       })
     } else {
       if (post?.postid) {
@@ -287,8 +310,17 @@ const PostForm = ({ post, groupId, onSubmitEdit }: PostFormType) => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full" disabled={loading}>
+        <ChatAI>
+          <Button variant={'outline'} className="border-fuchsia-500 text-fuchsia-500 bg-fuchsia-50 hover:bg-white hover:text-fuchsia-500">Chat Gemini</Button>
+        </ChatAI>
+        <Button
+          variant={'outline'}
+          className="border-green-500 text-green-500 bg-green-50 hover:bg-white hover:text-green-500 w-full"
+          type="submit"
+          disabled={loading}
+        >
           {post?.postid ? "Chỉnh sửa" : "Đăng bài"}
+          {loading ? <Loading className="animate-spin text-green-500 text-base ml-2" /> : <></>}
         </Button>
       </form>
     </Form>

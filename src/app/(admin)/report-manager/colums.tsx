@@ -64,4 +64,38 @@ export const columns: ColumnDef<Report>[] = [
             <UserDisplay user={row.original.user_reporter as User} />
         </div>,
     },
+    {
+        accessorKey: "reason",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Lý do
+                    <CaretSortIcon className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
+        cell: ({ row }) => <div className="ml-4 lowercase">
+            {row.original.reason}
+        </div>,
+    },
+    {
+        accessorKey: "content",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Lý do
+                    <CaretSortIcon className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
+        cell: ({ row }) => <div className="ml-4 lowercase">
+            {row.original.content}
+        </div>,
+    },
 ]

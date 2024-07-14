@@ -13,6 +13,7 @@ import useFirebase from "@/hooks/useFirebase"
 import { imageLocation } from "@/lib/utils"
 import PostForm from "./post-form"
 import { ScrollArea } from "../ui/scroll-area"
+import { Textarea } from "../ui/textarea"
 
 type PostMenuProps = {
   post: PostDto
@@ -22,6 +23,7 @@ type PostMenuProps = {
 const PostMenu = ({ post, onDeleted }: PostMenuProps) => {
   const [open, setOpen] = useState(false)
   const [openEdit, setOpenEdit] = useState(false)
+  const [openWarning, setOpenWarning] = useState(false)
   const [DeletePost] = useDeletePostMutation()
   const { deleteFile } = useFirebase()
   return (
@@ -42,6 +44,10 @@ const PostMenu = ({ post, onDeleted }: PostMenuProps) => {
               <Edit className="text-2xl text-blue-500 mr-4" />
               <span>Chỉnh sửa bài viết</span>
             </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setOpenWarning(true)}>
+              <Edit className="text-2xl text-blue-500 mr-4" />
+              <span>Kiểm tra từ ngữ nhạy cảm</span>
+            </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -55,7 +61,9 @@ const PostMenu = ({ post, onDeleted }: PostMenuProps) => {
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction onClick={() => {
-              deleteFile(imageLocation(post?.image as string))
+              if(post?.image) {
+                deleteFile(imageLocation(post?.image as string))
+              }
               DeletePost({
                 variables: {
                   postid: post?.postid
@@ -80,6 +88,24 @@ const PostMenu = ({ post, onDeleted }: PostMenuProps) => {
               <PostForm post={post as PostDto} onSubmitEdit={() => setOpenEdit(false)} />
             </div>
           </ScrollArea>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={openWarning} onOpenChange={setOpenWarning}>
+        <AlertDialogContent className="sm:max-w-none w-[500px]">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Từ ngữ nhạy cảm</AlertDialogTitle>
+          </AlertDialogHeader>
+          <ScrollArea className="pr-3">
+            <div className="">
+              {post?.warning === '1' ? <>
+                <Textarea value={post?.warningword || ''} disabled={true} />
+              </> : <>
+              <div className="w-full text-center font-bold">Bài viết rất tuyệt vời</div>
+              </>}
+            </div>
+          </ScrollArea>
+          <Button onClick={() => {setOpenWarning(false)}}>Xác nhận</Button>
         </AlertDialogContent>
       </AlertDialog>
     </>

@@ -12,6 +12,8 @@ fragment comment on Comment {
   createday
   updateday
   isdelete
+  warning
+  warningword
 }
 
 fragment cmt on Comment {

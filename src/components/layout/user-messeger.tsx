@@ -3,13 +3,15 @@
 import { useUserStorage } from "@/lib/store/userStorage";
 import { Messenger } from "../svgs";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet";
-import { DetailMessageDto, User, useGetMessageByUserIdSubscription } from "@/generated/types";
+import { DetailGroup_Message, DetailMessageDto, Group_Message, User, useGetGroupMessageByUserIdSubscription, useGetMessageByUserIdSubscription } from "@/generated/types";
 import MessageItem from "../message/message-item";
 import MessageZone from "../message/message-zone";
 import { useEffect, useState } from "react";
 import useStorage from "@/hooks/useStorage";
 import { useMessageStore } from "@/lib/store/mesageStore";
 import UserDisplay from "../users/user-display";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 type UserMessengerProps = {
     children?: React.ReactNode;
@@ -21,11 +23,19 @@ const UserMessenger = ({ children, onClick }: UserMessengerProps) => {
     const userStorage = useUserStorage((state) => state.user);
     const { message, anotherUser, removeMessage } = useMessageStore()
     const [selectMessage, setSelectMessage] = useState<DetailMessageDto>(message?.messageid ? undefined : JSON.parse(getItem('selectMessage') || "{}") || undefined);
+    const [selectGroupMessage, setSelectGroupMessage] = useState<Group_Message>(JSON.parse(getItem('selectGroupMessage') || "{}"))
     const { data, loading, error } = useGetMessageByUserIdSubscription({
         variables: {
             userid: userStorage?.userid
         }
     });
+
+    const { data: groupMessage, loading: loadGroup } = useGetGroupMessageByUserIdSubscription({
+        variables: {
+            userid: userStorage?.userid
+        },
+        skip: true
+    })
 
     useEffect(() => {
         if (!message?.messageid) {
@@ -57,19 +67,50 @@ const UserMessenger = ({ children, onClick }: UserMessengerProps) => {
                     </div>
                 </SheetHeader>
                 <div className="grid grid-cols-5 h-[calc(100%-72px)]">
-                    <div className="col-span-1 bg-gray-100 pl-4">
-                        {message?.messageid ? <MessageItem selected={true} user={anotherUser as User} /> : <></>}
-                        {data?.sub_detail_message_by_userid?.map(i => (
-                            <MessageItem
-                                key={i?.detailmessageid}
-                                user={i?.userid as User}
-                                onCLick={() => {
-                                    setSelectMessage(i as DetailMessageDto);
-                                    setItem('selectMessage', JSON.stringify(i));
-                                }}
-                                selected={selectMessage?.detailmessageid === i?.detailmessageid}
-                            />
-                        ))}
+                    <div className="col-span-1 ">
+                        <Tabs defaultValue="user" className="w-full">
+                            <TabsList className="grid w-full grid-cols-2 border">
+                                <TabsTrigger value="user">Cá nhân</TabsTrigger>
+                                <TabsTrigger value="group">Nhóm</TabsTrigger>
+                            </TabsList>
+                            <TabsContent value="user" className="pl-4 bg-gray-100">
+                                {message?.messageid ? <MessageItem selected={true} user={anotherUser as User} /> : <></>}
+                                {data?.sub_detail_message_by_userid?.map(i => (
+                                    <MessageItem
+                                        key={i?.detailmessageid}
+                                        user={i?.userid as User}
+                                        onCLick={() => {
+                                            setSelectMessage(i as DetailMessageDto);
+                                            setItem('selectMessage', JSON.stringify(i));
+                                            setItem('partner', (i?.messageid || '').toString())
+                                        }}
+                                        selected={selectMessage?.detailmessageid === i?.detailmessageid}
+                                    />
+                                ))}
+                            </TabsContent>
+                            <TabsContent value="group">
+                                {groupMessage?.sub_group_message_by_userid?.map(i => (
+                                    <div
+                                        key={i?.group_messageid}
+                                        onClick={() => {
+                                            setSelectGroupMessage(i as Group_Message);
+                                            setItem('selectGroupMessage', JSON.stringify(i));
+                                        }}
+                                    >
+                                        <Avatar>
+                                            <AvatarImage src={i?.group_messageimage || ''} alt={i?.group_messagename || ''}></AvatarImage>
+                                            <AvatarFallback>N</AvatarFallback>
+                                        </Avatar>
+                                        <div className="ml-2">
+                                            <div className="ml-2">
+                                                <p className="font-bold">{i?.group_messagename}</p>
+                                                <p className="text-sm">{i?.group_messagedescription}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </TabsContent>
+                        </Tabs>
                     </div>
                     <div className="col-span-4 pl-4">
                         {message?.messageid

@@ -83,7 +83,7 @@ const PostDetail = () => {
         <div className="grid grid-cols-3 w-[calc(100%-80px)]">
           <div className="col-span-2">
             <ScrollArea className="w-full h-[calc(100vh-72px)] pr-3">
-              <ImageCover image={data?.find_post_by_id?.image as string} />
+              {data?.find_post_by_id?.image ? <ImageCover image={data?.find_post_by_id?.image as string} /> : <></>}
               <Card className="rounded-md shadow-none">
                 <CardHeader>
                   {data?.find_post_by_id?.postid

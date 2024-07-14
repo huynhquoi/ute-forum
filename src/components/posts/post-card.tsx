@@ -64,7 +64,7 @@ const PostCard = ({ post, firstChild, inGroup }: PostCardProps) => {
               <div className="flex items-center mb-2">
                 {post?.listtopic?.map(item => (<Badge key={item?.topic_posttopic?.topicid} className="mr-1">{item?.topic_posttopic?.topicname}</Badge>))}
               </div>
-              <ImageCover image={post?.image as string} />
+              {post?.image ? <ImageCover image={post?.image as string} /> : <></>}
             </CardContent>
           </Link>
           <CardFooter className="py-1 px-2 flex items-center justify-between">

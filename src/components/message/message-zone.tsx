@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ScrollArea } from "../ui/scroll-area";
 import { useMessageStore } from "@/lib/store/mesageStore";
+import useStorage from "@/hooks/useStorage";
 
 type MessageZoneProps = {
     messageId: number,
@@ -20,13 +21,15 @@ const FormSchema = z.object({
 })
 
 const MessageZone = ({ messageId, userId }: MessageZoneProps) => {
+    console.log(messageId)
     const { message, removeMessage } = useMessageStore()
-    const { data, error } = useGetDetailMessageByMessageIdSubscription({
+    const {getItem} = useStorage()
+    const { data, loading: loadMess, error } = useGetDetailMessageByMessageIdSubscription({
         variables: {
-            messageid: messageId,
+            messageid: parseInt(getItem('partner')),
             userid: userId
         },
-        skip: !messageId, // Skip the subscription when there's no messageId
+        shouldResubscribe: true
     })
 
     const [createMessage, { loading }] = useCreateContentMessageMutation()
@@ -47,6 +50,8 @@ const MessageZone = ({ messageId, userId }: MessageZoneProps) => {
                     content: data.content,
                     messageid: messageId,
                     userid: userId,
+                    messageresponseid: 0,
+                    image: ''
                 }
             });
             form.resetField('content');

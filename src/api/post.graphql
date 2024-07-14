@@ -54,6 +54,8 @@ fragment postDto on PostDto {
       topicname
     }
   }
+  warning
+  warningword
 }
 
 fragment post_reacted on Post_Like {

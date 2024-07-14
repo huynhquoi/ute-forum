@@ -5,12 +5,13 @@ import { Dialog, DialogDescription, DialogFooter, DialogHeader, DialogTitle, Dia
 import { useForm } from "react-hook-form"
 import { useEffect, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Group, useCreateGroupMutation, useUpdateGroupMutation } from "@/generated/types"
+import { Group, useCreateGroupMessageMutation, useCreateGroupMutation, useUpdateGroupMutation } from "@/generated/types"
 import { useUserStorage } from "@/lib/store/userStorage"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
 import AvatarUpload from "../profile/avatar-upload"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 
 const ForumFormSchema = z.object({
     groupname: z.string(),
@@ -30,11 +31,13 @@ type ForumFormProps = {
 
 const ForumForm = ({ forum }: ForumFormProps) => {
     const authStorage = useUserStorage(state => state.user)
+    const route = useRouter()
     const [open, setOpen] = useState(false);
     const [avatarUrl, setAvatarUrl] = useState(forum?.image || "");
     const [loading, setLoading] = useState(false);
-    const [createForum] = useCreateGroupMutation()
+    const [createForum, { data, loading: loadCreate }] = useCreateGroupMutation()
     const [updateForum] = useUpdateGroupMutation()
+    const [createMessage] = useCreateGroupMessageMutation()
     const [forumInfo, setForumInfo] = useState<ForumFormType>({
         groupname: forum?.groupname || "",
         image: forum?.image || "",
@@ -54,6 +57,7 @@ const ForumForm = ({ forum }: ForumFormProps) => {
             return
         }
         if (forum?.groupid) {
+            setLoading(false)
             updateForum({
                 variables: {
                     group: {
@@ -62,18 +66,33 @@ const ForumForm = ({ forum }: ForumFormProps) => {
                     }
                 }
             }).then(() => {
-                setLoading(false)
                 setOpen(false);
             })
         } else {
+            setLoading(false)
             createForum({
                 variables: {
                     admin: authStorage?.userid,
                     group: forumInfo
                 }
-            }).then(() => setLoading(false))
+            }).then((data) => {
+                if (data?.data?.create_group) {
+                    createMessage({
+                        variables: {
+                            group_message: {
+                                group_messagename: data?.data?.create_group?.groupname,
+                                group_messageimage: data?.data?.create_group?.image,
+                                group_messagedescription: data?.data?.create_group?.description
+                            },
+                            userid: data?.data?.create_group?.admin
+                        }
+                    }).then(() => {
+                        route.push(`/forum/${data?.data?.create_group?.groupid}`)
+                    })
+                }
+            })
         }
-    }, [authStorage?.userid, createForum, forum?.groupid, forumInfo, loading, updateForum])
+    }, [authStorage?.userid, createForum, createMessage, data?.create_group?.description, data?.create_group?.groupid, data?.create_group?.groupname, data?.create_group?.image, forum?.groupid, forumInfo, loadCreate, loading, route, updateForum])
     const handleAvatarUpload = (url: string) => {
         setAvatarUrl(url);
         form.setValue("image", url);

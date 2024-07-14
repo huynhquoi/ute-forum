@@ -26,6 +26,14 @@ fragment content on ContentMessageDTO {
   image
 }
 
+fragment group_message on Group_Message {
+  group_messageid
+  group_messagename
+  group_messageimage
+  createday
+  group_messagedescription
+}
+
 mutation CreateMessage($userid1: String, $userid2: String) {
   create_message(userid1: $userid1, userid2: $userid2) {
     messageid
@@ -34,8 +42,47 @@ mutation CreateMessage($userid1: String, $userid2: String) {
   }
 }
 
-mutation CreateContentMessage($content: String, $image: String, $messageid: Int, $userid: String, $messageresponseid: Int) {
-    create_content_message(content: $content, image: $image, messageid: $messageid, userid: $userid, messageresponseid: $messageresponseid)
+mutation CreateContentMessage(
+  $content: String
+  $image: String
+  $messageid: Int
+  $userid: String
+  $messageresponseid: Int
+) {
+  create_content_message(
+    content: $content
+    image: $image
+    messageid: $messageid
+    userid: $userid
+    messageresponseid: $messageresponseid
+  )
+}
+
+mutation CreateGroupMessage(
+  $group_message: Group_MessageRequest
+  $userid: String
+) {
+  create_group_message(group_message: $group_message, userid: $userid)
+}
+
+mutation JoinGroupMessage($groupmessageid: Int, $userid: String, $level: Int) {
+  join_group_message(groupmessageid: $groupmessageid, userid: $userid, level: $level)
+}
+
+mutation CreateContentGroupMessage(
+  $content: String
+  $image: String
+  $groupmessageId: Int
+  $userId: String
+  $messageresponseid: Int
+) {
+  create_content_groupmessage(
+    content: $content
+    image: $image
+    groupmessageId: $groupmessageId
+    userId: $userId
+    messageresponseid: $messageresponseid
+  )
 }
 
 subscription GetMessageByUserId($userid: String) {
@@ -46,6 +93,24 @@ subscription GetMessageByUserId($userid: String) {
 
 subscription GetDetailMessageByMessageId($messageid: Int, $userid: String) {
   sub_content_message_by_messageid(messageid: $messageid, userid: $userid) {
+    ...content
+  }
+}
+
+subscription GetGroupMessageByUserId($userid: String) {
+  sub_group_message_by_userid(userid: $userid) {
+    ...group_message
+  }
+}
+
+subscription GetDetailGroupMessagebyMessageId(
+  $groupmessageid: Int
+  $userid: String
+) {
+  sub_contentgroup_message_by_userid(
+    groupmessageId: $groupmessageid
+    userid: $userid
+  ) {
     ...content
   }
 }

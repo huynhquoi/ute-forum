@@ -49,7 +49,7 @@ const OutstandingZone = ({ post, topic }: OutstandingZoneProps) => {
           ]}
         >
           <CarouselContent>
-            {post?.length ? postItem?.sort((a, b) => (a.totallike as number) - (b.totallike as number))?.map((item, index) => {
+            {post?.length ? postItem?.sort((a, b) => (b.totallike as number) - (a.totallike as number))?.map((item, index) => {
               if (index < 3) {
                 return (
                   <CarouselItem key={item?.postid}>

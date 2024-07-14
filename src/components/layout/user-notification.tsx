@@ -17,7 +17,7 @@ const UserNotification = () => {
   const { data, loading, error } = useGetNotificationByUserIdSubscription({
     variables: {
       userid: userStorage?.userid
-    }
+    },
   })
 
   const [IsSeen] = useIsSeenMutation({})
