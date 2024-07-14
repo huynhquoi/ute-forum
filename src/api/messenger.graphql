@@ -32,6 +32,36 @@ fragment group_message on Group_Message {
   group_messageimage
   createday
   group_messagedescription
+  parent
+}
+
+fragment detail_group_message on DetailGroup_Message {
+  detailgroup_messageid
+  detailgroupmessage_groupmessage {
+    ...group_message
+  }
+  user_detailgroupmessage {
+    fullname
+    userid
+    image
+  }
+  level
+  createday
+}
+
+fragment detail_group_message_Dto on DetailGroupMessageDTO {
+  detailgroupmessageid
+  groupmessage {
+    ...group_message
+  }
+  userid {
+    userid
+    fullname
+    image
+  }
+  ishide
+  lastseen
+  lastsend
 }
 
 mutation CreateMessage($userid1: String, $userid2: String) {
@@ -62,11 +92,19 @@ mutation CreateGroupMessage(
   $group_message: Group_MessageRequest
   $userid: String
 ) {
-  create_group_message(group_message: $group_message, userid: $userid)
+  create_group_message(group_message: $group_message, userid: $userid) {
+    ...detail_group_message
+  }
 }
 
 mutation JoinGroupMessage($groupmessageid: Int, $userid: String, $level: Int) {
-  join_group_message(groupmessageid: $groupmessageid, userid: $userid, level: $level)
+  join_group_message(
+    groupmessageid: $groupmessageid
+    userid: $userid
+    level: $level
+  ) {
+    ...detail_group_message
+  }
 }
 
 mutation CreateContentGroupMessage(
@@ -99,7 +137,7 @@ subscription GetDetailMessageByMessageId($messageid: Int, $userid: String) {
 
 subscription GetGroupMessageByUserId($userid: String) {
   sub_group_message_by_userid(userid: $userid) {
-    ...group_message
+    ...detail_group_message_Dto
   }
 }
 

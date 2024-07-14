@@ -84,6 +84,10 @@ const LoginPage = () => {
         maxAge: 30 * 24 * 60 * 60,
         path: '/',
       });
+      setCookie(null, 'refresh_token', responseLogin.refreshtoken || '', {
+        maxAge: 30 * 24 * 60 * 60,
+        path: '/',
+      });
     } catch (error: any) {
       setLoading(false);
       console.error(error.response?.data);

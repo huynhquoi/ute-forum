@@ -59,6 +59,12 @@ query GetReportByType($type: Int) {
   }
 }
 
+query GetReportById($id: Int) {
+  get_report_by_id(id: $id) {
+    ...report
+  }
+}
+
 mutation CreateReportUser(
   $report: ReportRequest
   $userid: String

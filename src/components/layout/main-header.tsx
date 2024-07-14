@@ -16,12 +16,16 @@ import { Button } from "../ui/button";
 import UserMenu from "../users/user-menu";
 import { Bookmark, Group, Post, Post_Like, useGetAccountByPkQuery, useGetGroupByAdminQuery, useGetGroupByUserIdQuery, useGetPostBookmarkByUserIdQuery, useGetPostReactedByUserIdQuery, User } from "@/generated/types";
 import useStorage from "@/hooks/useStorage";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useUserStorage } from "@/lib/store/userStorage";
 import UserNotification from "./user-notification";
 import UserMessenger from "./user-messeger";
 import SearchInput from "./SearchInput";
 import ChatAI from "../posts/chat-ai";
+import { parseCookies, setCookie } from 'nookies';
+import { jwtDecode } from 'jwt-decode';
+import { refreshToken } from "@/api/auth";
+import { toast } from "../ui/use-toast";
 
 type MainHeaderProps = {
   inUser?: boolean;
@@ -33,6 +37,8 @@ const MainHeader = ({ inUser }: MainHeaderProps) => {
   const addAllPost = useUserStorage((state) => state.addAllPost)
   const addAllBookmark = useUserStorage((state) => state.addAllBookmark)
   const addGroup = useUserStorage((state) => state.addGroup)
+
+  const [isTokenRefreshing, setIsTokenRefreshing] = useState(false);
 
   const { data, loading, fetchMore } = useGetAccountByPkQuery({
     variables: {
@@ -63,6 +69,60 @@ const MainHeader = ({ inUser }: MainHeaderProps) => {
       admin: getItem("userId"),
     }
   })
+
+  const checkAndRefreshToken = async () => {
+    const cookies = parseCookies();
+    const accessToken = cookies.auth_token;
+    const refreshTokenValue = cookies.refresh_token;
+
+    if (!accessToken || !refreshTokenValue) {
+      toast({
+        title: 'Lỗi',
+        description: 'Token không tồn tại',
+        variant: 'destructive'
+      })
+      return;
+    }
+
+    try {
+      const decodedToken = jwtDecode(accessToken);
+      const currentTime = Date.now() / 1000;
+
+      if (decodedToken.exp && decodedToken.exp < currentTime) {
+        setIsTokenRefreshing(true);
+        const response = await refreshToken(refreshTokenValue);
+        
+        if (response.accessToken && response.refreshToken) {
+          setCookie(null, 'auth_token', response.accessToken, {
+            maxAge: 30 * 24 * 60 * 60,
+            path: '/',
+          });
+          setCookie(null, 'refresh_token', response.refreshToken, {
+            maxAge: 30 * 24 * 60 * 60,
+            path: '/',
+          });
+        }
+        setIsTokenRefreshing(false);
+      }
+    } catch (error: any) {
+      toast({
+        title: 'Lỗi',
+        description: error.message as string,
+        variant: 'destructive'
+      })
+      setIsTokenRefreshing(false);
+      // Handle refresh token failure (e.g., logout user)
+    }
+  };
+
+  useEffect(() => {
+    checkAndRefreshToken();
+    // Set up an interval to check the token periodically
+    const intervalId = setInterval(checkAndRefreshToken, 5 * 60 * 1000); // Check every 5 minutes
+
+    return () => clearInterval(intervalId);
+  }, []);
+
   useEffect(() => {
     if (loading || !data?.find_account_by_id?.userid) {
       return;
@@ -73,6 +133,9 @@ const MainHeader = ({ inUser }: MainHeaderProps) => {
     addGroup(groups?.get_group_by_userid as Group[])
     addGroup(adminGroup?.get_group_by_admin as Group[])
   }, [loading, data?.find_account_by_id?.userid, addUser, data?.find_account_by_id, addAllPost, postReacted?.find_postlike_byuserid, addAllBookmark, bookmarks?.find_all_bookmark_by_userid, addGroup, groups?.get_group_by_userid, adminGroup?.get_group_by_admin])
+  
+
+
   return (
     <ApolloWrapper>
       <div className={inUser ? "mb-[56px]" : "mb-[72px]"}></div>

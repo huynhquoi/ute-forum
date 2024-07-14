@@ -5,6 +5,7 @@ import {
   API_AUTH_REGISTER,
   API_AUTH_SEND_MAIL,
   API_INFOR_SEARCH,
+  API_REFRESH_TOKEN,
   DELETE_METHOD,
   GET_METHOD,
   POST_METHOD,
@@ -49,4 +50,8 @@ export const getHistory = async (data: string) => {
 
 export const deleteHistory = async (data: string, keyword: string) => {
   return await callApi(`${API_INFOR_SEARCH.replace('{{USERID}}', data)}&keyword=${keyword}`, DELETE_METHOD)
+}
+
+export const refreshToken = async (data: string) => {
+  return await callApi(API_REFRESH_TOKEN, POST_METHOD, data)
 }

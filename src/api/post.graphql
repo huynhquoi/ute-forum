@@ -166,7 +166,9 @@ mutation CreatePost(
   $user: UserRequest
   $topic: [TopicRequest]
 ) {
-  create_post(post: $post, user: $user, topic: $topic)
+  create_post(post: $post, user: $user, topic: $topic) {
+    ...postDto
+  }
 }
 
 mutation UpdatePost($post: PostRequest, $topic: [TopicRequest]) {
@@ -184,7 +186,9 @@ mutation CreatePostInGroup(
     user: $user
     topic: $topic
     groupid: $groupid
-  )
+  ) {
+    ...postDto
+  }
 }
 
 mutation DeletePost($postid: Int) {

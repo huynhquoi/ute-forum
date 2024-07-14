@@ -121,6 +121,16 @@ export type Content_Message = {
   user_content?: Maybe<User>;
 };
 
+export type DetailGroupMessageDto = {
+  __typename?: 'DetailGroupMessageDTO';
+  detailgroupmessageid?: Maybe<Scalars['Int']['output']>;
+  groupmessage?: Maybe<Group_Message>;
+  ishide?: Maybe<Scalars['Int']['output']>;
+  lastseen?: Maybe<Scalars['LocalDateTime']['output']>;
+  lastsend?: Maybe<Scalars['LocalDateTime']['output']>;
+  userid?: Maybe<User>;
+};
+
 export type DetailGroup_Message = {
   __typename?: 'DetailGroup_Message';
   createday?: Maybe<Scalars['LocalDateTime']['output']>;
@@ -196,6 +206,7 @@ export type Group_Message = {
   group_messageid: Scalars['Int']['output'];
   group_messageimage?: Maybe<Scalars['String']['output']>;
   group_messagename?: Maybe<Scalars['String']['output']>;
+  parent?: Maybe<Scalars['Int']['output']>;
 };
 
 export type Group_MessageRequest = {
@@ -204,6 +215,7 @@ export type Group_MessageRequest = {
   group_messageid?: InputMaybe<Scalars['Int']['input']>;
   group_messageimage?: InputMaybe<Scalars['String']['input']>;
   group_messagename?: InputMaybe<Scalars['String']['input']>;
+  parent?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type Icon = {
@@ -255,7 +267,7 @@ export type Mutation = {
   /**    Group */
   create_group?: Maybe<GroupDto>;
   /**    Group_Message */
-  create_group_message?: Maybe<Scalars['String']['output']>;
+  create_group_message?: Maybe<DetailGroup_Message>;
   /**     CommentLike */
   create_icon_for_commentlike?: Maybe<Scalars['String']['output']>;
   /**     PostLike */
@@ -264,8 +276,8 @@ export type Mutation = {
   create_message?: Maybe<Message>;
   /**     Notice */
   create_notice?: Maybe<Notice>;
-  create_post?: Maybe<Scalars['String']['output']>;
-  create_post_in_group?: Maybe<Scalars['String']['output']>;
+  create_post?: Maybe<PostDto>;
+  create_post_in_group?: Maybe<PostDto>;
   create_report_comment?: Maybe<Scalars['String']['output']>;
   create_report_post?: Maybe<Scalars['String']['output']>;
   /**      Report */
@@ -291,7 +303,7 @@ export type Mutation = {
   /**    User_Group */
   join_group?: Maybe<Scalars['String']['output']>;
   /**    DetailGroup_Message */
-  join_group_message?: Maybe<Scalars['String']['output']>;
+  join_group_message?: Maybe<DetailGroup_Message>;
   leave_group?: Maybe<Scalars['String']['output']>;
   leave_group_message?: Maybe<Scalars['String']['output']>;
   logout?: Maybe<Scalars['String']['output']>;
@@ -828,6 +840,7 @@ export type Query = {
   get_group_message_by_keyword?: Maybe<Array<Maybe<Group_Message>>>;
   get_list_ban_user?: Maybe<Array<Maybe<User>>>;
   get_list_low_reputation?: Maybe<Array<Maybe<User>>>;
+  get_report_by_id?: Maybe<Report>;
   /**     Report */
   get_report_by_type?: Maybe<Array<Maybe<Report>>>;
   get_top_reputation_user?: Maybe<Array<Maybe<User>>>;
@@ -1051,6 +1064,11 @@ export type QueryGet_Group_Message_By_KeywordArgs = {
 };
 
 
+export type QueryGet_Report_By_IdArgs = {
+  id?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
 export type QueryGet_Report_By_TypeArgs = {
   type?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -1138,7 +1156,7 @@ export type Subscription = {
   sub_content_message_by_messageid?: Maybe<Array<Maybe<ContentMessageDto>>>;
   sub_contentgroup_message_by_userid?: Maybe<Array<Maybe<ContentMessageDto>>>;
   sub_detail_message_by_userid?: Maybe<Array<Maybe<DetailMessageDto>>>;
-  sub_group_message_by_userid?: Maybe<Array<Maybe<Group_Message>>>;
+  sub_group_message_by_userid?: Maybe<Array<Maybe<DetailGroupMessageDto>>>;
   sub_status_user?: Maybe<User>;
 };
 
@@ -1485,7 +1503,11 @@ export type MessageFragment = { __typename?: 'DetailMessageDTO', detailmessageid
 
 export type ContentFragment = { __typename?: 'ContentMessageDTO', contentid?: number | null, content?: string | null, createday?: any | null, updateday?: any | null, parentid?: number | null, userid?: string | null, messageid?: number | null, image?: string | null, totalicon?: Array<{ __typename?: 'TotalIcon', iconid?: number | null, total?: number | null } | null> | null };
 
-export type Group_MessageFragment = { __typename?: 'Group_Message', group_messageid: number, group_messagename?: string | null, group_messageimage?: string | null, createday?: any | null, group_messagedescription?: string | null };
+export type Group_MessageFragment = { __typename?: 'Group_Message', group_messageid: number, group_messagename?: string | null, group_messageimage?: string | null, createday?: any | null, group_messagedescription?: string | null, parent?: number | null };
+
+export type Detail_Group_MessageFragment = { __typename?: 'DetailGroup_Message', detailgroup_messageid: number, level?: number | null, createday?: any | null, detailgroupmessage_groupmessage?: { __typename?: 'Group_Message', group_messageid: number, group_messagename?: string | null, group_messageimage?: string | null, createday?: any | null, group_messagedescription?: string | null, parent?: number | null } | null, user_detailgroupmessage?: { __typename?: 'User', fullname?: string | null, userid: string, image?: string | null } | null };
+
+export type Detail_Group_Message_DtoFragment = { __typename?: 'DetailGroupMessageDTO', detailgroupmessageid?: number | null, ishide?: number | null, lastseen?: any | null, lastsend?: any | null, groupmessage?: { __typename?: 'Group_Message', group_messageid: number, group_messagename?: string | null, group_messageimage?: string | null, createday?: any | null, group_messagedescription?: string | null, parent?: number | null } | null, userid?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null };
 
 export type CreateMessageMutationVariables = Exact<{
   userid1?: InputMaybe<Scalars['String']['input']>;
@@ -1512,7 +1534,7 @@ export type CreateGroupMessageMutationVariables = Exact<{
 }>;
 
 
-export type CreateGroupMessageMutation = { __typename?: 'Mutation', create_group_message?: string | null };
+export type CreateGroupMessageMutation = { __typename?: 'Mutation', create_group_message?: { __typename?: 'DetailGroup_Message', detailgroup_messageid: number, level?: number | null, createday?: any | null, detailgroupmessage_groupmessage?: { __typename?: 'Group_Message', group_messageid: number, group_messagename?: string | null, group_messageimage?: string | null, createday?: any | null, group_messagedescription?: string | null, parent?: number | null } | null, user_detailgroupmessage?: { __typename?: 'User', fullname?: string | null, userid: string, image?: string | null } | null } | null };
 
 export type JoinGroupMessageMutationVariables = Exact<{
   groupmessageid?: InputMaybe<Scalars['Int']['input']>;
@@ -1521,7 +1543,7 @@ export type JoinGroupMessageMutationVariables = Exact<{
 }>;
 
 
-export type JoinGroupMessageMutation = { __typename?: 'Mutation', join_group_message?: string | null };
+export type JoinGroupMessageMutation = { __typename?: 'Mutation', join_group_message?: { __typename?: 'DetailGroup_Message', detailgroup_messageid: number, level?: number | null, createday?: any | null, detailgroupmessage_groupmessage?: { __typename?: 'Group_Message', group_messageid: number, group_messagename?: string | null, group_messageimage?: string | null, createday?: any | null, group_messagedescription?: string | null, parent?: number | null } | null, user_detailgroupmessage?: { __typename?: 'User', fullname?: string | null, userid: string, image?: string | null } | null } | null };
 
 export type CreateContentGroupMessageMutationVariables = Exact<{
   content?: InputMaybe<Scalars['String']['input']>;
@@ -1554,7 +1576,7 @@ export type GetGroupMessageByUserIdSubscriptionVariables = Exact<{
 }>;
 
 
-export type GetGroupMessageByUserIdSubscription = { __typename?: 'Subscription', sub_group_message_by_userid?: Array<{ __typename?: 'Group_Message', group_messageid: number, group_messagename?: string | null, group_messageimage?: string | null, createday?: any | null, group_messagedescription?: string | null } | null> | null };
+export type GetGroupMessageByUserIdSubscription = { __typename?: 'Subscription', sub_group_message_by_userid?: Array<{ __typename?: 'DetailGroupMessageDTO', detailgroupmessageid?: number | null, ishide?: number | null, lastseen?: any | null, lastsend?: any | null, groupmessage?: { __typename?: 'Group_Message', group_messageid: number, group_messagename?: string | null, group_messageimage?: string | null, createday?: any | null, group_messagedescription?: string | null, parent?: number | null } | null, userid?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null } | null> | null };
 
 export type GetDetailGroupMessagebyMessageIdSubscriptionVariables = Exact<{
   groupmessageid?: InputMaybe<Scalars['Int']['input']>;
@@ -1691,7 +1713,7 @@ export type CreatePostMutationVariables = Exact<{
 }>;
 
 
-export type CreatePostMutation = { __typename?: 'Mutation', create_post?: string | null };
+export type CreatePostMutation = { __typename?: 'Mutation', create_post?: { __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, totalcomment?: number | null, warning?: string | null, warningword?: string | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, createday?: any | null, bio?: string | null, address?: string | null, image?: string | null, color?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null } | null };
 
 export type UpdatePostMutationVariables = Exact<{
   post?: InputMaybe<PostRequest>;
@@ -1709,7 +1731,7 @@ export type CreatePostInGroupMutationVariables = Exact<{
 }>;
 
 
-export type CreatePostInGroupMutation = { __typename?: 'Mutation', create_post_in_group?: string | null };
+export type CreatePostInGroupMutation = { __typename?: 'Mutation', create_post_in_group?: { __typename?: 'PostDto', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, requiredreputation?: number | null, totalread?: number | null, totallike?: number | null, totaldislike?: number | null, totalcomment?: number | null, warning?: string | null, warningword?: string | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, createday?: any | null, bio?: string | null, address?: string | null, image?: string | null, color?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null } | null, listtopic?: Array<{ __typename?: 'Post_Topic', posttopicid: number, topic_posttopic?: { __typename?: 'Topic', topicid: number, topicname?: string | null } | null } | null> | null } | null };
 
 export type DeletePostMutationVariables = Exact<{
   postid?: InputMaybe<Scalars['Int']['input']>;
@@ -1769,6 +1791,13 @@ export type GetReportByTypeQueryVariables = Exact<{
 
 
 export type GetReportByTypeQuery = { __typename?: 'Query', get_report_by_type?: Array<{ __typename?: 'Report', reportid: number, reason?: string | null, content?: string | null, type?: number | null, createday?: any | null, user_report?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_report?: { __typename?: 'Post', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, isdelete?: number | null, requiredreputation?: number | null, totalread?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null } | null } | null, comment_report?: { __typename?: 'Comment', commentid: number, content?: string | null, createday?: any | null, updateday?: any | null, isdelete?: number | null, user_comment?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null, user_reporter?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null } | null> | null };
+
+export type GetReportByIdQueryVariables = Exact<{
+  id?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetReportByIdQuery = { __typename?: 'Query', get_report_by_id?: { __typename?: 'Report', reportid: number, reason?: string | null, content?: string | null, type?: number | null, createday?: any | null, user_report?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_report?: { __typename?: 'Post', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, isdelete?: number | null, requiredreputation?: number | null, totalread?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null } | null } | null, comment_report?: { __typename?: 'Comment', commentid: number, content?: string | null, createday?: any | null, updateday?: any | null, isdelete?: number | null, user_comment?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null, user_reporter?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null } | null };
 
 export type CreateReportUserMutationVariables = Exact<{
   report?: InputMaybe<ReportRequest>;
@@ -1960,8 +1989,40 @@ export const Group_MessageFragmentDoc = gql`
   group_messageimage
   createday
   group_messagedescription
+  parent
 }
     `;
+export const Detail_Group_MessageFragmentDoc = gql`
+    fragment detail_group_message on DetailGroup_Message {
+  detailgroup_messageid
+  detailgroupmessage_groupmessage {
+    ...group_message
+  }
+  user_detailgroupmessage {
+    fullname
+    userid
+    image
+  }
+  level
+  createday
+}
+    ${Group_MessageFragmentDoc}`;
+export const Detail_Group_Message_DtoFragmentDoc = gql`
+    fragment detail_group_message_Dto on DetailGroupMessageDTO {
+  detailgroupmessageid
+  groupmessage {
+    ...group_message
+  }
+  userid {
+    userid
+    fullname
+    image
+  }
+  ishide
+  lastseen
+  lastsend
+}
+    ${Group_MessageFragmentDoc}`;
 export const NoticeFragmentDoc = gql`
     fragment notice on Notice {
   noiticeid
@@ -3247,9 +3308,11 @@ export type CreateContentMessageMutationResult = Apollo.MutationResult<CreateCon
 export type CreateContentMessageMutationOptions = Apollo.BaseMutationOptions<CreateContentMessageMutation, CreateContentMessageMutationVariables>;
 export const CreateGroupMessageDocument = gql`
     mutation CreateGroupMessage($group_message: Group_MessageRequest, $userid: String) {
-  create_group_message(group_message: $group_message, userid: $userid)
+  create_group_message(group_message: $group_message, userid: $userid) {
+    ...detail_group_message
+  }
 }
-    `;
+    ${Detail_Group_MessageFragmentDoc}`;
 export type CreateGroupMessageMutationFn = Apollo.MutationFunction<CreateGroupMessageMutation, CreateGroupMessageMutationVariables>;
 
 /**
@@ -3283,9 +3346,11 @@ export const JoinGroupMessageDocument = gql`
     groupmessageid: $groupmessageid
     userid: $userid
     level: $level
-  )
+  ) {
+    ...detail_group_message
+  }
 }
-    `;
+    ${Detail_Group_MessageFragmentDoc}`;
 export type JoinGroupMessageMutationFn = Apollo.MutationFunction<JoinGroupMessageMutation, JoinGroupMessageMutationVariables>;
 
 /**
@@ -3419,10 +3484,10 @@ export type GetDetailMessageByMessageIdSubscriptionResult = Apollo.SubscriptionR
 export const GetGroupMessageByUserIdDocument = gql`
     subscription GetGroupMessageByUserId($userid: String) {
   sub_group_message_by_userid(userid: $userid) {
-    ...group_message
+    ...detail_group_message_Dto
   }
 }
-    ${Group_MessageFragmentDoc}`;
+    ${Detail_Group_Message_DtoFragmentDoc}`;
 
 /**
  * __useGetGroupMessageByUserIdSubscription__
@@ -4053,9 +4118,11 @@ export type DeleteBookmarkMutationResult = Apollo.MutationResult<DeleteBookmarkM
 export type DeleteBookmarkMutationOptions = Apollo.BaseMutationOptions<DeleteBookmarkMutation, DeleteBookmarkMutationVariables>;
 export const CreatePostDocument = gql`
     mutation CreatePost($post: PostRequest, $user: UserRequest, $topic: [TopicRequest]) {
-  create_post(post: $post, user: $user, topic: $topic)
+  create_post(post: $post, user: $user, topic: $topic) {
+    ...postDto
+  }
 }
-    `;
+    ${PostDtoFragmentDoc}`;
 export type CreatePostMutationFn = Apollo.MutationFunction<CreatePostMutation, CreatePostMutationVariables>;
 
 /**
@@ -4118,9 +4185,11 @@ export type UpdatePostMutationResult = Apollo.MutationResult<UpdatePostMutation>
 export type UpdatePostMutationOptions = Apollo.BaseMutationOptions<UpdatePostMutation, UpdatePostMutationVariables>;
 export const CreatePostInGroupDocument = gql`
     mutation CreatePostInGroup($post: PostRequest, $user: UserRequest, $topic: [TopicRequest], $groupid: Int) {
-  create_post_in_group(post: $post, user: $user, topic: $topic, groupid: $groupid)
+  create_post_in_group(post: $post, user: $user, topic: $topic, groupid: $groupid) {
+    ...postDto
+  }
 }
-    `;
+    ${PostDtoFragmentDoc}`;
 export type CreatePostInGroupMutationFn = Apollo.MutationFunction<CreatePostInGroupMutation, CreatePostInGroupMutationVariables>;
 
 /**
@@ -4392,6 +4461,46 @@ export type GetReportByTypeQueryHookResult = ReturnType<typeof useGetReportByTyp
 export type GetReportByTypeLazyQueryHookResult = ReturnType<typeof useGetReportByTypeLazyQuery>;
 export type GetReportByTypeSuspenseQueryHookResult = ReturnType<typeof useGetReportByTypeSuspenseQuery>;
 export type GetReportByTypeQueryResult = Apollo.QueryResult<GetReportByTypeQuery, GetReportByTypeQueryVariables>;
+export const GetReportByIdDocument = gql`
+    query GetReportById($id: Int) {
+  get_report_by_id(id: $id) {
+    ...report
+  }
+}
+    ${ReportFragmentDoc}`;
+
+/**
+ * __useGetReportByIdQuery__
+ *
+ * To run a query within a React component, call `useGetReportByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetReportByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetReportByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetReportByIdQuery(baseOptions?: Apollo.QueryHookOptions<GetReportByIdQuery, GetReportByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetReportByIdQuery, GetReportByIdQueryVariables>(GetReportByIdDocument, options);
+      }
+export function useGetReportByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetReportByIdQuery, GetReportByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetReportByIdQuery, GetReportByIdQueryVariables>(GetReportByIdDocument, options);
+        }
+export function useGetReportByIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetReportByIdQuery, GetReportByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetReportByIdQuery, GetReportByIdQueryVariables>(GetReportByIdDocument, options);
+        }
+export type GetReportByIdQueryHookResult = ReturnType<typeof useGetReportByIdQuery>;
+export type GetReportByIdLazyQueryHookResult = ReturnType<typeof useGetReportByIdLazyQuery>;
+export type GetReportByIdSuspenseQueryHookResult = ReturnType<typeof useGetReportByIdSuspenseQuery>;
+export type GetReportByIdQueryResult = Apollo.QueryResult<GetReportByIdQuery, GetReportByIdQueryVariables>;
 export const CreateReportUserDocument = gql`
     mutation CreateReportUser($report: ReportRequest, $userid: String, $reporterid: String) {
   create_report_user(report: $report, userid: $userid, reporterid: $reporterid)
