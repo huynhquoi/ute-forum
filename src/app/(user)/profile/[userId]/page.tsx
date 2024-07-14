@@ -7,6 +7,7 @@ import ProfilePostOutstanding from "@/components/profile/profile-post-outstandin
 import { Post, PostDto, User, useGetAccountByPkQuery, useGetPostByUserIdQuery } from "@/generated/types";
 import useZustandHook from "@/hooks/useZustandHook";
 import { UserActions, UserState, useUserStorage } from "@/lib/store/userStorage";
+import { hexToRgba } from "@/lib/utils";
 import { useParams } from "next/navigation";
 
 const ProfilePage = () => {
@@ -26,7 +27,7 @@ const ProfilePage = () => {
       {loading ? <></> :
         <>
           <ProfileHeader user={user?.find_account_by_id as User} />
-          <div className="grid grid-cols-7 h-[calc(100vh-72px)]">
+          <div className="grid grid-cols-7" style={{backgroundColor: hexToRgba(user?.find_account_by_id?.color || '', 0.05) || ""}}>
             <div className="col-span-1"></div>
             <div className="col-span-2">
               <ProfileInfo user={user?.find_account_by_id as User} />

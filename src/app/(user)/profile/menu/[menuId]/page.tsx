@@ -14,6 +14,7 @@ import FollowingZone from "@/components/menu/following-zone";
 import FollowerZone from "@/components/menu/follower-zone";
 import MaganerZone from "@/components/menu/manager-zone";
 import ForumZone from "@/components/menu/forum-zone";
+import { hexToRgba } from "@/lib/utils";
 
 const MenuPage = () => {
   const param = useParams()
@@ -27,7 +28,7 @@ const MenuPage = () => {
   return (
     <>
       {userStorage ? <ProfileHeader user={userStorage as User} /> : <></>}
-      <div className="grid grid-cols-7 h-[calc(100vh-72px)]">
+      <div className="grid grid-cols-7" style={{backgroundColor: hexToRgba(userStorage?.color || '', 0.05) || ""}}>
         <div className="col-span-1"></div>
         <div className="col-span-2">
           <ProfileInfo user={userStorage as User} />

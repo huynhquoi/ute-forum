@@ -30,6 +30,7 @@ fragment postDto on PostDto {
     bio
     address
     image
+    color
   }
   content
   title

@@ -23,7 +23,7 @@ const PostAuth = ({ user }: PostAuthProps) => {
     <>
       <Card className="ml-4 shadow-none rounded-md">
         <CardHeader className="flex flex-col p-0">
-          <div className="relative bg-blue-400 w-full h-10 rounded-t-md">
+          <div className="relative w-full h-10 rounded-t-md" style={{ background: user?.color || '#60A5FA'}} >
             <Avatar className="absolute top-1/2 left-[10%] bg-white h-12 w-12">
               <AvatarImage src={user?.image || "/userLogo.png"} />
             </Avatar>

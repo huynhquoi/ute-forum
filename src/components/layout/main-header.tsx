@@ -21,6 +21,7 @@ import { useUserStorage } from "@/lib/store/userStorage";
 import UserNotification from "./user-notification";
 import UserMessenger from "./user-messeger";
 import SearchInput from "./SearchInput";
+import ChatAI from "../posts/chat-ai";
 
 type MainHeaderProps = {
   inUser?: boolean;
@@ -57,7 +58,7 @@ const MainHeader = ({ inUser }: MainHeaderProps) => {
     }
   })
 
-  const {data: adminGroup} = useGetGroupByAdminQuery({
+  const { data: adminGroup } = useGetGroupByAdminQuery({
     variables: {
       admin: getItem("userId"),
     }
@@ -95,7 +96,7 @@ const MainHeader = ({ inUser }: MainHeaderProps) => {
                 className="ml-4 w-[400px]"
               ></SearchInput>
             </div>
-            <NavigationMenu className="relative left-[-10%]">
+            <NavigationMenu className="relative">
               <NavigationMenuList>
                 <NavigationMenuItem>
                   <Link href="/home" legacyBehavior passHref>
@@ -127,6 +128,9 @@ const MainHeader = ({ inUser }: MainHeaderProps) => {
               </NavigationMenuList>
             </NavigationMenu>
             <div className="m-0 p-0 flex items-center">
+              <ChatAI>
+                <Button variant={'outline'} className="mr-4 border-fuchsia-500 text-fuchsia-500 bg-fuchsia-50 hover:bg-white hover:text-fuchsia-500">Chat Gemini</Button>
+              </ChatAI>
               {inUser ? <></> : <Link href={"/create-post"}><Button className="mr-4">Đăng bài</Button></Link>}
               <UserMessenger />
               <UserNotification />

@@ -39,7 +39,7 @@ const profileInfoSchema = z.object({
   birthday: z.date(),
   image: z.string(),
   bio: z.string(),
-  color: z.string(),
+  color: z.string().max(7),
 });
 
 type ProfileInfoType = {
@@ -237,7 +237,10 @@ const ProfileEdit = () => {
                   <FormItem>
                     <FormLabel className="font-bold">Màu chủ đạo trang cá nhân</FormLabel>
                     <FormControl>
-                      <Input placeholder="#XXXXXX" {...field} />
+                      <div className="flex items-center space-x-3">
+                        <div className={"h-10 w-10 rounded-md border"} style={{ background: `${field.value}` }}></div>
+                        <Input placeholder="#XXXXXX" {...field} />
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>

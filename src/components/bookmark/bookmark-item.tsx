@@ -16,7 +16,7 @@ type BookmarkItemProps = {
 
 const BookmarkItem = ({ bookmark }: BookmarkItemProps) => {
     return <>
-        <Card className="w-full shadow-none hover:bg-gray-100 cursor-pointer mb-4 bookmark-card relative">
+        <Card className="w-full shadow-none hover:bg-gray-100 cursor-pointer mb-4 bookmark-card relative p-2">
             <Link href={`/post/${bookmark?.post_bookmark?.postid}`}>
                 <CardHeader className="py-1 px-2 flex flex-row justify-between items-start w-full transition-[width] bookmark-card-content">
                     <div className="">
@@ -43,7 +43,7 @@ const BookmarkItem = ({ bookmark }: BookmarkItemProps) => {
                 </CardHeader>
             </Link>
             <div className=" absolute top-0 right-0 h-full flex flex-col justify-center mr-4">
-                <Open className="text-5xl animate-pulse text-gray-600" />
+                <Open className="text-4xl animate-pulse text-gray-600" />
             </div>
         </Card>
     </>

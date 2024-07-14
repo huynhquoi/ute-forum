@@ -42,13 +42,13 @@ const ProfileHeader = ({ user }: ProfileHeaderProps) => {
     <>
       <Card className="shadow-none border-x-none border-t-none rounded-none fixed top-[56px] w-full z-50">
         <CardHeader className="flex flex-col p-0">
-          <div className=" bg-blue-400 w-full h-20">
+          <div style={{ background: userStorage?.color || ''}} className="w-full h-20">
             <div className="grid grid-cols-7 h-20">
               <div className="col-span-1"></div>
               <div className="col-span-5 relative h-20">
                 <Avatar
                   className={`absolute top-1/2 left-0 bg-white h-24 w-24 border-[6px]`}
-                  style={{ borderColor: "#60A5FA" }}
+                  style={{ borderColor: userStorage?.color || "#60A5FA" }}
                 >
                   <AvatarImage
                     src={user?.image || "/userLogo.png"}

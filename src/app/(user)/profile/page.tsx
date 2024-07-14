@@ -7,6 +7,7 @@ import ProfilePostOutstanding from "@/components/profile/profile-post-outstandin
 import { Post, PostDto, User, useGetPostByUserIdQuery } from "@/generated/types";
 import useZustandHook from "@/hooks/useZustandHook";
 import { UserActions, UserState, useUserStorage } from "@/lib/store/userStorage";
+import { hexToRgba } from "@/lib/utils";
 
 const ProfilePage = () => {
   const userStorage = useZustandHook<UserActions & UserState, User | null>(useUserStorage, (state => state.user))
@@ -18,7 +19,7 @@ const ProfilePage = () => {
   return (
     <>
       {userStorage ? <ProfileHeader user={userStorage as User} /> : <></>}
-      <div className="grid grid-cols-7 h-[calc(100vh-72px)]">
+      <div className="grid grid-cols-7" style={{backgroundColor: hexToRgba(userStorage?.color || '', 0.05) || ""}}>
         <div className="col-span-1"></div>
         <div className="col-span-2">
           <ProfileInfo user={userStorage as User} />

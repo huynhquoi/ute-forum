@@ -37,7 +37,7 @@ const PostCard = ({ post, firstChild, inGroup }: PostCardProps) => {
             Bài viết này đã bị xóa. <Link href={"/create-post"} className="font-bold">Tạo bài viết mới ngay</Link>
           </CardContent>
         </Card>
-        : <Card className="max-w-[680px] shadow-none border-none hover:bg-gray-100 cursor-pointer 2xl:w-[680px] min-[1400px]:w-[600px] xl:w-[500px]">
+        : <Card className="max-w-[680px] shadow-lg border-[0.5px] hover:bg-white cursor-pointer 2xl:w-[680px] min-[1400px]:w-[600px] xl:w-[500px] p-2">
           <CardHeader className="py-1 px-2 flex flex-row justify-between items-start">
             {post?.group_post?.groupid && !inGroup
               ? <Link href={`/forum/${post?.group_post?.groupid}`} className="flex items-center">

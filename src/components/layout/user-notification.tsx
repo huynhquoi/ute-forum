@@ -9,6 +9,7 @@ import { Card } from "../ui/card"
 import { useEffect, useState } from "react"
 import DotItem from "../shared/dot-item"
 import './styles.scss'
+import { format } from "date-fns"
 
 const UserNotification = () => {
   const userStorage = useUserStorage((state) => state.user)
@@ -60,7 +61,10 @@ const UserNotification = () => {
               onClick={() => {
                 setNotice(item?.noiticeid as number)
               }}>
-              <Description value={item?.content as string} />
+              <div className="flex flex-col items-start">
+                <Description value={item?.content as string} />
+                <div className="text-gray-400 text-sm">{format(item?.createday || '', 'dd/MM/yyyy, HH:mm')}</div>
+              </div>
               {item?.isseen === 0 ? <DotItem className="w-2 h-2 rounded-full bg-blue-500" /> : <></>}
             </Card>
           ))}
