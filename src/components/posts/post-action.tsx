@@ -6,6 +6,7 @@ import { PostDto, useCreatePostMutation, useCreatePostReactionMutation, useDelet
 import { useUserStorage } from "@/lib/store/userStorage";
 import { useEffect, useState } from "react";
 import { ArrowDownCircle, ArrowUpCircle, CommentIcon } from "../svgs";
+import { toast } from "../ui/use-toast";
 
 type PostActionProps = {
   post: PostDto
@@ -62,6 +63,12 @@ const PostAction = ({ post, isVertical, useBg, showCommnent }: PostActionProps) 
         }
       }).then(() => {
         setLoading(false)
+      }).catch((err) => {
+        toast({
+          title: 'Lỗi',
+          description: err.message,
+          variant: 'destructive'
+        })
       })
     } else {
       if (reacted === 0) {
@@ -80,6 +87,12 @@ const PostAction = ({ post, isVertical, useBg, showCommnent }: PostActionProps) 
           }
         }).then(() => {
           setLoading(false)
+        }).catch((err) => {
+          toast({
+            title: 'Lỗi',
+            description: err.message,
+            variant: 'destructive'
+          })
         })
       } else {
         setReacted(value)
@@ -106,6 +119,18 @@ const PostAction = ({ post, isVertical, useBg, showCommnent }: PostActionProps) 
             }
           }).then(() => {
             setLoading(false)
+          }).catch((err) => {
+            toast({
+              title: 'Lỗi',
+              description: err.message,
+              variant: 'destructive'
+            })
+          })
+        }).catch((err) => {
+          toast({
+            title: 'Lỗi',
+            description: err.message,
+            variant: 'destructive'
           })
         })
       }

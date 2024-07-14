@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/toaster";
 import { Metadata } from "next";
 import Image from "next/image";
 
@@ -20,6 +21,7 @@ export default function LoginLayout({
         style={{ zIndex: "-1" }}
       />
       {children}
+      <Toaster />
     </div>
   );
 }

@@ -14,6 +14,7 @@ import { imageLocation } from "@/lib/utils"
 import PostForm from "./post-form"
 import { ScrollArea } from "../ui/scroll-area"
 import { Textarea } from "../ui/textarea"
+import { toast } from "../ui/use-toast"
 
 type PostMenuProps = {
   post: PostDto
@@ -72,7 +73,13 @@ const PostMenu = ({ post, onDeleted }: PostMenuProps) => {
                 if (typeof onDeleted !== "undefined") {
                   onDeleted()
                 }
-              })
+              }).catch((err) => {
+                toast({
+                    title: 'Lỗi',
+                    description: err.message,
+                    variant: 'destructive'
+                })
+            })
             }}>Xác nhận</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

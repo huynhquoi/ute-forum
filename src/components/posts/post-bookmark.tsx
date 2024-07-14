@@ -3,6 +3,7 @@ import { BookmarkIcon, BookmarkFill } from "../svgs"
 import { Button } from "../ui/button"
 import { useUserStorage } from "@/lib/store/userStorage";
 import { Bookmark, useCreateBookmarkMutation, useDeleteBookmarkMutation } from "@/generated/types";
+import { toast } from "../ui/use-toast";
 
 type PostBookmarkProps = {
   postId: number;
@@ -46,7 +47,13 @@ const PostBookmark = ({ postId }: PostBookmarkProps) => {
       }).then(() => {
         addBookmark(data?.create_bookmark as Bookmark)
         setLoading(false)
-      })
+      }).catch((err) => {
+        toast({
+            title: 'Lỗi',
+            description: err.message,
+            variant: 'destructive'
+        })
+    })
     } else {
       setLoading(true)
       deleteBookmark({
@@ -57,7 +64,13 @@ const PostBookmark = ({ postId }: PostBookmarkProps) => {
       }).then(() => {
         removeBookmark(userBookmark?.filter(item => item?.post_bookmark?.postid === postId)[0])
         setLoading(false)
-      })
+      }).catch((err) => {
+        toast({
+            title: 'Lỗi',
+            description: err.message,
+            variant: 'destructive'
+        })
+    })
     }
   };
 

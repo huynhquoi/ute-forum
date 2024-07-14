@@ -10,6 +10,7 @@ import { Comment, useCreateCommentChildMutation, useCreateCommentMutation } from
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useCommentStorage } from "@/lib/store/commentStorage"
 import useStorage from "@/hooks/useStorage"
+import { toast } from "../ui/use-toast"
 
 type CommentFormProps = {
   postId: number,
@@ -76,7 +77,13 @@ const CommentForm = ({ postId, commentId }: CommentFormProps) => {
               userid: getItem('userId') as string,
               comment_parentid: commentId
             }
-          });
+          }).catch((err) => {
+            toast({
+                title: 'Lỗi',
+                description: err.message,
+                variant: 'destructive'
+            })
+        });
         } else {
           await CreateComment({
             variables: {
@@ -86,7 +93,13 @@ const CommentForm = ({ postId, commentId }: CommentFormProps) => {
               postid: postId,
               userid: getItem('userId') as string
             }
-          });
+          }).catch((err) => {
+            toast({
+                title: 'Lỗi',
+                description: err.message,
+                variant: 'destructive'
+            })
+        });
         }
 
         setSubmit(false);

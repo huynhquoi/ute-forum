@@ -20,6 +20,7 @@ import PostAction from "@/components/posts/post-action";
 import { format } from "date-fns";
 import ReportDialog from "@/components/shared/report-dialog";
 import { REPORT_POST } from "@/generated/default-types";
+import { toast } from "@/components/ui/use-toast";
 
 const PostDetail = () => {
   const param = useParams();
@@ -44,7 +45,15 @@ const PostDetail = () => {
         postid: parseInt(param?.postId as string),
         userid: user?.userid,
       }
-    }).then(() => refetch())
+    })
+    .then(() => refetch())
+    .catch((err) => {
+      toast({
+          title: 'Lỗi',
+          description: err.message,
+          variant: 'destructive'
+      })
+  })
   }, [createRead, param?.postId, read, refetch, user?.userid])
 
   setTimeout(() => {

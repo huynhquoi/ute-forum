@@ -13,6 +13,7 @@ import QuickMessage from "../message/quick-message";
 import ReportDialog from "../shared/report-dialog";
 import { Flag } from "../svgs";
 import { REPORT_USER } from "@/generated/default-types";
+import { toast } from "../ui/use-toast";
 
 type ProfileHeaderProps = {
   user?: User;
@@ -36,7 +37,13 @@ const ProfileHeader = ({ user }: ProfileHeaderProps) => {
     }).then(() => {
       addMessage(data?.create_message as Message)
       addUser(user)
-    })
+    }).catch((err) => {
+      toast({
+          title: 'Lỗi',
+          description: err.message,
+          variant: 'destructive'
+      })
+  })
   }
   return (
     <>

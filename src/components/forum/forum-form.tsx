@@ -12,6 +12,7 @@ import { Input } from "../ui/input"
 import AvatarUpload from "../profile/avatar-upload"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
+import { toast } from "../ui/use-toast"
 
 const ForumFormSchema = z.object({
     groupname: z.string(),
@@ -67,6 +68,12 @@ const ForumForm = ({ forum }: ForumFormProps) => {
                 }
             }).then(() => {
                 setOpen(false);
+            }).catch((err) => {
+                toast({
+                    title: 'Lỗi',
+                    description: err.message,
+                    variant: 'destructive'
+                })
             })
         } else {
             setLoading(false)
@@ -88,6 +95,12 @@ const ForumForm = ({ forum }: ForumFormProps) => {
                         }
                     }).then(() => {
                         route.push(`/forum/${data?.data?.create_group?.groupid}`)
+                    }).catch((err) => {
+                        toast({
+                            title: 'Lỗi',
+                            description: err.message,
+                            variant: 'destructive'
+                        })
                     })
                 }
             })

@@ -4,6 +4,7 @@ import Link from "next/link"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Button } from "../ui/button"
 import { Logout } from "../svgs"
+import { toast } from "../ui/use-toast"
 
 const ForumZone = () => {
     const { user: auth } = useUserStorage()
@@ -23,7 +24,13 @@ const ForumZone = () => {
                 groupid: id,
                 userid: auth?.userid
             }
-        }).then(() => refetch())
+        }).then(() => refetch()).catch((err) => {
+            toast({
+                title: 'Lỗi',
+                description: err.message,
+                variant: 'destructive'
+            })
+        })
     }
     return <>
         <div className="space-y-2">

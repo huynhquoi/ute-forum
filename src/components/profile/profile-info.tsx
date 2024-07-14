@@ -1,4 +1,4 @@
-import { User, useCreateFollowMutation, useDeleteFollowMutation, useGetFollowingUserQuery } from "@/generated/types"
+import { User} from "@/generated/types"
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card"
 import { Label } from "../ui/label"
 import { AboutMe, Address, Connect, Email, Gift, Route } from "../svgs"

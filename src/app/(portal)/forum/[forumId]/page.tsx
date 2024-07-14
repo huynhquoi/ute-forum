@@ -7,6 +7,7 @@ import PostCard from "@/components/posts/post-card"
 import { Bell, Login, Logout, Plus } from "@/components/svgs"
 import { Button } from "@/components/ui/button"
 import { Card, CardFooter, CardHeader } from "@/components/ui/card"
+import { toast } from "@/components/ui/use-toast"
 import { Group, PostDto, useGetGroupByGroupIdQuery, useGetPostbyGroupIdQuery, useJoinGroupMutation, useLeaveGroupMutation } from "@/generated/types"
 import useScroll from "@/hooks/useScroll"
 import useStorage from "@/hooks/useStorage"
@@ -48,7 +49,15 @@ const ForumDetailPage = () => {
         groupid: parseInt(param.forumId as string),
         userid: getItem('userId')
       }
-    }).then(() => setRequested(true))
+    })
+    .then(() => setRequested(true))
+    .catch((err) => {
+      toast({
+          title: 'Lỗi',
+          description: err.message,
+          variant: 'destructive'
+      })
+  })
   }
 
   const handleLeaveGroup = () => {
@@ -60,7 +69,15 @@ const ForumDetailPage = () => {
         groupid: parseInt(param.forumId as string),
         userid: getItem('userId')
       }
-    }).then(() => setOut(true))
+    })
+    .then(() => setOut(true))
+    .catch((err) => {
+      toast({
+          title: 'Lỗi',
+          description: err.message,
+          variant: 'destructive'
+      })
+  })
   }
   return <>
     <div className="bg-white">

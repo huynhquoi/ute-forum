@@ -19,6 +19,7 @@ import Notification from "../shared/notification"
 import { imageLocation, sanitizeString } from "@/lib/utils"
 import { useRouter } from "next/navigation"
 import ChatAI from "./chat-ai"
+import { toast } from "../ui/use-toast"
 
 const PostChema = z.object({
   title: z.string(),
@@ -112,7 +113,13 @@ const PostForm = ({ post, groupId, onSubmitEdit }: PostFormType) => {
         }).then(() => {
           setLoading(true)
           router.push("/home")
-        })
+        }).catch((err) => {
+          toast({
+              title: 'Lỗi',
+              description: err.message,
+              variant: 'destructive'
+          })
+      })
         return
       })
     }
@@ -146,10 +153,13 @@ const PostForm = ({ post, groupId, onSubmitEdit }: PostFormType) => {
           setLoading(true)
           router.push("/home")
         })
-      }).catch((error) => {
-        console.log(error)
-        return
-      })
+      }).catch((err) => {
+        toast({
+            title: 'Lỗi',
+            description: err.message,
+            variant: 'destructive'
+        })
+    })
     } else {
       if (post?.postid) {
         return
@@ -173,10 +183,16 @@ const PostForm = ({ post, groupId, onSubmitEdit }: PostFormType) => {
       }).then(() => {
         setLoading(true)
         router.push(`/forum/${groupId}`)
-      })
+      }).catch((err) => {
+        toast({
+            title: 'Lỗi',
+            description: err.message,
+            variant: 'destructive'
+        })
+    })
     }
 
-  }, [createGroupPost, createPost, groupId, loading, onSubmitEdit, post?.postid, postData, router, updatePost, userStorage?.userid])
+  }, [createGroupPost, createPost, fetchMore, groupId, loading, onSubmitEdit, post?.postid, postData, router, updatePost, userStorage?.userid])
 
   const onSubmit = (values: z.infer<typeof PostChema>) => {
     setPostData(values);

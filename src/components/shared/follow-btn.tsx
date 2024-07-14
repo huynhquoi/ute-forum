@@ -5,6 +5,7 @@ import * as React from "react"
 import { useEffect, useState } from "react"
 import { Button } from "../ui/button"
 import { useCreateFollowMutation, useDeleteFollowMutation, useGetFollowingUserQuery } from "@/generated/types"
+import { toast } from "../ui/use-toast"
 
 interface FollowBtnProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
     userId: string
@@ -42,14 +43,26 @@ const FollowBtn: React.FC<FollowBtnProps> = ({ userId, ...props }) => {
               followerid: user?.userid,
               userid: userId,
             }
-          }).then(() => refetch())
+          }).then(() => refetch()).catch((err) => {
+            toast({
+                title: 'Lỗi',
+                description: err.message,
+                variant: 'destructive'
+            })
+        })
         } else if (type === 'unfollow') {
           DeleteFollow({
             variables: {
               followerid: user?.userid,
               userid: userId,
             }
-          }).then(() => refetch())
+          }).then(() => refetch()).catch((err) => {
+            toast({
+                title: 'Lỗi',
+                description: err.message,
+                variant: 'destructive'
+            })
+        })
         }
       }
     return (

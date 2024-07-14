@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ScrollArea } from "../ui/scroll-area";
 import { useMessageStore } from "@/lib/store/mesageStore";
 import useStorage from "@/hooks/useStorage";
+import { toast } from "../ui/use-toast";
 
 type MessageZoneProps = {
     messageId: number,
@@ -53,6 +54,12 @@ const MessageZone = ({ messageId, userId }: MessageZoneProps) => {
                     messageresponseid: 0,
                     image: ''
                 }
+            }).catch((err) => {
+                toast({
+                    title: 'Lỗi',
+                    description: err.message,
+                    variant: 'destructive'
+                })
             });
             form.resetField('content');
             if (message?.messageid) {

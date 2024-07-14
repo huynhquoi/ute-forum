@@ -3,6 +3,7 @@ import UserDisplay from "../users/user-display"
 import { Button } from "../ui/button"
 import { Check, XIcon } from "../svgs"
 import { useState } from "react"
+import { toast } from "../ui/use-toast"
 
 type ForumRequestItemProps = {
     user: User_Group,
@@ -22,6 +23,13 @@ const ForumRequestItem = ({ forumId, user }: ForumRequestItemProps) => {
                 userid: user?.user_usergroup?.userid
             }
         }).then(() => setAction(true))
+            .catch((err) => {
+                toast({
+                    title: 'Lỗi',
+                    description: err.message,
+                    variant: 'destructive'
+                })
+            })
     }
 
     const handleReject = () => {
@@ -30,7 +38,15 @@ const ForumRequestItem = ({ forumId, user }: ForumRequestItemProps) => {
                 groupid: forumId,
                 userid: user?.user_usergroup?.userid
             }
-        }).then(() => setAction(true))
+        })
+            .then(() => setAction(true))
+            .catch((err) => {
+                toast({
+                    title: 'Lỗi',
+                    description: err.message,
+                    variant: 'destructive'
+                })
+            })
     }
 
     return <>

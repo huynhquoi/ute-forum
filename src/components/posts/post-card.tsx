@@ -5,7 +5,7 @@ import UserDisplay from "../users/user-display";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import Link from "next/link";
-import { Post, PostDto, useDeletePostMutation, User } from "@/generated/types";
+import { PostDto, User } from "@/generated/types";
 import PostAction from "./post-action";
 import { useState } from "react";
 import ImageCover from "../shared/image-cover";

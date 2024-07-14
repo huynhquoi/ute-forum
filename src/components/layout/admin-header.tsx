@@ -46,7 +46,7 @@ const AdminHeader = () => {
                                 height={48}
                             />
                         </Link>
-                        <NavigationMenu className="relative left-[-10%] max-w-none">
+                        <NavigationMenu className="relative">
                             <NavigationMenuList>
                                 <NavigationMenuItem>
                                     <Link href="/user-manager" legacyBehavior passHref>
@@ -84,7 +84,7 @@ const AdminHeader = () => {
                                         </NavigationMenuLink>
                                     </Link>
                                 </NavigationMenuItem>
-                                {/* <NavigationMenuItem>
+                                <NavigationMenuItem>
                                     <Link href="/analyst-manager" legacyBehavior passHref>
                                         <NavigationMenuLink
                                             className={navigationMenuTriggerStyle()}
@@ -101,7 +101,7 @@ const AdminHeader = () => {
                                             Cài đặt
                                         </NavigationMenuLink>
                                     </Link>
-                                </NavigationMenuItem> */}
+                                </NavigationMenuItem>
                             </NavigationMenuList>
                         </NavigationMenu>
                         <div className="m-0 p-0 flex items-center">

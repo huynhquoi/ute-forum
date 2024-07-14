@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogT
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 import { useBanUserMutation, useGetAccountQuery } from "@/generated/types"
 import { Button } from "../ui/button"
+import { useToast } from "../ui/use-toast"
 
 type BanUserDialogProps = {
     userId: string,
@@ -11,6 +12,7 @@ type BanUserDialogProps = {
 
 const BanUserDialog = ({ userId, children }: BanUserDialogProps) => {
     const [ban, setBan] = useState('')
+    const { toast } = useToast()
     const [open, setOpen] = useState(false)
     const [BanUser] = useBanUserMutation()
     const {refetch} = useGetAccountQuery({
@@ -29,6 +31,12 @@ const BanUserDialog = ({ userId, children }: BanUserDialogProps) => {
         }).then(() => {
             refetch()
             setOpen(false)
+        }).catch((err) => {
+            toast({
+                title: 'Lỗi',
+                description: err.message,
+                variant: 'destructive'
+            })
         })
     }
 

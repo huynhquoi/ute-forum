@@ -9,6 +9,7 @@ import { useState } from "react"
 import { useUserStorage } from "@/lib/store/userStorage"
 import { Form, FormControl, FormField, FormItem } from "../ui/form"
 import { Input } from "../ui/input"
+import { toast } from "../ui/use-toast"
 
 type QuickMessageProps = {
     user: User
@@ -55,8 +56,20 @@ const QuickMessage = ({ user }: QuickMessageProps) => {
                     }).then(() => {
                         setOpen(false);
                         form.resetField('content')
+                    }).catch((err) => {
+                        toast({
+                            title: 'Lỗi',
+                            description: err.message,
+                            variant: 'destructive'
+                        })
                     })
                 }
+            }).catch((err) => {
+                toast({
+                    title: 'Lỗi',
+                    description: err.message,
+                    variant: 'destructive'
+                })
             })
         }
     }

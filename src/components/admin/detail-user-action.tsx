@@ -3,6 +3,7 @@ import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { useState } from "react"
 import BanUserDialog from "./ban-user-dialog"
+import { toast } from "../ui/use-toast"
 
 type DetailUserActionProps = {
     userId: string
@@ -45,6 +46,12 @@ const DetailUserAction = ({ userId, isBan }: DetailUserActionProps) => {
                             }).then(() => {
                                 refetch()
                                 setReputation('')
+                            }).catch((err) => {
+                                toast({
+                                    title: 'Lỗi',
+                                    description: err.message,
+                                    variant: 'destructive'
+                                })
                             })
                         }}
                     >

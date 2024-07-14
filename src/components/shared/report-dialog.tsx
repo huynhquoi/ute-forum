@@ -13,6 +13,7 @@ import { REPORT_COMMENT, REPORT_POST, REPORT_USER } from "@/generated/default-ty
 import { useCreateReportCommentMutation, useCreateReportPostMutation, useCreateReportUserMutation } from "@/generated/types"
 import useStorage from "@/hooks/useStorage"
 import { useState } from "react"
+import { toast } from "../ui/use-toast"
 
 type ReportDialogProps = {
     children: React.ReactNode
@@ -54,6 +55,12 @@ const ReportDialog = ({ children, title, type, commentId, postId, userId }: Repo
             }).then(() => {
                 setOpen(false)
                 return;
+            }).catch((err) => {
+                toast({
+                    title: 'Lỗi',
+                    description: err.message,
+                    variant: 'destructive'
+                })
             })
         }
         if (type === REPORT_POST) {
@@ -66,6 +73,12 @@ const ReportDialog = ({ children, title, type, commentId, postId, userId }: Repo
             }).then(() => {
                 setOpen(false)
                 return;
+            }).catch((err) => {
+                toast({
+                    title: 'Lỗi',
+                    description: err.message,
+                    variant: 'destructive'
+                })
             })
         }
         if (type === REPORT_COMMENT) {
@@ -78,6 +91,12 @@ const ReportDialog = ({ children, title, type, commentId, postId, userId }: Repo
             }).then(() => {
                 setOpen(false)
                 return;
+            }).catch((err) => {
+                toast({
+                    title: 'Lỗi',
+                    description: err.message,
+                    variant: 'destructive'
+                })
             })
         }
     }

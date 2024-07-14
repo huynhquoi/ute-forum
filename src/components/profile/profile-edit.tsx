@@ -29,6 +29,7 @@ import DatePickerForm from "../shared/date-picker-form";
 import Editor from "../shared/editor";
 import AvatarUpload from "./avatar-upload";
 import Image from "next/image";
+import { toast } from "../ui/use-toast";
 
 const profileInfoSchema = z.object({
   fullname: z.string(),
@@ -100,7 +101,13 @@ const ProfileEdit = () => {
           ...profileInfo
         }
       }
-    })
+    }).catch((err) => {
+      toast({
+          title: 'Lỗi',
+          description: err.message,
+          variant: 'destructive'
+      })
+  })
   }, [loading, updateAccount, profileInfo, userStorage?.userid])
 
   const handleAvatarUpload = (url: string) => {

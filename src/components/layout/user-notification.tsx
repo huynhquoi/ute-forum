@@ -10,6 +10,7 @@ import { useEffect, useState } from "react"
 import DotItem from "../shared/dot-item"
 import './styles.scss'
 import { format } from "date-fns"
+import { toast } from "../ui/use-toast"
 
 const UserNotification = () => {
   const userStorage = useUserStorage((state) => state.user)
@@ -33,6 +34,13 @@ const UserNotification = () => {
         noticeid: notice
       }
     }).then(() => setNotice(0))
+    .catch((err) => {
+      toast({
+          title: 'Lỗi',
+          description: err.message,
+          variant: 'destructive'
+      })
+  })
   }, [IsSeen, notice])
   return <><Sheet>
     <SheetTrigger asChild >

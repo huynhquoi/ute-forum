@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Button } from "../ui/button"
 import { useState } from "react"
 import Link from "next/link"
+import { toast } from "../ui/use-toast"
 
 const FollowingZone = () => {
     const { user } = useUserStorage()
@@ -23,7 +24,13 @@ const FollowingZone = () => {
                 followerid: user?.userid,
                 userid: id
             }
-        }).then(() => refetch())
+        }).then(() => refetch()).catch((err) => {
+            toast({
+                title: 'Lỗi',
+                description: err.message,
+                variant: 'destructive'
+            })
+        })
     }
     return <>
         <div className="space-y-2">

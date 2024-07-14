@@ -1,6 +1,6 @@
 import React from "react"
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
-import { User, User_Group, useUpdateGroupMutation } from "@/generated/types"
+import { User, User_Group } from "@/generated/types"
 import UserDisplay from "../users/user-display"
 
 type GroupUserDialogProps = {

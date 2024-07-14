@@ -1,5 +1,6 @@
 import { ApolloWrapper } from "@/lib/ApolloWrapper";
 import MainHeader from "@/components/layout/main-header";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function RootLayout({
   children,
@@ -15,6 +16,7 @@ export default function RootLayout({
           <div className="col-span-5">{children}</div>
           <div className="col-span-1"></div>
         </div>
+        <Toaster />
       </ApolloWrapper>
     </>
   );

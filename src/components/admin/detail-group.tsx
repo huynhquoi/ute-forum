@@ -56,9 +56,9 @@ const DetailGroup = ({ group, inGroup }: DetailGroupProps) => {
                                 <div className=" flex items-center justify-start space-x-3">
                                     <p className="font-bold">Số lượng thành viên: </p>
                                     <div className="align-bottom">{data?.get_user_in_group?.length}</div>
-                                    {inGroup ? <GroupUserDialog users={data?.get_user_in_group as User_Group[]}>
+                                    <GroupUserDialog users={data?.get_user_in_group as User_Group[]}>
                                         <Eye className="text-xl" />
-                                    </GroupUserDialog> : <></>}
+                                    </GroupUserDialog>
                                 </div>
                             </CardContent>
                         </Card>
