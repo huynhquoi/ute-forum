@@ -4,6 +4,7 @@ import { DetailGroupMessageDto, DetailMessageDto, User } from "@/generated/types
 import { Card } from "../ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import MessageActions from "./message-actions";
+import MessageGroupActions from "./message-group-actions";
 
 type MessageGroupItemProps = {
     newMessage?: string;
@@ -35,6 +36,7 @@ const MessageGroupItem = ({ newMessage, read, selected, detail, onCLick }: Messa
                     </div>
                 </div>
             </div>
+            <MessageGroupActions detailMessage={detail} />
         </Card>
         {selected ? <div className="h-4 bg-white">
             <div className="h-4 rounded-tr-xl bg-gray-100"></div>

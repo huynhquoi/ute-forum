@@ -17,7 +17,10 @@ const MessageDetailItem = ({ content, byMe, inGroup, userId }: MessageDetailItem
     })
     return <>
         <div className={`flex items-center mt-2 ${byMe ? 'justify-end' : ''}`}>
-            <div className={`${byMe ? 'bg-black text-white' : 'bg-gray-100'} rounded-full w-fit px-4 py-2`}>{content}</div>
+            <div className={`flex flex-col ${byMe ? 'items-end' : 'items-start'}`}>
+                {byMe ? <></> : <p className="text-sm text-gray-400 font-semibold mb-1">{data?.find_account_by_id?.fullname}</p>}
+                <div className={`${byMe ? 'bg-black text-white' : 'bg-gray-100'} rounded-full w-fit px-4 py-2`}>{content}</div>
+            </div>
         </div>
     </>
 }

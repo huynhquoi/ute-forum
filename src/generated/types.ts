@@ -1525,7 +1525,7 @@ export type AcceptUserToGroupMutationVariables = Exact<{
 
 export type AcceptUserToGroupMutation = { __typename?: 'Mutation', update_check?: string | null };
 
-export type MessageFragment = { __typename?: 'DetailMessageDTO', detailmessageid: number, messageid?: number | null, isblock?: number | null, lastseen?: any | null, lastsend?: any | null, userid?: { __typename?: 'User', userid: string, fullname?: string | null, status?: number | null } | null };
+export type MessageFragment = { __typename?: 'DetailMessageDTO', detailmessageid: number, messageid?: number | null, isblock?: number | null, lastseen?: any | null, lastsend?: any | null, userid?: { __typename?: 'User', userid: string, fullname?: string | null, status?: number | null, image?: string | null } | null };
 
 export type ContentFragment = { __typename?: 'ContentMessageDTO', contentid?: number | null, content?: string | null, createday?: any | null, updateday?: any | null, parentid?: number | null, userid?: string | null, messageid?: number | null, image?: string | null, totalicon?: Array<{ __typename?: 'TotalIcon', iconid?: number | null, total?: number | null } | null> | null };
 
@@ -1611,7 +1611,7 @@ export type GetMessageByUserIdSubscriptionVariables = Exact<{
 }>;
 
 
-export type GetMessageByUserIdSubscription = { __typename?: 'Subscription', sub_detail_message_by_userid?: Array<{ __typename?: 'DetailMessageDTO', detailmessageid: number, messageid?: number | null, isblock?: number | null, lastseen?: any | null, lastsend?: any | null, userid?: { __typename?: 'User', userid: string, fullname?: string | null, status?: number | null } | null } | null> | null };
+export type GetMessageByUserIdSubscription = { __typename?: 'Subscription', sub_detail_message_by_userid?: Array<{ __typename?: 'DetailMessageDTO', detailmessageid: number, messageid?: number | null, isblock?: number | null, lastseen?: any | null, lastsend?: any | null, userid?: { __typename?: 'User', userid: string, fullname?: string | null, status?: number | null, image?: string | null } | null } | null> | null };
 
 export type GetDetailMessageByMessageIdSubscriptionVariables = Exact<{
   messageid?: InputMaybe<Scalars['Int']['input']>;
@@ -2020,6 +2020,7 @@ export const MessageFragmentDoc = gql`
     userid
     fullname
     status
+    image
   }
   isblock
   lastseen

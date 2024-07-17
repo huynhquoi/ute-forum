@@ -5,6 +5,7 @@ fragment message on DetailMessageDTO {
     userid
     fullname
     status
+    image
   }
   isblock
   lastseen
