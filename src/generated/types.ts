@@ -1174,7 +1174,7 @@ export type SubscriptionSub_Content_Message_By_MessageidArgs = {
 
 export type SubscriptionSub_Contentgroup_Message_By_UseridArgs = {
   groupmessageId?: InputMaybe<Scalars['Int']['input']>;
-  userid?: InputMaybe<Scalars['String']['input']>;
+  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -1535,6 +1535,21 @@ export type Detail_Group_MessageFragment = { __typename?: 'DetailGroup_Message',
 
 export type Detail_Group_Message_DtoFragment = { __typename?: 'DetailGroupMessageDTO', detailgroupmessageid?: number | null, ishide?: number | null, lastseen?: any | null, lastsend?: any | null, groupmessage?: { __typename?: 'Group_Message', group_messageid: number, group_messagename?: string | null, group_messageimage?: string | null, createday?: any | null, group_messagedescription?: string | null, parent?: number | null } | null, userid?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null };
 
+export type CheckMessageExistQueryVariables = Exact<{
+  userid1?: InputMaybe<Scalars['String']['input']>;
+  userid2?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type CheckMessageExistQuery = { __typename?: 'Query', check_detail_message?: boolean | null };
+
+export type GetDetailMessageByUserIdQueryVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetDetailMessageByUserIdQuery = { __typename?: 'Query', get_detail_message_by_userid?: Array<{ __typename?: 'DetailMessage', detailmessageid: number, isblock?: number | null, lastseen?: any | null, detailmessage_message?: { __typename?: 'Message', messageid: number } | null, user_detailmessage?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null } | null> | null };
+
 export type CreateMessageMutationVariables = Exact<{
   userid1?: InputMaybe<Scalars['String']['input']>;
   userid2?: InputMaybe<Scalars['String']['input']>;
@@ -1614,8 +1629,8 @@ export type GetGroupMessageByUserIdSubscriptionVariables = Exact<{
 export type GetGroupMessageByUserIdSubscription = { __typename?: 'Subscription', sub_group_message_by_userid?: Array<{ __typename?: 'DetailGroupMessageDTO', detailgroupmessageid?: number | null, ishide?: number | null, lastseen?: any | null, lastsend?: any | null, groupmessage?: { __typename?: 'Group_Message', group_messageid: number, group_messagename?: string | null, group_messageimage?: string | null, createday?: any | null, group_messagedescription?: string | null, parent?: number | null } | null, userid?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null } | null> | null };
 
 export type GetDetailGroupMessagebyMessageIdSubscriptionVariables = Exact<{
-  groupmessageid?: InputMaybe<Scalars['Int']['input']>;
-  userid?: InputMaybe<Scalars['String']['input']>;
+  groupmessageId?: InputMaybe<Scalars['Int']['input']>;
+  userId?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -3418,6 +3433,95 @@ export function useAcceptUserToGroupMutation(baseOptions?: Apollo.MutationHookOp
 export type AcceptUserToGroupMutationHookResult = ReturnType<typeof useAcceptUserToGroupMutation>;
 export type AcceptUserToGroupMutationResult = Apollo.MutationResult<AcceptUserToGroupMutation>;
 export type AcceptUserToGroupMutationOptions = Apollo.BaseMutationOptions<AcceptUserToGroupMutation, AcceptUserToGroupMutationVariables>;
+export const CheckMessageExistDocument = gql`
+    query CheckMessageExist($userid1: String, $userid2: String) {
+  check_detail_message(userid1: $userid1, userid2: $userid2)
+}
+    `;
+
+/**
+ * __useCheckMessageExistQuery__
+ *
+ * To run a query within a React component, call `useCheckMessageExistQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCheckMessageExistQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCheckMessageExistQuery({
+ *   variables: {
+ *      userid1: // value for 'userid1'
+ *      userid2: // value for 'userid2'
+ *   },
+ * });
+ */
+export function useCheckMessageExistQuery(baseOptions?: Apollo.QueryHookOptions<CheckMessageExistQuery, CheckMessageExistQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CheckMessageExistQuery, CheckMessageExistQueryVariables>(CheckMessageExistDocument, options);
+      }
+export function useCheckMessageExistLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CheckMessageExistQuery, CheckMessageExistQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CheckMessageExistQuery, CheckMessageExistQueryVariables>(CheckMessageExistDocument, options);
+        }
+export function useCheckMessageExistSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CheckMessageExistQuery, CheckMessageExistQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CheckMessageExistQuery, CheckMessageExistQueryVariables>(CheckMessageExistDocument, options);
+        }
+export type CheckMessageExistQueryHookResult = ReturnType<typeof useCheckMessageExistQuery>;
+export type CheckMessageExistLazyQueryHookResult = ReturnType<typeof useCheckMessageExistLazyQuery>;
+export type CheckMessageExistSuspenseQueryHookResult = ReturnType<typeof useCheckMessageExistSuspenseQuery>;
+export type CheckMessageExistQueryResult = Apollo.QueryResult<CheckMessageExistQuery, CheckMessageExistQueryVariables>;
+export const GetDetailMessageByUserIdDocument = gql`
+    query GetDetailMessageByUserId($userid: String) {
+  get_detail_message_by_userid(userid: $userid) {
+    detailmessageid
+    detailmessage_message {
+      messageid
+    }
+    user_detailmessage {
+      userid
+      fullname
+      image
+    }
+    isblock
+    lastseen
+  }
+}
+    `;
+
+/**
+ * __useGetDetailMessageByUserIdQuery__
+ *
+ * To run a query within a React component, call `useGetDetailMessageByUserIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDetailMessageByUserIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDetailMessageByUserIdQuery({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *   },
+ * });
+ */
+export function useGetDetailMessageByUserIdQuery(baseOptions?: Apollo.QueryHookOptions<GetDetailMessageByUserIdQuery, GetDetailMessageByUserIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetDetailMessageByUserIdQuery, GetDetailMessageByUserIdQueryVariables>(GetDetailMessageByUserIdDocument, options);
+      }
+export function useGetDetailMessageByUserIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDetailMessageByUserIdQuery, GetDetailMessageByUserIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetDetailMessageByUserIdQuery, GetDetailMessageByUserIdQueryVariables>(GetDetailMessageByUserIdDocument, options);
+        }
+export function useGetDetailMessageByUserIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetDetailMessageByUserIdQuery, GetDetailMessageByUserIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetDetailMessageByUserIdQuery, GetDetailMessageByUserIdQueryVariables>(GetDetailMessageByUserIdDocument, options);
+        }
+export type GetDetailMessageByUserIdQueryHookResult = ReturnType<typeof useGetDetailMessageByUserIdQuery>;
+export type GetDetailMessageByUserIdLazyQueryHookResult = ReturnType<typeof useGetDetailMessageByUserIdLazyQuery>;
+export type GetDetailMessageByUserIdSuspenseQueryHookResult = ReturnType<typeof useGetDetailMessageByUserIdSuspenseQuery>;
+export type GetDetailMessageByUserIdQueryResult = Apollo.QueryResult<GetDetailMessageByUserIdQuery, GetDetailMessageByUserIdQueryVariables>;
 export const CreateMessageDocument = gql`
     mutation CreateMessage($userid1: String, $userid2: String) {
   create_message(userid1: $userid1, userid2: $userid2) {
@@ -3734,10 +3838,10 @@ export function useGetGroupMessageByUserIdSubscription(baseOptions?: Apollo.Subs
 export type GetGroupMessageByUserIdSubscriptionHookResult = ReturnType<typeof useGetGroupMessageByUserIdSubscription>;
 export type GetGroupMessageByUserIdSubscriptionResult = Apollo.SubscriptionResult<GetGroupMessageByUserIdSubscription>;
 export const GetDetailGroupMessagebyMessageIdDocument = gql`
-    subscription GetDetailGroupMessagebyMessageId($groupmessageid: Int, $userid: String) {
+    subscription GetDetailGroupMessagebyMessageId($groupmessageId: Int, $userId: String) {
   sub_contentgroup_message_by_userid(
-    groupmessageId: $groupmessageid
-    userid: $userid
+    groupmessageId: $groupmessageId
+    userId: $userId
   ) {
     ...content
   }
@@ -3756,8 +3860,8 @@ export const GetDetailGroupMessagebyMessageIdDocument = gql`
  * @example
  * const { data, loading, error } = useGetDetailGroupMessagebyMessageIdSubscription({
  *   variables: {
- *      groupmessageid: // value for 'groupmessageid'
- *      userid: // value for 'userid'
+ *      groupmessageId: // value for 'groupmessageId'
+ *      userId: // value for 'userId'
  *   },
  * });
  */

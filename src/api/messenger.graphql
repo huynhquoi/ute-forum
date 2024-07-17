@@ -64,6 +64,26 @@ fragment detail_group_message_Dto on DetailGroupMessageDTO {
   lastsend
 }
 
+query CheckMessageExist($userid1: String, $userid2: String) {
+  check_detail_message(userid1: $userid1, userid2: $userid2)
+}
+
+query GetDetailMessageByUserId($userid: String) {
+  get_detail_message_by_userid(userid: $userid) {
+    detailmessageid
+    detailmessage_message {
+      messageid
+    }
+    user_detailmessage {
+      userid
+      fullname
+      image
+    }
+    isblock
+    lastseen
+  }
+}
+
 mutation CreateMessage($userid1: String, $userid2: String) {
   create_message(userid1: $userid1, userid2: $userid2) {
     messageid
@@ -146,12 +166,12 @@ subscription GetGroupMessageByUserId($userid: String) {
 }
 
 subscription GetDetailGroupMessagebyMessageId(
-  $groupmessageid: Int
-  $userid: String
+  $groupmessageId: Int
+  $userId: String
 ) {
   sub_contentgroup_message_by_userid(
-    groupmessageId: $groupmessageid
-    userid: $userid
+    groupmessageId: $groupmessageId
+    userId: $userId
   ) {
     ...content
   }

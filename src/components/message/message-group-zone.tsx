@@ -1,4 +1,4 @@
-import { useCreateContentMessageMutation, useGetDetailMessageByMessageIdSubscription } from "@/generated/types"
+import { useCreateContentGroupMessageMutation, useCreateContentMessageMutation, useGetDetailGroupMessagebyMessageIdSubscription, useGetDetailMessageByMessageIdSubscription } from "@/generated/types"
 import MessageDetailItem from "./message-detail-item";
 import { Input } from "../ui/input";
 import { useEffect, useRef } from "react";
@@ -12,7 +12,7 @@ import { useMessageStore } from "@/lib/store/mesageStore";
 import useStorage from "@/hooks/useStorage";
 import { toast } from "../ui/use-toast";
 
-type MessageZoneProps = {
+type MessageGroupZoneProps = {
     messageId: number,
     userId: string;
 }
@@ -21,18 +21,16 @@ const FormSchema = z.object({
     content: z.string().min(1),
 })
 
-const MessageZone = ({ messageId, userId }: MessageZoneProps) => {
+const MessageGroupZone = ({ messageId, userId }: MessageGroupZoneProps) => {
     const { message, removeMessage } = useMessageStore()
-    const {getItem} = useStorage()
-    const { data, loading: loadMess, error } = useGetDetailMessageByMessageIdSubscription({
+    const { data, loading: loadMess, error } = useGetDetailGroupMessagebyMessageIdSubscription({
         variables: {
-            messageid: parseInt(getItem('partner')),
-            userid: userId
-        },
-        shouldResubscribe: true
+            groupmessageId: messageId,
+            userId: userId
+        }
     })
 
-    const [createMessage, { loading }] = useCreateContentMessageMutation()
+    const [createMessage, { loading }] = useCreateContentGroupMessageMutation()
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -48,8 +46,8 @@ const MessageZone = ({ messageId, userId }: MessageZoneProps) => {
             await createMessage({
                 variables: {
                     content: data.content,
-                    messageid: messageId,
-                    userid: userId,
+                    groupmessageId: messageId,
+                    userId: userId,
                     messageresponseid: 0,
                     image: ''
                 }
@@ -77,7 +75,7 @@ const MessageZone = ({ messageId, userId }: MessageZoneProps) => {
 
     useEffect(() => {
         scrollToBottom();
-    }, [data?.sub_content_message_by_messageid?.length]);
+    }, [data?.sub_contentgroup_message_by_userid?.length]);
 
     // Log error from subscription
     useEffect(() => {
@@ -92,13 +90,15 @@ const MessageZone = ({ messageId, userId }: MessageZoneProps) => {
         <div className="flex flex-col justify-between h-[calc(100vh-72px)]">
             <ScrollArea className="w-full h-[calc(100vh-112px)] pr-4">
                 <div ref={scrollRef} className="flex flex-1 flex-col h-full">
-                    {data?.sub_content_message_by_messageid
+                    {data?.sub_contentgroup_message_by_userid
                         ?.sort((a, b) => (a?.contentid as number) - (b?.contentid as number))
                         ?.map(i => (
                             <MessageDetailItem 
                                 key={i?.contentid} 
                                 content={i?.content || ""} 
                                 byMe={i?.userid as string === userId} 
+                                inGroup={true}
+                                userId={i?.userid as string}
                             />
                         ))
                     }
@@ -126,4 +126,4 @@ const MessageZone = ({ messageId, userId }: MessageZoneProps) => {
     );
 }
 
-export default MessageZone;
+export default MessageGroupZone;
