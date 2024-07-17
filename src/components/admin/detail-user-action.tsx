@@ -32,7 +32,7 @@ const DetailUserAction = ({ userId, isBan }: DetailUserActionProps) => {
                     </Button>
                 </BanUserDialog>
 
-                <div className="flex items-center space-x-2">
+                {/* <div className="flex items-center space-x-2">
                     <Input value={reputation} onChange={(e) => setReputation(e.target.value)} />
                     <Button
                         variant={"outline"}
@@ -57,7 +57,7 @@ const DetailUserAction = ({ userId, isBan }: DetailUserActionProps) => {
                     >
                         Cộng / Trừ
                     </Button>
-                </div>
+                </div> */}
             </div>
         </>
     )

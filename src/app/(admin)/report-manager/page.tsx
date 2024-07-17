@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { useUserStorage } from "@/lib/store/userStorage"
 import DetailUser from "@/components/admin/detail-user"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Loading } from "@/components/svgs"
 
 const ManagerReportPage = () => {
     const [type, setType] = useState(1)
@@ -32,7 +33,7 @@ const ManagerReportPage = () => {
                     </SelectContent>
                 </Select>
 
-                {loading ? <></> : <DataTable columns={columns} data={data?.get_report_by_type as Report[]} filterColum="createday" placeholderFilterSearch="Tìm theo email..." />}
+                {loading ? <><Loading className="text-2xl text-center animate-spin mt-3" /></> : <DataTable columns={columns} data={data?.get_report_by_type as Report[]} filterColum="createday" placeholderFilterSearch="Tìm theo email..." />}
             </div>
             <div className="col-span-2 pl-4">
 

@@ -1,17 +1,19 @@
 import { User } from "@/generated/types"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card"
 import UserDisplay from "../users/user-display"
-import { AboutMe, Address, Connect, Email, Gift, Route } from "../svgs"
+import { AboutMe, Address, Connect, Email, Gift, Loading, Route } from "../svgs"
 import { format } from "date-fns"
 import DetailUserAction from "./detail-user-action"
 
 type DetailUserProps = {
-    user: User
+    user: User,
+    loading: boolean
 }
 
-const DetailUser = ({ user }: DetailUserProps) => {
+const DetailUser = ({ user, loading }: DetailUserProps) => {
     return (
         <>
+            {loading ? <Loading className="text-2xl animate-spin" /> : <></>}
             {user?.userid
                 ? <Card className="w-full">
                     <CardHeader>
@@ -50,14 +52,14 @@ const DetailUser = ({ user }: DetailUserProps) => {
                     </CardContent>
 
                     <CardFooter>
-                        <DetailUserAction userId={user?.userid as string} isBan={user?.isban?.isbanid ? 1 : 0}/>
+                        <DetailUserAction userId={user?.userid as string} isBan={user?.isban?.isbanid ? 1 : 0} />
                     </CardFooter>
                 </Card>
                 : <Card>
                     <CardHeader>
                         <CardTitle>Thông tin người dùng</CardTitle>
                     </CardHeader>
-                    </Card>}
+                </Card>}
         </>
     )
 }

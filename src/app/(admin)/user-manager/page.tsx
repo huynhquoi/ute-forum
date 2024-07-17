@@ -11,6 +11,7 @@ import { ChartConfig, ChartContainer } from "@/components/ui/chart"
 import { months } from "@/lib/utils"
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Loading } from "@/components/svgs"
 
 const chartConfig = {
     user: {
@@ -29,7 +30,7 @@ const ManagerUserPage = () => {
         }
     })
 
-    const { data: u } = useGetAccountByPkQuery({
+    const { data: u, loading: loadAcc } = useGetAccountByPkQuery({
         variables: {
             userId: userId
         }
@@ -48,7 +49,7 @@ const ManagerUserPage = () => {
     return (<>
         <div className="grid grid-cols-5">
             <div className="col-span-3 flex min flex-col items-center">
-                {loading ? <></> : <DataTable columns={columns} data={data?.account as User[]} filterColum="email" placeholderFilterSearch="Tìm theo email..." />}
+                {loading ? <><Loading className="text-2xl text-center animate-spin" /></> : <DataTable columns={columns} data={data?.account as User[]} filterColum="email" placeholderFilterSearch="Tìm theo email..." />}
             </div>
             <div className="col-span-2 pl-4">
                 <div className="py-4">
@@ -61,10 +62,10 @@ const ManagerUserPage = () => {
                         className="max-w-sm"
                     />
                 </div>
-                <DetailUser user={u?.find_account_by_id as User} />
+                <DetailUser user={u?.find_account_by_id as User} loading={loadAcc} />
             </div>
         </div>
-        <Card className="">
+        <Card className="mt-3">
             <CardHeader>
                 <CardTitle>Biểu đồ tăng trưởng người dùng</CardTitle>
             </CardHeader>

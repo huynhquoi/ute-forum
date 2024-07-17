@@ -11,6 +11,7 @@ import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "
 import { months } from "@/lib/utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts"
+import { Loading } from "@/components/svgs"
 
 const chartConfig = {
     user: {
@@ -42,7 +43,7 @@ const ManagerPostPage = () => {
     }))
     return (<>
         <div className="">
-            {loading ? <></> : <DataTable columns={columns} data={data?.post as (PostDto)[]} filterColum="title" placeholderFilterSearch="Tìm theo tên bài viết..." />}
+            {loading ? <><Loading className="text-2xl text-center animate-spin" /></> : <DataTable columns={columns} data={data?.post as (PostDto)[]} filterColum="title" placeholderFilterSearch="Tìm theo tên bài viết..." />}
         </div>
         <Card className="">
             <CardHeader>

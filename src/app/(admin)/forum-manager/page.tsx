@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { useUserStorage } from "@/lib/store/userStorage"
 import DetailUser from "@/components/admin/detail-user"
 import DetailGroup from "@/components/admin/detail-group"
+import { Loading } from "@/components/svgs"
 
 const ManagerUserPage = () => {
     const [groupId, setGroupId] = useState('')
@@ -27,7 +28,7 @@ const ManagerUserPage = () => {
     return (<>
         <div className="grid grid-cols-5 h-[calc(100vh-72px)]">
             <div className="col-span-3 flex min-h-[calc(100vh-72px)] flex-col items-center">
-                {loading ? <></> : <DataTable columns={columns} data={data?.get_all_group as Group[]} filterColum="groupname" placeholderFilterSearch="Tìm theo tên nhóm..." />}
+                {loading ? <><Loading className="text-2xl text-center animate-spin" /></> : <DataTable columns={columns} data={data?.get_all_group as Group[]} filterColum="groupname" placeholderFilterSearch="Tìm theo tên nhóm..." />}
             </div>
             <div className="col-span-2 pl-4">
                 <div className="py-4">

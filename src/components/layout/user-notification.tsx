@@ -11,6 +11,7 @@ import DotItem from "../shared/dot-item"
 import './styles.scss'
 import { format } from "date-fns"
 import { toast } from "../ui/use-toast"
+import { ScrollArea } from "../ui/scroll-area"
 
 const UserNotification = () => {
   const userStorage = useUserStorage((state) => state.user)
@@ -34,13 +35,13 @@ const UserNotification = () => {
         noticeid: notice
       }
     }).then(() => setNotice(0))
-    .catch((err) => {
-      toast({
+      .catch((err) => {
+        toast({
           title: 'Lỗi',
           description: err.message,
           variant: 'destructive'
+        })
       })
-  })
   }, [IsSeen, notice])
   return <><Sheet>
     <SheetTrigger asChild >
@@ -60,24 +61,28 @@ const UserNotification = () => {
           Xem thông báo của bạn tại đây, nhớ đánh dấu đã đọc nhé
         </SheetDescription>
       </SheetHeader>
-      {data?.sub_all_notice_by_userid?.length ? <>
+      <ScrollArea className="h-full">
         <div className="">
-          {data?.sub_all_notice_by_userid?.map(item => (
-            <Card
-              className={`py-4 rounded-none border-x-0 border-b-0 shadow-none flex items-center justify-between hover:cursor-pointer`}
-              key={item?.noiticeid}
-              onClick={() => {
-                setNotice(item?.noiticeid as number)
-              }}>
-              <div className="flex flex-col items-start max-w-[95%]">
-                <Description value={item?.content as string} />
-                <div className="text-gray-400 text-sm">{format(item?.createday || '', 'dd/MM/yyyy, HH:mm')}</div>
-              </div>
-              {item?.isseen === 0 ? <DotItem className="w-2 h-2 rounded-full bg-blue-500" /> : <></>}
-            </Card>
-          ))}
+          {data?.sub_all_notice_by_userid?.length ? <>
+            <div className="">
+              {data?.sub_all_notice_by_userid?.map(item => (
+                <Card
+                  className={`py-4 rounded-none border-x-0 border-b-0 shadow-none flex items-center justify-between hover:cursor-pointer`}
+                  key={item?.noiticeid}
+                  onClick={() => {
+                    setNotice(item?.noiticeid as number)
+                  }}>
+                  <div className="flex flex-col items-start max-w-[95%]">
+                    <Description value={item?.content as string} />
+                    <div className="text-gray-400 text-sm">{format(item?.createday || '', 'dd/MM/yyyy, HH:mm')}</div>
+                  </div>
+                  {item?.isseen === 0 ? <DotItem className="w-2 h-2 rounded-full bg-blue-500" /> : <></>}
+                </Card>
+              ))}
+            </div>
+          </> : <>Không có thông báo</>}
         </div>
-      </> : <>Không có thông báo</>}
+      </ScrollArea>
     </SheetContent>
   </Sheet></>
 }
