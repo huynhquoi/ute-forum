@@ -1,4 +1,4 @@
-import { Message, User, useCreateMessageMutation } from "@/generated/types";
+import { Message, User, useCheckMessageExistQuery, useCreateMessageMutation } from "@/generated/types";
 import { Card, CardHeader } from "../ui/card";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
@@ -21,41 +21,25 @@ type ProfileHeaderProps = {
 
 const ProfileHeader = ({ user }: ProfileHeaderProps) => {
   const userStorage = useUserStorage((state) => state.user)
-  const addMessage = useMessageStore((state) => state.addMessage)
-  const addUser = useMessageStore((state) => state.addUser)
-  const [createMessage, { data, loading }] = useCreateMessageMutation()
-
-  const handleCreateMessage = () => {
-    if (!user?.userid) {
-      return
+  const { data } = useCheckMessageExistQuery({
+    variables: {
+      userid1: userStorage?.userid,
+      userid2: user?.userid
     }
-    createMessage({
-      variables: {
-        userid1: userStorage?.userid,
-        userid2: user.userid
-      }
-    }).then(() => {
-      addMessage(data?.create_message as Message)
-      addUser(user)
-    }).catch((err) => {
-      toast({
-          title: 'Lỗi',
-          description: err.message,
-          variant: 'destructive'
-      })
   })
-  }
+
+  const color = user?.userid ? (user?.color ? user.color : '#60A5FA') : userStorage?.color || '#60A5FA'
   return (
     <>
       <Card className="shadow-none border-x-none border-t-none rounded-none fixed top-[56px] w-full z-50">
         <CardHeader className="flex flex-col p-0">
-          <div style={{ background: user?.color || userStorage?.color || ''}} className="w-full h-20">
+          <div style={{ background: color }} className="w-full h-20">
             <div className="grid grid-cols-7 h-20">
               <div className="col-span-1"></div>
               <div className="col-span-5 relative h-20">
                 <Avatar
                   className={`absolute top-1/2 left-0 bg-white h-24 w-24 border-[6px]`}
-                  style={{ borderColor:user?.color || userStorage?.color || "#60A5FA" }}
+                  style={{ borderColor: color }}
                 >
                   <AvatarImage
                     src={user?.image || "/userLogo.png"}
@@ -92,8 +76,7 @@ const ProfileHeader = ({ user }: ProfileHeaderProps) => {
                         <p>Báo cáo</p>
                       </Button>
                     </ReportDialog>
-                    <QuickMessage user={user as User}>
-                    </QuickMessage>
+                    {data?.check_detail_message ? <UserMessenger>Nhắn tin</UserMessenger> : <QuickMessage user={user as User}></QuickMessage>}
                   </div>
                 </>}
               </div>
