@@ -26,6 +26,8 @@ import { parseCookies, setCookie } from 'nookies';
 import { jwtDecode } from 'jwt-decode';
 import { refreshToken } from "@/api/auth";
 import { toast } from "../ui/use-toast";
+import LogoutAction from "../shared/logout-action";
+import { ToastAction } from "@radix-ui/react-toast";
 
 type MainHeaderProps = {
   inUser?: boolean;
@@ -91,13 +93,10 @@ const MainHeader = ({ inUser }: MainHeaderProps) => {
       if (decodedToken.exp && decodedToken.exp < currentTime) {
         setIsTokenRefreshing(true);
         const response = await refreshToken(refreshTokenValue);
-        
-        if (response.accessToken && response.refreshToken) {
+
+        if (response.accessToken) {
+          setItem('access_token', response.accessToken)
           setCookie(null, 'auth_token', response.accessToken, {
-            maxAge: 30 * 24 * 60 * 60,
-            path: '/',
-          });
-          setCookie(null, 'refresh_token', response.refreshToken, {
             maxAge: 30 * 24 * 60 * 60,
             path: '/',
           });
@@ -108,7 +107,8 @@ const MainHeader = ({ inUser }: MainHeaderProps) => {
       toast({
         title: 'Lỗi',
         description: error.message as string,
-        variant: 'destructive'
+        variant: 'destructive',
+        action: <LogoutAction><ToastAction altText="Đăng xuất">Đăng xuất</ToastAction></LogoutAction>
       })
       setIsTokenRefreshing(false);
       // Handle refresh token failure (e.g., logout user)
@@ -133,7 +133,7 @@ const MainHeader = ({ inUser }: MainHeaderProps) => {
     addGroup(groups?.get_group_by_userid as Group[])
     addGroup(adminGroup?.get_group_by_admin as Group[])
   }, [loading, data?.find_account_by_id?.userid, addUser, data?.find_account_by_id, addAllPost, postReacted?.find_postlike_byuserid, addAllBookmark, bookmarks?.find_all_bookmark_by_userid, addGroup, groups?.get_group_by_userid, adminGroup?.get_group_by_admin])
-  
+
 
 
   return (
@@ -191,9 +191,6 @@ const MainHeader = ({ inUser }: MainHeaderProps) => {
               </NavigationMenuList>
             </NavigationMenu>
             <div className="m-0 p-0 flex items-center">
-              <ChatAI>
-                <Button variant={'outline'} className="mr-4 border-fuchsia-500 text-fuchsia-500 bg-fuchsia-50 hover:bg-white hover:text-fuchsia-500">Chat Gemini</Button>
-              </ChatAI>
               {inUser ? <></> : <Link href={"/create-post"}><Button className="mr-4">Đăng bài</Button></Link>}
               <UserMessenger />
               <UserNotification />

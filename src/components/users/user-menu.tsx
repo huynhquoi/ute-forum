@@ -17,6 +17,7 @@ import {
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import { useUserStorage } from "@/lib/store/userStorage";
+import LogoutAction from "../shared/logout-action";
 
 const UserMenu = () => {
   const router = useRouter();
@@ -144,10 +145,12 @@ const UserMenu = () => {
           </DropdownMenuGroup>
 
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            {/* <LogOut className="mr-2 h-4 w-4" /> */}
-            <span>Log out</span>
-          </DropdownMenuItem>
+          <LogoutAction>
+            <DropdownMenuItem>
+              {/* <LogOut className="mr-2 h-4 w-4" /> */}
+              <span>Log out</span>
+            </DropdownMenuItem>
+          </LogoutAction>
         </DropdownMenuContent>
       </DropdownMenu>
     </>

@@ -44,3 +44,7 @@ mutation CreateCommentChild($comment: CommentRequest, $userid:String, $comment_p
     ...cmt
   }
 }
+
+mutation DeleteComment($commentid: Int) {
+  delete_comment_by_pk(commentid: $commentid)
+}

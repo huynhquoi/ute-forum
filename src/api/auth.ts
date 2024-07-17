@@ -53,5 +53,7 @@ export const deleteHistory = async (data: string, keyword: string) => {
 }
 
 export const refreshToken = async (data: string) => {
-  return await callApi(API_REFRESH_TOKEN, POST_METHOD, data)
+  return await callApi(API_REFRESH_TOKEN, POST_METHOD, {
+    refreshtoken: data,
+  })
 }

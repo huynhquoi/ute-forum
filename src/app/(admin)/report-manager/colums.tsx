@@ -1,7 +1,10 @@
+import QuickReport from "@/components/admin/quick-report"
+import { Eye } from "@/components/svgs"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
 import UserDisplay from "@/components/users/user-display"
+import { REPORT_COMMENT, REPORT_POST, REPORT_USER } from "@/generated/default-types"
 import { Report, User } from "@/generated/types"
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
 import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons"
@@ -97,5 +100,27 @@ export const columns: ColumnDef<Report>[] = [
         cell: ({ row }) => <div className="ml-4 lowercase">
             {row.original.content}
         </div>,
+    },
+    {
+        id: "actions",
+        enableHiding: false,
+        cell: ({ row }) => {
+            const user = row.original
+
+            return (
+                <QuickReport
+                    report={row.original}
+                    type={
+                        row?.original?.user_report?.userid
+                            ? REPORT_USER
+                            : row?.original?.post_report?.postid
+                                ? REPORT_POST
+                                : REPORT_COMMENT
+                    }
+                >
+                    <Eye className="text-xl text-red-300 cursor-pointer hover:text-red-500" />
+                </QuickReport>
+            )
+        },
     },
 ]

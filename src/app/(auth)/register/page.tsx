@@ -20,9 +20,13 @@ import { checkCodeApi, registerApi, senMailApi } from "@/api/auth";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
+const emailPattern = /^(?:\d{8}@student\.hcmute\.edu\.vn|[a-zA-Z0-9._%+-]+@hcmute\.edu\.vn)$/;
+
 const registerSchema = z.object({
   fullname: z.string().min(2).max(50),
-  email: z.string().email(),
+  email: z.string().email().regex(emailPattern, {
+    message: "Email phải có định dạng XXXXXXXX@student.hcmute.edu.vn hoặc X@hcmute.edu.vn"
+  }),
   username: z.string().min(2).max(50),
   password: z.string().min(6),
 });
@@ -36,7 +40,6 @@ type RegisterType = {
 
 const RegisterPage = () => {
   const router = useRouter();
-
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [register, setRegister] = useState(false);

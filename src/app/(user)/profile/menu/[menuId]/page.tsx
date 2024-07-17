@@ -15,6 +15,7 @@ import FollowerZone from "@/components/menu/follower-zone";
 import MaganerZone from "@/components/menu/manager-zone";
 import ForumZone from "@/components/menu/forum-zone";
 import { hexToRgba } from "@/lib/utils";
+import { Card } from "@/components/ui/card";
 
 const MenuPage = () => {
   const param = useParams()
@@ -35,7 +36,7 @@ const MenuPage = () => {
           <ProfilePostOutstanding post={data?.find_post_by_userid as PostDto[]} />
         </div>
         <div className="col-span-3">
-          <div className="mt-4">
+          <Card className="mt-4 p-3">
             <Tabs defaultValue={param.menuId as string} className="w-full" onValueChange={(e) => {router.push(e)}}>
               <TabsList>
                 <TabsTrigger value="saved">Đã lưu</TabsTrigger>
@@ -60,7 +61,7 @@ const MenuPage = () => {
                 <ForumZone />
               </TabsContent>
             </Tabs>
-          </div>
+          </Card>
         </div>
         <div className="col-span-1"></div>
       </div>

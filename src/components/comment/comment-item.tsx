@@ -15,9 +15,10 @@ type CommentItemsProps = {
   comment: Comment
   onReload?: () => void
   onComment?: () => void
+  inReport?: boolean
 }
 
-const CommentItems = ({ comment, onReload, onComment }: CommentItemsProps) => {
+const CommentItems = ({ comment, inReport, onReload, onComment }: CommentItemsProps) => {
   const [reply, setReply] = useState(false)
   return <>
     <div className="w-full">
@@ -39,29 +40,32 @@ const CommentItems = ({ comment, onReload, onComment }: CommentItemsProps) => {
           {comment?.content}
         </CardContent>
       </Card>
-      <div className="flex flex-col items-start ml-12">
-        <div className="flex items-center space-x-2">
-          <Button
-            variant={"ghost"}
-            className="p-0"
-            onClick={() => {
-              setReply(!reply)
-            }}>Phản hồi</Button>
-          <ReportDialog type={REPORT_COMMENT} title={'bình luận này'} commentId={comment?.commentid}>
+      {inReport
+        ? <></>
+        : <div className="flex flex-col items-start ml-12">
+          <div className="flex items-center space-x-2">
             <Button
-              variant={"secondary"}
-              className={`rounded-full shadow-none bg-white hover:bg-gray-200 px-2`}
-            >
-              <Flag className="text-base text-red-500" />
-            </Button>
-          </ReportDialog>
+              variant={"ghost"}
+              className="p-0"
+              onClick={() => {
+                setReply(!reply)
+              }}>Phản hồi</Button>
+            <ReportDialog type={REPORT_COMMENT} title={'bình luận này'} commentId={comment?.commentid}>
+              <Button
+                variant={"secondary"}
+                className={`rounded-full shadow-none bg-white hover:bg-gray-200 px-2`}
+              >
+                <Flag className="text-base text-red-500" />
+              </Button>
+            </ReportDialog>
+          </div>
+          {reply
+            ? <CommentForm
+              postId={comment?.post_comment?.postid as number}
+              commentId={comment?.commentid as number} />
+            : <></>}
         </div>
-        {reply
-          ? <CommentForm
-            postId={comment?.post_comment?.postid as number}
-            commentId={comment?.commentid as number} />
-          : <></>}
-      </div>
+      }
     </div>
   </>
 }

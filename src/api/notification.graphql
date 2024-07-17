@@ -22,3 +22,19 @@ mutation IsSeen($noticeid: Int) {
     ...notice
   }
 }
+
+mutation CreateNotification(
+  $userid: String
+  $content: String
+  $type: Int
+  $subject: Int
+) {
+  create_notice(
+    userid: $userid
+    content: $content
+    type: $type
+    subject: $subject
+  ) {
+    ...notice
+  }
+}

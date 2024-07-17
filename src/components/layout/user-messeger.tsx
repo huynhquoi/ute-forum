@@ -74,8 +74,7 @@ const UserMessenger = ({ children, onClick }: UserMessengerProps) => {
                                 <TabsTrigger value="group">Nhóm</TabsTrigger>
                             </TabsList>
                             <TabsContent value="user" className="pl-4 bg-gray-100">
-                                {message?.messageid ? <MessageItem selected={true} user={anotherUser as User} /> : <></>}
-                                {data?.sub_detail_message_by_userid?.map(i => (
+                                {data?.sub_detail_message_by_userid?.filter(m => !m?.isblock).map(i => (
                                     <MessageItem
                                         key={i?.detailmessageid}
                                         user={i?.userid as User}
@@ -85,11 +84,12 @@ const UserMessenger = ({ children, onClick }: UserMessengerProps) => {
                                             setItem('partner', (i?.messageid || '').toString())
                                         }}
                                         selected={selectMessage?.detailmessageid === i?.detailmessageid}
+                                        detail={i as DetailMessageDto}
                                     />
                                 ))}
                             </TabsContent>
                             <TabsContent value="group">
-                                {groupMessage?.sub_group_message_by_userid?.map(i => (
+                                {/* {groupMessage?.sub_group_message_by_userid?.map(i => (
                                     <div
                                         key={i?.group_messageid}
                                         onClick={() => {
@@ -108,7 +108,7 @@ const UserMessenger = ({ children, onClick }: UserMessengerProps) => {
                                             </div>
                                         </div>
                                     </div>
-                                ))}
+                                ))} */}
                             </TabsContent>
                         </Tabs>
                     </div>

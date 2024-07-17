@@ -1280,6 +1280,25 @@ export type ViewPost = {
   viewid: Scalars['Int']['output'];
 };
 
+export type GetAnalystUserQueryVariables = Exact<{
+  year?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetAnalystUserQuery = { __typename?: 'Query', statistic_user?: Array<number | null> | null };
+
+export type GetAnalystPostQueryVariables = Exact<{
+  year?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetAnalystPostQuery = { __typename?: 'Query', statistic_post?: Array<number | null> | null };
+
+export type GetAnalystPostInTopicQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAnalystPostInTopicQuery = { __typename?: 'Query', statistic_post_in_topic?: Array<number | null> | null };
+
 export type UserFragment = { __typename?: 'User', userid: string, username?: string | null, fullname?: string | null, email?: string | null, address?: string | null, phone?: string | null, birthday?: any | null, gender?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, status?: number | null, mssv?: string | null, bio?: string | null, color?: string | null, totalfollowing?: number | null, role?: { __typename?: 'Role', roleid: number, rolename?: string | null } | null, isban?: { __typename?: 'IsBan', isbanid: number, nameban?: string | null, description?: string | null } | null };
 
 export type GetAccountQueryVariables = Exact<{
@@ -1411,6 +1430,13 @@ export type CreateCommentChildMutationVariables = Exact<{
 
 export type CreateCommentChildMutation = { __typename?: 'Mutation', create_comment_in_comment?: { __typename?: 'Comment', commentid: number, content?: string | null, createday?: any | null, updateday?: any | null, isdelete?: number | null, warning?: string | null, warningword?: string | null, comment_comment?: { __typename?: 'Comment', commentid: number, content?: string | null, createday?: any | null, updateday?: any | null, isdelete?: number | null, warning?: string | null, warningword?: string | null, user_comment?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null, user_comment?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, post_comment?: { __typename?: 'Post', postid: number } | null } | null };
 
+export type DeleteCommentMutationVariables = Exact<{
+  commentid?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type DeleteCommentMutation = { __typename?: 'Mutation', delete_comment_by_pk?: string | null };
+
 export type GroupFragment = { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputaion?: number | null, description?: string | null, user_group?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null };
 
 export type GroupDtoFragment = { __typename?: 'GroupDTO', groupid?: number | null, groupname?: string | null, image?: string | null, createday?: any | null, reputation?: number | null, admin?: string | null, description?: string | null, chanel?: number | null, totaluser?: number | null };
@@ -1517,6 +1543,15 @@ export type CreateMessageMutationVariables = Exact<{
 
 export type CreateMessageMutation = { __typename?: 'Mutation', create_message?: { __typename?: 'Message', messageid: number, messagename?: string | null, createday?: any | null } | null };
 
+export type HideMessageMutationVariables = Exact<{
+  messageid?: InputMaybe<Scalars['Int']['input']>;
+  userid?: InputMaybe<Scalars['String']['input']>;
+  isblock?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type HideMessageMutation = { __typename?: 'Mutation', block_message?: string | null };
+
 export type CreateContentMessageMutationVariables = Exact<{
   content?: InputMaybe<Scalars['String']['input']>;
   image?: InputMaybe<Scalars['String']['input']>;
@@ -1601,6 +1636,16 @@ export type IsSeenMutationVariables = Exact<{
 
 
 export type IsSeenMutation = { __typename?: 'Mutation', update_isseen_true?: { __typename?: 'Notice', noiticeid: number, content?: string | null, createday?: any | null, isseen?: number | null, type?: number | null, subjectid?: number | null, user_notice?: { __typename?: 'User', userid: string, fullname?: string | null } | null } | null };
+
+export type CreateNotificationMutationVariables = Exact<{
+  userid?: InputMaybe<Scalars['String']['input']>;
+  content?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<Scalars['Int']['input']>;
+  subject?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type CreateNotificationMutation = { __typename?: 'Mutation', create_notice?: { __typename?: 'Notice', noiticeid: number, content?: string | null, createday?: any | null, isseen?: number | null, type?: number | null, subjectid?: number | null, user_notice?: { __typename?: 'User', userid: string, fullname?: string | null } | null } | null };
 
 export type PostFragment = { __typename?: 'Post', postid: number, content?: string | null, title?: string | null, createday?: any | null, updateday?: any | null, image?: string | null, ishide?: number | null, isdelete?: number | null, requiredreputation?: number | null, totalread?: number | null, user_post?: { __typename?: 'User', userid: string, fullname?: string | null, image?: string | null } | null, group_post?: { __typename?: 'Group', groupid?: number | null, groupname?: string | null, image?: string | null } | null };
 
@@ -2187,6 +2232,119 @@ export const TopicFragmentDoc = gql`
   isdelete
 }
     `;
+export const GetAnalystUserDocument = gql`
+    query getAnalystUser($year: Int) {
+  statistic_user(year: $year)
+}
+    `;
+
+/**
+ * __useGetAnalystUserQuery__
+ *
+ * To run a query within a React component, call `useGetAnalystUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAnalystUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAnalystUserQuery({
+ *   variables: {
+ *      year: // value for 'year'
+ *   },
+ * });
+ */
+export function useGetAnalystUserQuery(baseOptions?: Apollo.QueryHookOptions<GetAnalystUserQuery, GetAnalystUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAnalystUserQuery, GetAnalystUserQueryVariables>(GetAnalystUserDocument, options);
+      }
+export function useGetAnalystUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAnalystUserQuery, GetAnalystUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAnalystUserQuery, GetAnalystUserQueryVariables>(GetAnalystUserDocument, options);
+        }
+export function useGetAnalystUserSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAnalystUserQuery, GetAnalystUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAnalystUserQuery, GetAnalystUserQueryVariables>(GetAnalystUserDocument, options);
+        }
+export type GetAnalystUserQueryHookResult = ReturnType<typeof useGetAnalystUserQuery>;
+export type GetAnalystUserLazyQueryHookResult = ReturnType<typeof useGetAnalystUserLazyQuery>;
+export type GetAnalystUserSuspenseQueryHookResult = ReturnType<typeof useGetAnalystUserSuspenseQuery>;
+export type GetAnalystUserQueryResult = Apollo.QueryResult<GetAnalystUserQuery, GetAnalystUserQueryVariables>;
+export const GetAnalystPostDocument = gql`
+    query getAnalystPost($year: Int) {
+  statistic_post(year: $year)
+}
+    `;
+
+/**
+ * __useGetAnalystPostQuery__
+ *
+ * To run a query within a React component, call `useGetAnalystPostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAnalystPostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAnalystPostQuery({
+ *   variables: {
+ *      year: // value for 'year'
+ *   },
+ * });
+ */
+export function useGetAnalystPostQuery(baseOptions?: Apollo.QueryHookOptions<GetAnalystPostQuery, GetAnalystPostQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAnalystPostQuery, GetAnalystPostQueryVariables>(GetAnalystPostDocument, options);
+      }
+export function useGetAnalystPostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAnalystPostQuery, GetAnalystPostQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAnalystPostQuery, GetAnalystPostQueryVariables>(GetAnalystPostDocument, options);
+        }
+export function useGetAnalystPostSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAnalystPostQuery, GetAnalystPostQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAnalystPostQuery, GetAnalystPostQueryVariables>(GetAnalystPostDocument, options);
+        }
+export type GetAnalystPostQueryHookResult = ReturnType<typeof useGetAnalystPostQuery>;
+export type GetAnalystPostLazyQueryHookResult = ReturnType<typeof useGetAnalystPostLazyQuery>;
+export type GetAnalystPostSuspenseQueryHookResult = ReturnType<typeof useGetAnalystPostSuspenseQuery>;
+export type GetAnalystPostQueryResult = Apollo.QueryResult<GetAnalystPostQuery, GetAnalystPostQueryVariables>;
+export const GetAnalystPostInTopicDocument = gql`
+    query getAnalystPostInTopic {
+  statistic_post_in_topic
+}
+    `;
+
+/**
+ * __useGetAnalystPostInTopicQuery__
+ *
+ * To run a query within a React component, call `useGetAnalystPostInTopicQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAnalystPostInTopicQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAnalystPostInTopicQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAnalystPostInTopicQuery(baseOptions?: Apollo.QueryHookOptions<GetAnalystPostInTopicQuery, GetAnalystPostInTopicQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAnalystPostInTopicQuery, GetAnalystPostInTopicQueryVariables>(GetAnalystPostInTopicDocument, options);
+      }
+export function useGetAnalystPostInTopicLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAnalystPostInTopicQuery, GetAnalystPostInTopicQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAnalystPostInTopicQuery, GetAnalystPostInTopicQueryVariables>(GetAnalystPostInTopicDocument, options);
+        }
+export function useGetAnalystPostInTopicSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAnalystPostInTopicQuery, GetAnalystPostInTopicQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAnalystPostInTopicQuery, GetAnalystPostInTopicQueryVariables>(GetAnalystPostInTopicDocument, options);
+        }
+export type GetAnalystPostInTopicQueryHookResult = ReturnType<typeof useGetAnalystPostInTopicQuery>;
+export type GetAnalystPostInTopicLazyQueryHookResult = ReturnType<typeof useGetAnalystPostInTopicLazyQuery>;
+export type GetAnalystPostInTopicSuspenseQueryHookResult = ReturnType<typeof useGetAnalystPostInTopicSuspenseQuery>;
+export type GetAnalystPostInTopicQueryResult = Apollo.QueryResult<GetAnalystPostInTopicQuery, GetAnalystPostInTopicQueryVariables>;
 export const GetAccountDocument = gql`
     query GetAccount($limit: Int, $pacing: Int) {
   account(limit: $limit, pacing: $pacing) {
@@ -2834,6 +2992,37 @@ export function useCreateCommentChildMutation(baseOptions?: Apollo.MutationHookO
 export type CreateCommentChildMutationHookResult = ReturnType<typeof useCreateCommentChildMutation>;
 export type CreateCommentChildMutationResult = Apollo.MutationResult<CreateCommentChildMutation>;
 export type CreateCommentChildMutationOptions = Apollo.BaseMutationOptions<CreateCommentChildMutation, CreateCommentChildMutationVariables>;
+export const DeleteCommentDocument = gql`
+    mutation DeleteComment($commentid: Int) {
+  delete_comment_by_pk(commentid: $commentid)
+}
+    `;
+export type DeleteCommentMutationFn = Apollo.MutationFunction<DeleteCommentMutation, DeleteCommentMutationVariables>;
+
+/**
+ * __useDeleteCommentMutation__
+ *
+ * To run a mutation, you first call `useDeleteCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCommentMutation, { data, loading, error }] = useDeleteCommentMutation({
+ *   variables: {
+ *      commentid: // value for 'commentid'
+ *   },
+ * });
+ */
+export function useDeleteCommentMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCommentMutation, DeleteCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCommentMutation, DeleteCommentMutationVariables>(DeleteCommentDocument, options);
+      }
+export type DeleteCommentMutationHookResult = ReturnType<typeof useDeleteCommentMutation>;
+export type DeleteCommentMutationResult = Apollo.MutationResult<DeleteCommentMutation>;
+export type DeleteCommentMutationOptions = Apollo.BaseMutationOptions<DeleteCommentMutation, DeleteCommentMutationVariables>;
 export const GetAllGroupDocument = gql`
     query GetAllGroup($limit: Int, $pacing: Int) {
   get_all_group(limit: $limit, pacing: $pacing) {
@@ -3265,6 +3454,39 @@ export function useCreateMessageMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateMessageMutationHookResult = ReturnType<typeof useCreateMessageMutation>;
 export type CreateMessageMutationResult = Apollo.MutationResult<CreateMessageMutation>;
 export type CreateMessageMutationOptions = Apollo.BaseMutationOptions<CreateMessageMutation, CreateMessageMutationVariables>;
+export const HideMessageDocument = gql`
+    mutation HideMessage($messageid: Int, $userid: String, $isblock: Int) {
+  block_message(messageid: $messageid, userid: $userid, isblock: $isblock)
+}
+    `;
+export type HideMessageMutationFn = Apollo.MutationFunction<HideMessageMutation, HideMessageMutationVariables>;
+
+/**
+ * __useHideMessageMutation__
+ *
+ * To run a mutation, you first call `useHideMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useHideMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [hideMessageMutation, { data, loading, error }] = useHideMessageMutation({
+ *   variables: {
+ *      messageid: // value for 'messageid'
+ *      userid: // value for 'userid'
+ *      isblock: // value for 'isblock'
+ *   },
+ * });
+ */
+export function useHideMessageMutation(baseOptions?: Apollo.MutationHookOptions<HideMessageMutation, HideMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<HideMessageMutation, HideMessageMutationVariables>(HideMessageDocument, options);
+      }
+export type HideMessageMutationHookResult = ReturnType<typeof useHideMessageMutation>;
+export type HideMessageMutationResult = Apollo.MutationResult<HideMessageMutation>;
+export type HideMessageMutationOptions = Apollo.BaseMutationOptions<HideMessageMutation, HideMessageMutationVariables>;
 export const CreateContentMessageDocument = gql`
     mutation CreateContentMessage($content: String, $image: String, $messageid: Int, $userid: String, $messageresponseid: Int) {
   create_content_message(
@@ -3608,6 +3830,47 @@ export function useIsSeenMutation(baseOptions?: Apollo.MutationHookOptions<IsSee
 export type IsSeenMutationHookResult = ReturnType<typeof useIsSeenMutation>;
 export type IsSeenMutationResult = Apollo.MutationResult<IsSeenMutation>;
 export type IsSeenMutationOptions = Apollo.BaseMutationOptions<IsSeenMutation, IsSeenMutationVariables>;
+export const CreateNotificationDocument = gql`
+    mutation CreateNotification($userid: String, $content: String, $type: Int, $subject: Int) {
+  create_notice(
+    userid: $userid
+    content: $content
+    type: $type
+    subject: $subject
+  ) {
+    ...notice
+  }
+}
+    ${NoticeFragmentDoc}`;
+export type CreateNotificationMutationFn = Apollo.MutationFunction<CreateNotificationMutation, CreateNotificationMutationVariables>;
+
+/**
+ * __useCreateNotificationMutation__
+ *
+ * To run a mutation, you first call `useCreateNotificationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateNotificationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createNotificationMutation, { data, loading, error }] = useCreateNotificationMutation({
+ *   variables: {
+ *      userid: // value for 'userid'
+ *      content: // value for 'content'
+ *      type: // value for 'type'
+ *      subject: // value for 'subject'
+ *   },
+ * });
+ */
+export function useCreateNotificationMutation(baseOptions?: Apollo.MutationHookOptions<CreateNotificationMutation, CreateNotificationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateNotificationMutation, CreateNotificationMutationVariables>(CreateNotificationDocument, options);
+      }
+export type CreateNotificationMutationHookResult = ReturnType<typeof useCreateNotificationMutation>;
+export type CreateNotificationMutationResult = Apollo.MutationResult<CreateNotificationMutation>;
+export type CreateNotificationMutationOptions = Apollo.BaseMutationOptions<CreateNotificationMutation, CreateNotificationMutationVariables>;
 export const GetPostDocument = gql`
     query GetPost($limit: Int, $pacing: Int) {
   post(limit: $limit, pacing: $pacing) {

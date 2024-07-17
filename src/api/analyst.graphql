@@ -1,0 +1,11 @@
+query getAnalystUser($year: Int) {
+    statistic_user(year: $year)
+}
+
+query getAnalystPost($year: Int) {
+    statistic_post(year: $year)
+}
+
+query getAnalystPostInTopic {
+    statistic_post_in_topic
+}

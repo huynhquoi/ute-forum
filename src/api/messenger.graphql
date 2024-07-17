@@ -72,6 +72,10 @@ mutation CreateMessage($userid1: String, $userid2: String) {
   }
 }
 
+mutation HideMessage($messageid: Int, $userid: String, $isblock: Int) {
+  block_message(messageid: $messageid, userid: $userid, isblock: $isblock)
+}
+
 mutation CreateContentMessage(
   $content: String
   $image: String

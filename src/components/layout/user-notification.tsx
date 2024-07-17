@@ -69,7 +69,7 @@ const UserNotification = () => {
               onClick={() => {
                 setNotice(item?.noiticeid as number)
               }}>
-              <div className="flex flex-col items-start">
+              <div className="flex flex-col items-start max-w-[95%]">
                 <Description value={item?.content as string} />
                 <div className="text-gray-400 text-sm">{format(item?.createday || '', 'dd/MM/yyyy, HH:mm')}</div>
               </div>
