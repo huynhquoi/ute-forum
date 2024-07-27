@@ -18,6 +18,9 @@ fragment post on Post {
     groupid
     groupname
     image
+    user_group {
+      userid
+    }
   }
 }
 
@@ -44,6 +47,9 @@ fragment postDto on PostDto {
     groupid
     groupname
     image
+    user_group {
+      userid
+    }
   }
   totallike
   totaldislike
